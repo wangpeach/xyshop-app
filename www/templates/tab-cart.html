@@ -1,0 +1,88 @@
+<ion-view view-title="购物车">
+       <ion-nav-buttons side="right">
+              <button class="button" ng-click="compiler()" ng-animate="config.animate">
+                     {{config.compilerName}}
+              </button>
+       </ion-nav-buttons>
+       <ion-content ng-class="config.hastabs ? 'ws-cart-has-tabs' : 'ws-cart-no-tabs'">
+              <ion-list class="ws-list" ng-if="carts.length > 0">
+                     <div ng-repeat="item in carts">
+                            <div style="width: 98%; margin: 0px auto; height: auto; background: white;">
+                                   <div ng-click="checkShopAll(item)" class="checkbox checkbox-input-hidden checkbox-circle ws-cart-all-check" ng-class="item.checkClass">
+                                          <input type="checkbox" ng-model="item.checkAll" class="ng-pristine ng-untouched ng-valid">
+                                          <i class="checkbox-icon"></i>
+                                   </div>
+                                   <div style="float: right; margin-right: 1rem; line-height: 35px;">{{item.shopName}}</div>
+                            </div>
+                            <ion-item class="animated fadeInLeft item-remove-animate item-icon-right  item-thumbnail-left ws-cart-item " ng-repeat="other in item.products" type="item-text-wrap">
+                                   <div ng-click="check(item, other)" class="checkbox checkbox-input-hidden checkbox-circle ws-cart-each-check" ng-class="other.checkClass">
+                                          <input type="checkbox" ng-model="other.checked" class="ng-pristine ng-untouched ng-valid">
+                                          <i class="checkbox-icon"></i>
+                                   </div>
+                                   <a ng-href="{{getUrl(other.product.productid)}}">
+                                          <img class="ws-cart-picimg" ng-src="{{other.product.productimgurl}}" href="#/tab/cart/{{other.product.productid}}">
+                                          <h2 class="ws-cart-picname" href="#/tab/cart/{{other.product.productid}}">{{other.product.productname}}</h2>
+                                          <p class="ws-cart-picpri" href="#/tab/cart/{{other.product.productid}}">
+                                                 {{sortOutProps(other.chooseProps) }}
+                                          </p>
+                                          <i class="icon ion-chevron-right icon-accessory"></i>
+                                          <p class="ws-cart-other">
+                                                 <span style="color: red">￥{{other.product.productprice}}</span>
+                                                 <div class="ws-cart-buynum">
+                                                        <span>
+                                                               <a class="button button-clear" ng-click="buyLess(other)">-</a>
+                                                               <input type="text" class="inp-num" ng-model="other.num" disabled="disabled">
+                                                               <a class="button button-clear" ng-click="buyAdd(other)">+</a>
+                                                        </span>
+                                                 </div>
+                                          </p>
+                                   </a>
+                                   <ion-option-button class="button-assertive" ng-click="remove(item, other)">
+                                          删除
+                                   </ion-option-button>
+                            </ion-item>
+                            <p ng-if="$index < carts.length-1" class="ws-cart-nextshop"></p>
+                     </div>
+              </ion-list>
+              <ul ng-if="carts.length == 0" class="ws-pdlist-all-res">
+                     <li class="ws-nothing">
+                            <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
+                            <br />
+                            <p>购物车里没有商品啊</p>
+                     </li>
+              </ul>
+       </ion-content>
+       <div ng-if="!config.compiler" class="bar bar-footer ws-cart-action-bar" ng-class="config.hastabs ? 'ws-cart-action-hasbar' : ''; ">
+              <div>
+                     <div>
+                            <div ng-click="checkAll()" class="checkbox checkbox-input-hidden checkbox-circle ws-cart-all-check" ng-class="checkAllClass">
+                                   <input type="checkbox" ng-model="check.all" class="ng-pristine ng-untouched ng-valid">
+                                   <i class="checkbox-icon"></i>
+                            </div>
+                            <div style="position: absolute; top: 11px; left: 45px;">全选</div>
+                     </div>
+                     <div style="color: red;">
+                            合计: ￥{{config.total}}
+                     </div>
+              </div>
+              <div class="ws-cart-action-buy">
+                     <button class="button button-clear ws-cart-action-buybtn" ng-click="readyBuy()">去结算({{config.checkNum}})</button>
+              </div>
+       </div>
+       <div ng-if="config.compiler" class="bar bar-footer ws-cart-action-bar" ng-class="config.hastabs ? 'ws-cart-action-hasbar' : ''; ">
+              <div>
+                     <div>
+                            <div ng-click="checkAll()" class="checkbox checkbox-input-hidden checkbox-circle ws-cart-all-check" ng-class="checkAllClass">
+                                   <input type="checkbox" ng-model="check.all" class="ng-pristine ng-untouched ng-valid">
+                                   <i class="checkbox-icon"></i>
+                            </div>
+                            <div style="position: absolute; top: 11px; left: 45px;">全选</div>
+                     </div>
+                     <div>
+                     </div>
+              </div>
+              <div class="ws-cart-action-del">
+                     <button class="button button-outline button-assertive ws-cart-action-delbtn" ng-click="mulRemove()">删除</button>
+              </div>
+       </div>
+</ion-view>

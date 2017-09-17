@@ -1,0 +1,81 @@
+
+<ion-view view-title="免费开店" class="foShop" hide-tabs>
+    <ion-content>
+        <div class="shopLogo" ng-click="show()">
+            <img data-ng-src="{{shopLogo}}" ng-src="{{shopLogo}}">
+            <p>设置你的店铺LOGO</p>
+        </div>
+        <div class="list">
+            <label class="item item-input">
+                <input type="text" ng-model="shop.shopname" placeholder="你的店铺名称">
+            </label>
+            <label class="item item-input" ng-click="chooseAddr()">
+               <span class="input-label">所在区域</span> {{view.provience + (view.city != "" ? ("-" + view.city) : "") + (view.area != "" ? ("-" + view.area) : "")}}
+               <input type="hidden" required ng-model="shop.area">
+               <i class="icon ion-ios-arrow-right ad-icon-right" style="position: absolute; right: 0px; top: 35%;"></i>
+            </label>
+            <label class="item item-input">
+                <input type="text" ng-model="shop.address" placeholder="详细地址">
+            </label>
+            <label class="item item-input" ng-click="getlocation()">
+                <span class="input-label">选择商铺坐标</span>
+                <span class="input-label">{{(shop.lng ? shop.lng : '') + (shop.lat ? ("," + shop.lat) : '') }}</span>
+                <i class="icon ion-ios-arrow-right ad-icon-right" style="position: absolute; right: 0px; top: 35%;"></i>
+            </label>
+            <label class="item item-input">
+                <input type="text" ng-model="shop.description" placeholder="描述下你的店铺">
+            </label>
+        </div>
+        <div class="padding">
+            <a class="button button-block button-balanced" ng-click="open()">立即开通</a>
+        </div>
+        <h3>立即免费开店，手机随时管理</h3>
+    </ion-content>
+
+    <div ng-class="chooseBack" on-tap="close()"></div>
+       <div class="choose-addr" ng-class="chooseAddress">
+              <div>
+                     <a class="button button-icon icon ion-ios-close-empty" ng-click="close()"></a>
+              </div>
+              <div class="level">
+                     <ul>
+                            <li><a ng-click="_provience()">省份</a></li>
+                            <li ng-if="caconfig._city != null"><a ng-click="_city()">城区</a></li>
+                            <li ng-if="caconfig._area != null"><a ng-click="_area()">县区</a></li>
+                     </ul>
+                     <div ng-style="caconfig.levelpg"></div>
+              </div>
+              <ion-slide-box does-continue="false" show-pager="false" on-slide-changed="areaSlideChange($index)">
+                     <ion-slide>
+                            <div class="list">
+                                   <ion-scroll direction="y">
+                                          <a class="item item-button-right" ng-repeat="item in caconfig._prov" on-tap="choosedArea(item, 1)">
+                                              {{item.name}}
+                                              <i ng-if="item.name == addr.provience" class="icon ion-checkmark"></i>
+                                      </a>
+                                   </ion-scroll>
+                            </div>
+                     </ion-slide>
+                     <ion-slide ng-if="caconfig._city != null">
+                            <div class="list">
+                                   <ion-scroll direction="y">
+                                          <a class="item item-button-right" ng-repeat="item in caconfig._city" on-tap="choosedArea(item, 2)">
+                                              {{item.name}}
+                                              <i ng-if="item.name == addr.city" class="icon ion-checkmark"></i>
+                                      </a>
+                                   </ion-scroll>
+                            </div>
+                     </ion-slide>
+                     <ion-slide ng-if="caconfig._area != null">
+                            <div class="list">
+                                   <ion-scroll direction="y">
+                                          <a class="item item-button-right" ng-repeat="item in caconfig._area" on-tap="choosedArea(item, -1)">
+                                              {{item.name}}
+                                              <i ng-if="item.name == addr.area" class="icon ion-checkmark"></i>
+                                      </a>
+                                   </ion-scroll>
+                            </div>
+                     </ion-slide>
+              </ion-slide-box>
+       </div>
+</ion-view>

@@ -1,0 +1,58 @@
+<ion-modal-view>
+       <ion-header-bar>
+              <button ng-click="closeOrderModel()" class="button icon icon-left ion-chevron-left button-clear button-dark icon ion-ios-arrow-back"></button>
+              <h1 class="title">填写订单</h1>
+       </ion-header-bar>
+       <ion-content class="scroll-content-white has-cusfooter">
+              <div class="order_content" ng-if="targetAddr">
+                     <div class="order-addr" ng-click="chooseAddrs()">
+                            <h4>
+                                   <span style="margin-right: 15px">{{targetAddr.name }}</span>
+                                   <span>{{formatPhone(targetAddr.tel) }}</span>
+                            </h4>
+                            <p><i class="icon-address"></i>{{targetAddr.provience + targetAddr.city + targetAddr.area + targetAddr.address}}</p>
+                     </div>
+                     <div class="list order-paywhy">
+                            <a class="item item-icon-right" ng-click="choosePaywhy()">
+                                   支付方式
+                                   <span ng-repeat="why in paywhy" ng-if="why.active">{{why.name}}</span>
+                                   <i class="icon ion-ios-arrow-right"></i> 
+                            </a>
+                     </div>
+                     <div class="order-pd" ng-repeat="item in orders">
+                            <p class="shopname">{{item.shopName}}</p>
+                            <div class="list orders-pd" ng-repeat="other in item.products">
+                                   <div>
+                                          <div class="item item-thumbnail-left">
+                                                 <img ng-src="{{other.product.productimgurl}}">
+                                                 <h2>{{other.product.productname}}</h2>
+                                                 <p>{{sortOutProps(other.chooseProps) }}</p>
+                                                 <br>
+                                                 <p class="pdtn"><span>￥{{other.total}}</span> <span>X{{other.num}}</span></p>
+                                          </div>
+                                          <div class="or-pd-other">
+                                                 <p>已省{{spread(other.product.productmarket, other.product.productprice, other.num)}}</p>
+                                                 <p>
+                                                        <del>原价:{{other.product.productmarket}}</del>
+                                                 </p>
+                                                 <p>
+                                                        邮费:
+                                                        <span ng-class="hasYoufei(other.product.productyoufei) ? 'textRed textBlod' : ''">
+                                                               {{hasYoufei(other.product.productyoufei) > 0 ? other.product.productyoufei : '免邮'}}
+                                                        </span>
+                                                 </p>
+                                          </div>
+                                   </div>
+                            </div>
+                     </div>
+              </div>
+       </ion-content>
+       <div class="bar bar-footer orders-down">
+              <div class="orders-total">
+                     合计: ￥{{ordersTotal}}
+              </div>
+              <div>
+                     <button class="button button-clear button-rectangle-100" ng-click="pay()">立即购买</button>
+              </div>
+       </div>
+</ion-modal-view>

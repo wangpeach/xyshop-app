@@ -1,0 +1,37 @@
+<ion-view view-title="地址管理" hide-tabs>
+       <ion-content has-subheader="false" class="has-cusfooter scroll-content-tansei">
+              <ul class="list ad-list" ng-if="addrs.length > 0">
+                     <li class="item" ng-repeat="item in addrs">
+                            <h2 style="color: #4E4E4E">{{item.name +"&nbsp;&nbsp;&nbsp;&nbsp;"+ formatPhone(item.tel)}}</h2>
+                            <p style="font-size: 12px">{{item.provience + '-' + item.city + '-' + item.area + ',&nbsp;' + item.address}}</p>
+                            <div class="ad-list-action">
+                            	<ul>
+                            		<li>
+                            			<ion-checkbox ng-model="item.isdefault" ng-click="swipeDefault(item)">{{item.isdefault ? '默认地址' : '设为默认'}}</ion-checkbox>
+                            		</li>
+                            		<li>
+                            			<button class="button button-clear" ng-click="updAddr(item)">
+                            				<i class="ion-ios-compose-outline"></i>编辑
+                            			</button>
+                            			<button class="button button-clear" ng-click="delAddr(item)">
+                            				<i class="ion-ios-trash-outline"></i>删除
+                            			</button>
+                            		</li>
+                            	</ul>
+                            </div>
+                     </li>
+              </ul>
+              <ul ng-if="noaddr" class="ws-pdlist-all-res">
+                     <li class="ws-nothing">
+                            <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
+                            <br />
+                            <p>{{prompt}}</p>
+                     </li>
+              </ul>
+       </ion-content>
+       <div class="bar bar-footer bar-cusfooter-transparent bar-footer-nopadding">
+              <button class="button icon-center ion-plus-round button-block button-assertive" ng-click="goNewAddr()" style="background-color: #29d2b3; margin: 3px auto; padding: 0px; font-size: 15px;">
+                     新建地址
+              </button>
+       </div>
+</ion-view>

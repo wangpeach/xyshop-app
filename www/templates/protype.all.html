@@ -1,0 +1,13 @@
+<ion-view view-title="全部分类" class="productAll">
+    <ion-content>
+        <div class="listAll" ng-repeat="item in protyItems">
+            <div class="listname">
+                <img ng-src="{{item.iconImgPath}}">
+                <span>{{item.name}}</span>
+            </div>
+            <div class="row" ng-repeat="clds in item.childs">
+                <div class="col col-25" ng-click="proListByTybe(item.name, item.catId, clds.catId)">{{clds.name}}</div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

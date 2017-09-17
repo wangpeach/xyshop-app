@@ -1,0 +1,30 @@
+<ion-view view-title="我的推荐会员">
+        <ion-content>
+                <ion-refresher pulling-text="松开刷新" on-refresh="doRefresh()" disable-pulling-rotation="true">
+                </ion-refresher>
+                <ion-list ng-repeat="item in items" item="item">
+                        <ion-item class="y-item" ng-repeat="other in item">
+                                <ul class="data-col">
+                                        <li>{{other.username}}</li>
+                                        <li>{{fd(other.usercreatedate)}}</li>
+                                </ul>
+                                <ul class="data-col">
+                                        <li>{{other.userroles.typename}}</li>
+                                </ul>
+                                <ul class="data-col">
+                                        <li>红积分：
+                                                <font color="red">{{other.userhongjifen}}</font>
+                                        </li>
+                                </ul>
+                        </ion-item>
+                </ion-list>
+                <ul>
+                        <li class="animate-repeat" ng-if="!moreDataCanBeLoaded" style="width: 100%; box-shadow: none;">
+                                <div class="nothing">
+                                        <p>没有更多了</p>
+                                </div>
+                        </li>
+                </ul>
+                <ion-infinite-scroll ng-if="moreDataCanBeLoaded" on-infinite="loadMore()" distance="1%"></ion-infinite-scroll>
+        </ion-content>
+</ion-view>

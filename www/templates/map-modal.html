@@ -1,0 +1,22 @@
+<ion-view class="sortmap" view-title="" hide-tabs>
+    <ion-content>
+        <a class="button button-icon icon ion-ios-arrow-back" ng-click="$ionicGoBack()"></a>
+        <!--地图容器-->
+        <div id="{{glview.glcontainer}}" ng-style="glview.style">
+            <!--初始化-->
+            {{initMap()}}
+        </div>
+        <div ng-style="glview.transferStyle">
+            <div class="button-bar">
+              <a class="button button-light button-outline button-small" ng-click="initMapTransfer(1)">公交</a>
+              <a class="button button-light button-outline button-small" ng-click="initMapTransfer(2)">自驾</a>
+              <a class="button button-light button-outline button-small" ng-click="initMapTransfer(3)">步行</a>
+              <a class="button button-light button-outline button-small" ng-click="initMapTransfer(4)">骑行</a>
+            </div>
+        </div>
+        <!--地图路线及标识-->
+        <div id="{{glview.panel}}">
+        </div>
+        <!--切换方案-->
+    </ion-content>
+</ion-view>

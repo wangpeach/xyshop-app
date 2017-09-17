@@ -1,0 +1,53 @@
+<ion-view class="proDetails" view-title="商品详情" hide-tabs>
+	<style>
+	    .pd-detail img {
+	        width: 100%;
+	    }
+	</style>
+    <ion-content>
+        <div class="detail">
+            <!--旋转木马-->
+            <div class="carousel">
+                <ion-slide-box auto-play="true" does-continue="true" show-pager="true">
+                    <ion-slide ng-repeat="item in proDetails.gallery">
+                        <img ng-src="{{item}}" width="100%"/>
+                    </ion-slide>
+                </ion-slide-box>
+            </div>
+            <div class="list">
+                <a class="item item-button-right pd-info" style="padding: 8px 16px;">
+                    <h5>{{proDetails.name}}</h5>
+                    <h4>¥  {{proDetails.price}}<span class="menshijia">门市价：¥  {{proDetails.orgPrice}}</span></h4>
+                    <p>
+                    <span class="product-show-sales">已售{{proDetails.saleNum}}</span>
+                    <span class="product-show-scan">已浏览{{proDetails.productwain}}</span>
+                    </p>
+                    <button class="button button-energized" ng-click="goSubmitOrder()">立即购买</button>
+                </a>
+                <p class="quarantine"></p>
+                <div class="h4 title ">商家信息</div>
+                <div class="item item-button-right shop-info" style="padding: 10px;">
+                    <div class="address" ng-click="proShopDetails()">
+                        <i class="icon icon-shop"></i>
+                        <span style="margin-left: 0.3rem; position: absolute;">{{proDetails.shopName}}</span>
+                    </div>
+                    <a class="button item-button-right button-clear" ng-href="tel:{{shop.shopPhone}}">
+                        <i class="icon ion-ios-telephone"></i>
+                    </a>
+                </div>
+            </div>
+            <!--分隔线-->
+            <p class="quarantine"></p>
+            <!--服务项-->
+            <div class="introduce">
+                <!-- <div class="h4 title">商品介绍</div> -->
+                <div class="list">
+                    <div class="item item-divider">
+                        图文详情
+                    </div>
+                    <div class="pd-detail" ng-bind-html="proDetail"></div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

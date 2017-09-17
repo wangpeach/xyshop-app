@@ -1,0 +1,52 @@
+
+<ion-view class="shopList proTypeSearch" hide-nav-bar="true" hide-tabs>
+    <ion-header-bar align-title="left" class="bar-stable">
+        <button class="button button-clear  icon-left ion-chevron-left" style="color:rgba(68, 68, 68, 0.6)" ng-click="itemBack()"></button>
+        <h1 ng-hide="searchParams.searchKey" style="width: 100%;" class="title">{{title}}</h1>
+        <div ng-hide="!searchParams.searchKey" class="search-shop">
+            <i class="icon ion-ios-search placeholder-icon ws-search-icon"></i>
+            <form ng-submit="anewSearch()">
+                <input type="search" ng-model="searchParams.key" ng-focus="searchSwipe(true)" ng-blur="searchSwipe(false)">
+            </form>
+            <button class="button button-clear " style="font-size: 20px;" ng-if="search.key!= null" ng-click="clearShopKey(cancel)">
+                <i class="ion-close-circled placeholder-icon ws-search-icon"></i>
+            </button>
+        </div>
+    </ion-header-bar>
+    <ion-header-bar class="bar-subheader">
+        <div class="button-bar">
+            <a class="button button-clear icon-right ion-android-arrow-dropdown" ng-click="openPopoverProList.show($event)">{{selected.type}}</a>
+            <a class="button button-clear icon-right ion-android-arrow-dropdown" ng-click="openPopoverNearby.show($event)">{{selected.distance}}</a>
+            <a class="button button-clear icon-right ion-android-arrow-dropdown" ng-click="openPopoverSort.show($event)">{{selected.orderBy}}</a>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+
+        <div class="content-list">
+            <div class="list">
+                <a class="item item-thumbnail-left" ng-repeat="item in shops" ng-click="typeProDetails(item)">
+                    <img src="{{item.thumbImgShow}}">
+                    <p class="weui_media_title product-buttom">
+                        <span class="product-show-title">{{item.name}}</span>
+                    </p>
+                    <p class="weui_media_desc product-buttom">
+                        <span>地址<font> {{item.address}}</font></span>
+                    </p>
+                    <p>
+                            <span class="product-show-sales">已售{{item.totalSaleNum}}</span>
+                            <span class="product-show-scan">{{item.distance}}</span>
+                    </p>
+                </a>
+            </div>
+        </div>
+        <ul ng-if="typePros.length == 0 && !searchParams.moreDataCanBeLoaded" class="ws-pdlist-all-res">
+            <li class="ws-nothing">
+                <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
+                <br />
+                <p>哦~没有找到相关商品</p>
+            </li>
+        </ul>
+        <fieldset ng-if="!searchParams.moreDataCanBeLoaded" class="line"><legend align="center">&nbsp;&nbsp;我是有底线的&nbsp;&nbsp;</legend></fieldset>
+        <ion-infinite-scroll ng-if="searchParams.moreDataCanBeLoaded && searchParams.allowLoad" on-infinite="loadShops(searchParams.allowLoad)" distance="10%"></ion-infinite-scroll>
+    </ion-content>
+</ion-view>

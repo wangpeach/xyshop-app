@@ -1,0 +1,171 @@
+<style>
+.item-select,
+.item-input {
+        border-left: 0px;
+        border-right: 0px;
+}
+
+.button {
+        font-size: 15px;
+}
+.rg-tjr a.button {
+        font-size: 1.5rem;
+        margin-top: -0.7rem;
+}
+</style>
+<ion-modal-view>
+        <ion-content class="lsr-content">
+                <div class="sr-header">
+                        <a class="button button-clear button-balanced sr-cancel" ng-click="cancelSR()">取消</a>
+                </div>
+                <div class="sr-content">
+                        <h1>绿力商城</h1>
+                        <p>为消费者打开致富梦想的大门</p>
+                        <p>引领消费领域的彻底革命</p>
+                        <div class="sr-switch-content">
+                                <div ng-if="why=='Login'">
+                                        <div class="logic">
+                                                <form name="lcform" ng-submit="signIn(logic)">
+                                                        <div>
+                                                                <input type="text" required ng-model="logic.username" name="yhusername" id="yhusername" placeholder="&nbsp;&nbsp;用户名" />
+                                                                <br>
+                                                                <input type="password" required ng-model="logic.userpass" name="yhuserpass" id="yhuserpass" placeholder="&nbsp;&nbsp;密码" />
+                                                        </div>
+                                                        <div id="get">
+                                                                <button id="submit" ng-disabled="wdform.$invalid" type="submit" class="button button-block button-positive" style="background-color:#64C39C;">登录</button>
+                                                                <br>
+                                                                <br>
+                                                                <p style="color: red;" id="_gi"></p>
+                                                        </div>
+                                                </form>
+                                        </div>
+                                        <div id="quistion">
+                                                <span>
+                                                        <a href="javascript:;" class="button button-clear button-balanced sr-cancel" ng-click="switch('ResetPass')">无法登录?</a>
+                                                </span>
+                                                <span>
+                                                        <a href="javascript:;" class="button button-clear button-balanced sr-cancel" ng-click="switch('Register')">新用户</a>
+                                                </span>
+                                        </div>
+                                </div>
+                                <div ng-if="why=='Register'">
+                                        <ion-slide-box ng-init="disableSwipe()" does-continue="false" show-pager="false">
+                                                <ion-slide>
+                                                        <form name="regform" ng-submit="_baseInfo(_reguser)">
+                                                                <input type="text" ng-model="_reguser.username" ng-pattern="regexp.username" id="username" required placeholder="&nbsp;&nbsp;用户名(不能使用汉字)" />
+                                                                <br>
+                                                                <input type="password" ng-model="_reguser.userpass" id="userpass" required placeholder="&nbsp;&nbsp;密码 (必填)" />
+                                                                <br>
+                                                                <input type="text" ng-model="_reguser.useremail" ng-pattern="regexp.email" placeholder="&nbsp;&nbsp;邮箱(可选)">
+                                                                <br>
+                                                                <div class="rg-tjr">
+                                                                        <input type="text" ng-model="_reguser.temptjrn" id="temptjrn" placeholder="&nbsp;&nbsp;推荐人" style="width: 80%;" />
+                                                                        <input type="hidden" ng-model="_reguser.usertuijianren" id="usertuijianren">
+                                                                        <a class="button button-clear" ng-click="scanCode($event)">
+                                                                                <i class="icon-qr-code"></i>
+                                                                        </a>
+                                                                </div>
+                                                                <br>
+                                                                <!-- <input type="text" ng-model="reguser.useridcard" ng-pattern="regexp.useridcard" id="useridcard" required placeholder="&nbsp;&nbsp;身份证号码 (必填)" /> -->
+                                                                <button id="next" class="button button-block button-balanced" style="margin-top: 10px;" ng-disabled="regform.$invalid" type="submit">下一步</button>
+                                                        </form>
+                                                </ion-slide>
+                                                <ion-slide>
+                                                        <form name="areaform" ng-submit="areaComplete(addr)">
+                                                                <label class="item item-input item-select">
+                                                                        <span class="input-label" style="text-align: left;">省</span>
+                                                                        <select required ng-model="addr.provience" ng-options="option.name for option in pros" ng-change="changeArea(addr, 'city')">
+                                                                                <option>请选择</option>
+                                                                        </select>
+                                                                </label>
+                                                                <label class="item item-input item-select">
+                                                                        <span class="input-label" style="text-align: left;">市</span>
+                                                                        <select required ng-model="addr.city" ng-options="option.name for option in cits" ng-change="changeArea(addr, 'area')">
+                                                                                <option>请选择</option>
+                                                                        </select>
+                                                                </label>
+                                                                <label class="item item-input item-select">
+                                                                        <span class="input-label" style="text-align: left;">区</span>
+                                                                        <select required ng-model="addr.area" ng-options="option.name for option in ares">
+                                                                                <option>请选择</option>
+                                                                        </select>
+                                                                </label>
+                                                                <button id="next" class="button button-block button-balanced" ng-disabled="regform.$invalid" type="submit">下一步</button>
+                                                        </form>
+                                                        <p style="margin-top: 10px;">
+                                                                <button id="back" class="button button-outline button-block button-assertive" ng-click="_back()">上一步</button>
+                                                        </p>
+                                                </ion-slide>
+                                                <ion-slide>
+                                                        <div class="content">
+                                                                <form name="verifPhone" ng-submit="sendCode_Reg(iden.userphone)">
+                                                                        <input type="text" ng-pattern="regexp.phone" ng-model="iden.userphone" style="width: 70%; float: left;" id="userphone" required placeholder="&nbsp;&nbsp;手机号码" />
+                                                                        <button class="button button-small button-balanced" ng-disabled="againNum > 0 || verifPhone.$invalid" ng-click="" style="float: right;">
+                                                                                {{againText}}
+                                                                        </button>
+                                                                </form>
+                                                                <form name="idenform" ng-submit="idenSubmit(iden)">
+                                                                        <br>
+                                                                        <input type="number" ng-model="iden.code" ng-minlength="4" ng-maxlength="4" required placeholder="&nbsp;&nbsp;验证码" />
+                                                                        <button class="button button-block button-balanced" ng-disabled="idenform.$invalid" type="submit">
+                                                                                完成
+                                                                        </button>
+                                                                </form>
+                                                                <p style="margin-top: 10px;">
+                                                                        <button id="back" class="button button-outline button-block button-assertive" ng-click="_back()">上一步</button>
+                                                                </p>
+                                                        </div>
+                                                </ion-slide>
+                                        </ion-slide-box>
+                                        <p>
+                                                <a id="sig" class="button button-clear button-stable" style="font-size: 13px;" href="javascript:;" ng-click="switch('Login')">已有账号?</a>
+                                        </p>
+                                        <p style="color: red; font-size: 12px;">*请确保您的用户名，邮箱和身份证号码的正确性</p>
+                                </div>
+                                <div ng-if="why=='ResetPass'">
+                                        <ion-slide-box ng-init="disableSwipe()" does-continue="false" show-pager="false">
+                                                <ion-slide>
+                                                        <div class="content">
+                                                                <div>
+                                                                        <form name="valphone" ng-submit="sendCode_forget(phone)">
+                                                                                <input type="text" ng-pattern="regexp.phone" required placeholder="请输入手机号码" ng-model="phone.num" style="width: 70%; float: left;">
+                                                                                <button class="button button-small button-balanced" ng-disabled="againNum > 0 || valphone.$invalid" type="submit" style="float: right; margin-right: 3px; ">
+                                                                                        {{againText}}
+                                                                                </button>
+                                                                        </form>
+                                                                </div>
+                                                                <div>
+                                                                        <form name="valcode" ng-submit="goforget(phone)">
+                                                                                <input type="text" required placeholder="请输入验证码" ng-model="phone.code">
+                                                                                <button ng-disabled="valcode.$invalid" type="submit" class="button button-block button-balanced">
+                                                                                        确&nbsp;&nbsp;&nbsp;&nbsp;定
+                                                                                </button>
+                                                                        </form>
+                                                                </div>
+                                                        </div>
+                                                </ion-slide>
+                                                <ion-slide>
+                                                        <form name="changepass" ng-submit="savePass(user)">
+                                                                <div class="list">
+                                                                        <label class="item item-input" style="border: 0px;">
+                                                                                <span class="input-label" style="width: 25%;">新密码</span>
+                                                                                <input type="password" required placeholder="" ng-model="user.pass">
+                                                                        </label>
+                                                                        <button ng-disabled="changepass.$invalid" type="submit" class="button button-block button-balanced">
+                                                                                确&nbsp;&nbsp;&nbsp;&nbsp;定
+                                                                        </button>
+                                                                </div>
+                                                        </form>
+                                                        <p style="margin-top: 10px;">
+                                                                <button id="back" class="button button-outline button-block button-assertive" ng-click="_back()">上一步</button>
+                                                        </p>
+                                                </ion-slide>
+                                        </ion-slide-box>
+                                        <p>
+                                                <a id="sig" class="button button-clear button-stable" style="font-size: 15px;" href="javascript:;" ng-click="switch('Login')">登录</a>
+                                        </p>
+                                </div>
+                        </div>
+                </div>
+        </ion-content>
+</ion-modal-view>

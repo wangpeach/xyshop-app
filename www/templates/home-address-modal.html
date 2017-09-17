@@ -1,0 +1,86 @@
+<ion-modal-view class="homeModal modal">
+    <ion-header-bar class="bar-stable">
+        <div class="header">
+            <button class="button icon-left ion-chevron-left button-clear button-dark " style="color: rgba(68, 68, 68, 0.6)" ng-click="chooseCity()"></button>
+            <span>选择地区</span>
+        </div>
+        <div class="search">
+            <div class="search-city">
+                <i class="icon ion-ios-search placeholder-icon ws-search-icon"></i>
+                <input type="search" placeholder="{{searchCitySender.placeholder}}" ng-change="filterCity(searchCitySender.key)" ng-model="searchCitySender.key">
+                <button class="button button-clear " style="font-size: 20px;" ng-if="searchCitySender.key!= null" ng-click="clearCityKey(cancel)">
+                    <i class="ion-close-circled placeholder-icon ws-search-icon"></i>
+                </button>
+            </div>
+        </div>
+    </ion-header-bar>
+    <ion-content delegate-handle="cityscroll">
+        <div class="city_selection">
+            <div class="now_place">
+                <em>当前：{{defailtAddress.clientSide}}</em>
+                <span class="right-button">
+            </span>
+            </div>
+            <!-- <div class="city_area" ng-if="Area">
+                <ul class="list_one">
+                    <li ng-repeat="regionaladdres in regional.data" style="padding: 0;">
+                        <ion-radio ng-value="regionaladdres.name" ng-model="defailtAddress.clientSide" name="server-side" ng-click="chooseCity()">
+                            {{ regionaladdres.name }}
+                        </ion-radio>
+                    </li>
+                </ul>
+            </div>
+            <div class="clearcity"></div>
+            <div class="city">
+                <div class="mar font_small">当前定位城市</div>
+                <div class="place">
+                    <ul class="list_one">
+                        <li><a href="#">成都</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clearcity"></div>
+            <div class="city">
+                <div class="mar">最近访问城市</div>
+                <div class="place">
+                    <ul class="list_one">
+                        <li><a href="#">成都</a></li>
+                    </ul>
+                </div>
+            </div> -->
+            <div class="clearcity"></div>
+            <div class="city">
+                <div class="mar">热门城市</div>
+                <div class="place">
+                    <ul class="list_one">
+                        <li ng-repeat="hotaddres in hotAddress.name" style="padding: 0;">
+                            <ion-radio ng-value="hotaddres" ng-model="defailtAddress.clientSide" name="server-side" ng-click="chooseCity()">
+                                {{hotaddres}}
+                            </ion-radio>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clearcity"></div>
+            <div class="mar">
+                <div class="line"></div>
+            </div>
+            <div class="city" ng-repeat="letter in addrList">
+                <div class="mar">{{letter.name}}</div>
+                <ion-radio class="radio-{{place.id}}" ng-repeat="place in letter.city" ng-value="place.name" ng-model="defailtAddress.clientSide" name="server-side" ng-click="chooseCity()">
+                    {{place.name}}
+                </ion-radio>
+            </div>
+        </div>
+    </ion-content>
+    <!-- <div class="right_bar">
+        <div>
+            <ul>
+                <li>定位</li>
+                <li>最近</li>
+                <li>热门</li>
+                <li ng-repeat="letter in addres.data">{{letter.name}}</li>
+            </ul>
+        </div>
+    </div> -->
+</ion-modal-view>

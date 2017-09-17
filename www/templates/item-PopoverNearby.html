@@ -1,0 +1,10 @@
+<ion-popover-view class="itemPopover">
+    <ion-content>
+        <div class="list">
+            <ion-radio ng-repeat="item in contentList1" name="distance" ng-value="item.value" ng-model="searchParams.distance" ng-change="openPopoverNearby.hide(); selected.nearby=item.text; anewSearch()">
+                {{ item.text }}
+                <!-- <span class="number">{{ item.value }}</span> -->
+            </ion-radio>
+        </div>
+    </ion-content>
+</ion-popover-view>

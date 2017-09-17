@@ -1,0 +1,53 @@
+<ion-view class="proOrder" view-title="提交订单" hide-tabs>
+    <ion-content hasfooter>
+        <div class="order-addr" ng-click="chooseAddrs()">
+            <h4>
+                   <span style="margin-right: 15px">{{targetAddr.name }}</span>
+                   <span>{{formatPhone(targetAddr.tel) }}</span>
+            </h4>
+            <p><i class="icon-address"></i>{{targetAddr.provience + targetAddr.city + targetAddr.area + targetAddr.address}}</p>
+        </div>
+        <div class="list money">
+            <p class="quarantine"></p>
+            <a class="item item-avatar">
+                <img src="{{parameters.product.productimgurl.split('，')[0]}}" style="border-radius: 0"> {{parameters.product.productname}}
+                <span class="item-note">
+                    ¥{{parameters.product.productprice}}
+                </span>
+            </a>
+            <a class="item">
+                数量
+                <span class="sumcount">
+                    <button class="button button-small button-outline button-light left" ng-click= "buyLess()">-</button>
+                    <span class="count">{{parameters.sumcounts}}</span>
+                    <button class="button button-small button-outline button-light right" ng-click= "buyAdd()">+</button>
+                </span>
+            </a>
+            <!-- <a class="item smallprice">
+                小计
+                <span class="item-note">
+                    ¥ 15
+                </span>
+            </a> -->
+            <!-- <p class="quarantine"></p>
+            <a class="item privilege">
+                    优惠活动
+             </a>
+            <ion-checkbox class="privilegedetails" ng-model="item.checked" ng-checked="item.checked">
+                活动内容
+            </ion-checkbox> -->
+            <p class="quarantine"></p>
+            <a class="item sumprice">
+                 总价
+                 <span class="sumcounts">(共{{parameters.sumcounts}}张)</span>
+                 <span class="item-note">
+                    ¥ {{parameters.sumprices}}
+                </span>
+                <!-- <span class="privilegemoney">(已优惠¥2)</span> -->   
+            </a>
+        </div>
+    </ion-content>
+    <div class="bar bar-footer bar-balanced" ng-click="goPayOrder()">
+        <div class="title">提交订单</div>
+    </div>
+</ion-view>

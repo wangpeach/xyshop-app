@@ -1,0 +1,48 @@
+<style>
+	.data-col { float: left; text-align: left; margin: 0px 0% 0px 1%; font-size: 14px; text-align: center; }
+	.data-col:nth-child(1) { width: 25%; }
+	.data-col:nth-child(2) { width: 40%; }
+	.data-col:nth-child(3) { width: 15%; }
+	.data-col:last-child { width: 15%; text-align: right; }
+	.data-col li:nth-child(2) { color: #b3b3b3; }
+	.data-col li:nth-child(odd) { font-size: 14px; }
+	.data-col li:nth-child(even) { font-size: 11px; }
+</style>
+<ion-view view-title="资金明细">
+        <ion-content>
+                <ion-refresher pulling-text="松开刷新" on-refresh="doRefresh()" disable-pulling-rotation="true">
+                </ion-refresher>
+                <ion-list ng-repeat="item in items" item="item">
+                        <ion-item class="y-item" ng-repeat="other in item">
+                                <ul class="data-col">
+                                        <li>{{fd(other.createdate)}}</li>
+                                        <li>{{td(other.createdate)}}</li>
+                                </ul>
+                                <ul class="data-col">
+                                        <li>{{other.remark}}</li>
+                                </ul>
+                                <ul class="data-col">
+                                        <li>
+                                                <font color="red">{{other.state}}</font>
+                                        </li>
+                                </ul>
+                                <ul class="data-col">
+                                        <li>
+                                                <font>{{other.amount}}</font>
+                                        </li>
+                                        <li ng-show="other.paywhy=='提现'">
+                                                {{other.kyamount}}
+                                        </li>
+                                </ul>
+                        </ion-item>
+                </ion-list>
+                <ul>
+                        <li class="animate-repeat" ng-if="!moreDataCanBeLoaded" style="width: 100%; box-shadow: none;">
+                                <div class="nothing">
+                                        <p>没有更多了</p>
+                                </div>
+                        </li>
+                </ul>
+                <ion-infinite-scroll ng-if="moreDataCanBeLoaded" on-infinite="loadMore()" distance="1%"></ion-infinite-scroll>
+        </ion-content>
+</ion-view>

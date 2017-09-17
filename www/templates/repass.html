@@ -1,0 +1,73 @@
+<style>
+.item-select,
+.item-input {
+    border-left: 0px;
+    border-right: 0px;
+}
+
+.button {
+    font-size: 15px;
+}
+
+.rg-tjr a.button {
+    font-size: 1.5rem;
+    margin-top: -0.7rem;
+}
+</style>
+<ion-modal-view class="sinreg">
+    <ion-header-bar align-title="center" class="bar-green">
+        <div class="buttons">
+            <button class="button button-clear icon ion-chevron-left" ng-click="replogin()"></button>
+        </div>
+        <h1 class="title">修改密码</h1>
+        <div class="buttons">
+        </div>
+    </ion-header-bar>
+    <ion-content class="lsr-content">
+        <div class="sr-content">
+            <div class="sr-switch-content">
+                <div>
+                    <ion-slide-box ng-init="disableSwipe()" does-continue="false" show-pager="false">
+                        <ion-slide>
+                            <div class="content">
+                                <div>
+                                    <form name="valphone" ng-submit="sendCode_forget(phone)">
+                                        <input type="text" ng-pattern="regexp.phone" required placeholder="请输入手机号码" ng-model="phone.num" style="width: 70%; float: left;">
+                                        <button class="button button-small button-green" ng-disabled="againNum > 0 || valphone.$invalid" type="submit" style="float: right; margin-right: 3px; ">
+                                            {{againText}}
+                                        </button>
+                                    </form>
+                                </div>
+                                <div>
+                                    <form name="valcode" ng-submit="goforget(phone)">
+                                        <br><br><br>
+                                        <input type="text" required placeholder="请输入验证码" ng-model="phone.code">
+                                        <button ng-disabled="valcode.$invalid" type="submit" class="button button-block button-green">
+                                            确&nbsp;&nbsp;&nbsp;&nbsp;定
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </ion-slide>
+                        <ion-slide>
+                            <form name="changepass" ng-submit="savePass(user)">
+                                <div class="list">
+                                    <label class="item item-input" style="border: 0px;">
+                                        <span class="input-label" style="width: 25%;">新密码</span>
+                                        <input type="password" required placeholder="" ng-model="user.pass">
+                                    </label>
+                                    <button ng-disabled="changepass.$invalid" type="submit" class="button button-block button-green">
+                                        确&nbsp;&nbsp;&nbsp;&nbsp;定
+                                    </button>
+                                </div>
+                            </form>
+                            <p style="margin-top: 10px;">
+                                <button id="back" class="button button-outline button-block button-assertive" ng-click="_back()">上一步</button>
+                            </p>
+                        </ion-slide>
+                    </ion-slide-box>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-modal-view>

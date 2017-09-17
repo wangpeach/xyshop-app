@@ -1,0 +1,33 @@
+<ion-modal-view class="homeSearchModal" ng-class="GoingAway==1 ? 'slideInRight ng-leave' : 'slideOutLeft ng-leave'">
+    <ion-header-bar>
+        <div class="buttons">
+            <button class="button button-clear button-dark icon-left ion-chevron-left" style="color:rgba(68, 68, 68, 0.6)" ng-click="searchModal.hide()"></button>
+        </div>
+        <div class="search-shop">
+            <i class="icon ion-ios-search placeholder-icon ws-search-icon"></i>
+            <form ng-submit="searchShop(searchShopSender.key)">
+                <input type="search" placeholder="{{searchShopSender.placeholder}}" ng-model="searchShopSender.key" ng-focus="searchSwipe(true)" ng-blur="searchSwipe(false)">
+            </form>
+            <button class="button button-clear " style="font-size: 20px;" ng-if="searchShopSender.key!= null" ng-click="clearShopKey(cancel)">
+                <i class="ion-close-circled placeholder-icon ws-search-icon"></i>
+            </button>
+        </div>
+<!--         <button class="button button-clear" style="padding-right: 10px; font-size: 13px; color: #bbb;" ng-if="cancel" ng-click="searchSwipe(false)">
+            取消
+        </button> -->
+    </ion-header-bar>
+    <ion-content>
+        <div class="history-search" ng-if="searchItems && searchItems.length > 0">历史搜索</div>
+        <ion-list>
+            <ion-item class="history-search-item item-icon-left item-icon-right" ng-repeat="item in searchItems" ng-click="searchShop(item)" href="">
+                <i class="icon ion-ios-search"></i>
+                {{item}}
+                <i class="icon ion-ios-arrow-right"></i>
+            </ion-item>
+        </ion-list>
+        <div class="clear-history-record" ng-click="clearhispanel()" ng-if="searchItems && searchItems.length > 0" style="height:40px; text-align:center; background:#ffffff;">
+            <h5 style="margin:0;padding:10px;color:#a2a2a2">清除历史记录</h5>
+        </div>
+    </ion-content>
+</ion-modal-view>
+

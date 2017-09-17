@@ -1,0 +1,174 @@
+<ion-view view-title="首页" hide-nav-bar="true" class="home">
+
+
+    <ion-content delegate-handle="scroll-ct">
+        <ion-refresher on-refresh="doRefresh()">
+        </ion-refresher>
+        <div class="title title-center header-item bar-transparent bar bar-header" ng-click="openSearchPanel()">
+            <!--  <form class="search" ng-submit="search(searchSender)">
+                <input type="text" placeholder="{{searchSender.placeholder}}" ng-model="searchSender.key" class="inp">
+            </form> -->
+            <form class="search">
+                <input type="text" placeholder="搜索商品类" class="inp">
+            </form>
+        </div>
+
+        <!--广告-->
+        <!--<ion-slides options="options" slider="data.slider"  auto-play="true" does-continue="true" style="height: 13em">
+            <ion-slide-page ng-repeat="item in advs">
+                <img ng-src="{{item.imgUrlShow}}" ng-click="lookAdv(item)" style="width: 100%; height: 13em;">
+            </ion-slide-page>
+        </ion-slides>-->
+        <ion-slide-box auto-play="true" does-continue="true" show-pager="true" class="ad-slider">
+            <ion-slide ng-repeat="item in advs">
+                <img ng-src="{{item.imgUrlShow}}" ng-click="handleAd(item)" style="width: 100%; height: 13em;">
+            </ion-slide>
+        </ion-slide-box>
+        <!--分类-->
+        <div class="carousel">
+            <ion-slides options="options" slider="data.slider">
+                <ion-slide-page ng-repeat="item in protys">
+                    <div class="row" ng-repeat="rowItem in item">
+                        <div class="col" ng-repeat="grainItem in rowItem" ng-click="searchpro(grainItem)">
+                            <img ng-src="{{grainItem.iconImgPath}}" alt="">
+                            <p>{{grainItem.name}}</p>
+                        </div>
+                    </div>
+                </ion-slide-page>
+            </ion-slides>
+        </div>
+        <!-- 隔离条 -->
+        <p class="quarantine"></p>
+        <!-- 广告 -->
+        <!-- <div class="row adv adv-5r">
+            <div class="col col-100">
+                <div class="row">
+                    <div class="col col-67">
+                        <b>测试啊啊啊</b>
+                        <p>小标题</p>
+                    </div>
+                    <div class="col col-33">
+                        <img src="img/test/banner1.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!--<div class="row adv adv-3r">
+            <div class="col col-50" ng-click="adgopro(advs[0].action, advs[0].productid)">
+                <div class="row">
+                    <div class="col col-67">
+                        <b>{{advs[0].pro.productname }}</b>
+                        <p>{{advs[0].default2 }}</p>
+                    </div>
+                    <div class="col col-33">
+                        <img ng-src="{{advs[0].pro.productimgurl }}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="col col-50" ng-click="adgopro(advs[1].action, advs[1].productid)">
+                <div class="row">
+                    <div class="col col-67">
+                        <b>{{advs[1].pro.productname }}</b>
+                        <p>{{advs[1].default2 }}</p>
+                    </div>
+                    <div class="col col-33">
+                        <img src="{{advs[1].pro.productimgurl }}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row adv adv-3r">
+            <div class="col col-50" ng-click="adgopro(advs[2].action, advs[2].productid)" >
+                <div class="row">
+                    <div class="col col-67">
+                        <b>{{advs[2].pro.productname }}</b>
+                        <p>{{advs[2].default2 }}</p>
+                    </div>
+                    <div class="col col-33">
+                        <img src="{{advs[2].pro.productimgurl }}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="col col-50" ng-click="adgopro(advs[3].action, advs[3].productid)">
+                <div class="row">
+                    <div class="col col-67">
+                        <b>{{advs[3].pro.productname }}</b>
+                        <p>{{advs[3].default2 }}</p>
+                    </div>
+                    <div class="col col-33">
+                        <img src="{{advs[3].pro.productimgurl }}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row adv adv-3r">
+            <div class="col col-50" ng-click="adgopro(advs[4].action, advs[4].productid)">
+                <div class="row">
+                    <div class="col col-67">
+                        <b>{{advs[4].pro.productname }}</b>
+                        <p>{{advs[4].default2 }}</p>
+                    </div>
+                    <div class="col col-33">
+                        <img src="{{advs[4].pro.productimgurl }}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="col col-50" ng-click="adgopro(advs[5].action, advs[5].productid)">
+                <div class="row">
+                    <div class="col col-67">
+                        <b>{{advs[5].pro.productname }}</b>
+                        <p>{{advs[5].default2 }}</p>
+                    </div>
+                    <div class="col col-33">
+                        <img src="{{advs[5].pro.productimgurl }}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>-->
+        <!-- END -->
+        <!-- 隔离条 -->
+        <p class="quarantine"></p>
+        <!-- 猜你喜欢 -->
+        <p class="maybeLike">
+            <span><i class="ion-bonfire"></i>热门商品</span>
+            <a href="javascript:;" style="float: right;" ng-click="">更多</a>
+        </p>
+        <ion-list show-delete="shouldShowDelete" show-reorder="shouldShowReorder" can-swipe="true">
+
+            <ion-item ng-repeat="item in likes" ng-click="hotGoodDetails({{item}})" class="item-thumbnail-left">
+                <img ng-src="{{item.thumbImgShow}}">
+                <p class="weui_media_title product-buttom">
+                    <span class="product-show-title">{{item.name}}</span>
+                    <!-- <span class="product-show-distance">{{item.default5}}m</span> -->
+                </p>
+                <!--<p class="weui_media_desc product-buttom">
+                    <span class="product-show-discount"></span
+                </p>> -->
+                <p class="weui_media_desc product-show-introduce">{{item.description}}</p>
+                <p class="weui_media_desc product-buttom">
+                    <span class="product-show-price">￥<font>{{item.price}}</font></span>
+                    <span class="product-show-discount">门市价:￥{{item.orgPrice}}</span>
+                </p>
+                <p>
+                    <span class="product-show-sales">{{item.shopName}}</span>
+                    <span class="product-show-scan">已售{{item.saleNum}}</span>
+                </p>
+                <!-- <ion-option-button class="button-positive" ng-click="share(item)">
+                    分享
+                </ion-option-button>
+                <ion-option-button class="button-info" ng-click="edit(item)">
+                    不喜欢
+                </ion-option-button> -->
+                <!-- <ion-delete-button class="ion-minus-circled" ng-click="maybeLikes.splice($index, 1)">
+                    </ion-delete-button>
+                    <ion-reorder-button class="ion-navicon" on-reorder="reorderItem(item, $fromIndex, $toIndex)">
+                    </ion-reorder-button> -->
+            </ion-item>
+        </ion-list>
+        <fieldset ng-if="!options.moreDataCanBeLoaded" class="line">
+            <legend align="center">&nbsp;&nbsp;我是有底线的&nbsp;&nbsp;</legend>
+        </fieldset>
+        <!--<ion-infinite-scroll ng-if="options.moreDataCanBeLoaded" on-infinite="loadMaybeLike()" distance="20%"></ion-infinite-scroll>-->
+        <!-- END -->
+    </ion-content>
+</ion-view>

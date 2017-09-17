@@ -1,0 +1,18 @@
+<ion-view class="proPay" view-title="支付订单" hide-tabs>
+    <ion-content>
+        <div class="list money">
+            <a class="item item-avatar">
+                <img src="{{parameters.product.productimgurl.split('，')[0]}}">
+                <h2>¥ {{parameters.sumprices}}</h2>
+                <p>{{parameters.product.productname}}</p>
+            </a>
+            <p class="quarantine"></p>
+            <ion-radio  class="payway" ng-repeat= "item in payways" ng-value="item.way" ng-model="data.method" name="way">
+                <img src="{{item.img}}" style="height: 25px; width: 80px;">
+            </ion-radio>
+        </div>
+        <div class="padding">
+            <a class="button button-block button-balanced" ng-click="getPay()">确认支付</a>
+        </div>
+    </ion-content>
+</ion-view>

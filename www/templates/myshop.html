@@ -1,0 +1,54 @@
+<ion-view view-title="我的店铺" class="myShop" hide-tabs>
+    <!-- <ion-header-bar align-title="left" class="bar-stable">
+        <button class="button button-clear  icon-left ion-chevron-left" style="color:rgba(68, 68, 68, 0.6)" ng-click="itemBack()"></button>
+        <h1 class="title">我的店铺</h1>
+    </ion-header-bar> -->
+    <ion-content>
+        <div class="list headPortrait">
+            <a class="item item-avatar">
+                <img src="{{shop.logo}}">
+                <h2>{{shop.shopname}}</h2>
+            </a>
+        </div>
+        <div class="list identification" ng-if="shop.status != '1'">
+            <!-- <a class="item item-icon-right" href="#">
+                <h2>实名认证</h2>
+                <i class="icon ion-ios-arrow-right"></i>
+                <p>完成实名认证才能收到货款</p>
+            </a> -->
+            <h6>{{tips}}</h6>
+            <a class="item item-icon-right" href="#/tab/account/msCertification">
+                <h2>店铺认证</h2>
+                <i class="icon ion-ios-arrow-right"></i>
+                <p>让更多人看到你的店铺，正式开张</p>
+            </a>
+        </div>
+        <!-- <p class="quarantine"></p>
+        <div class="list novice">
+            <a class="item item-thumbnail-lef item-icon-right" href="#">
+                <img src="http://www.runoob.com/try/demo_source/venkman.jpg">
+                <span>新手卖家三步入门</span>
+                <i class="icon ion-ios-arrow-right"></i>
+            </a>
+        </div> -->
+        <p class="quarantine"></p>
+        <div class="row function">
+            <a class="col" ng-click="jump('#/tab/account/msRelease')">
+                <img src="http://www.runoob.com/try/demo_source/venkman.jpg">
+                <p>发布宝贝</p>
+            </a>
+            <a class="col" ng-click="jump('#/tab/account/msManage')">
+                <img src="http://www.runoob.com/try/demo_source/venkman.jpg">
+                <p>宝贝管理</p>
+            </a>
+            <a class="col" ng-click="jump('#/tab/account/msOrder')">
+                <img src="http://www.runoob.com/try/demo_source/venkman.jpg">
+                <p>订单管理</p>
+            </a>
+            <a class="col" ng-click="jump('#/tab/account/msSetting')">
+                <img src="http://www.runoob.com/try/demo_source/venkman.jpg">
+                <p>设置</p>
+            </a>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,86 @@
+<ion-view class="shopDetails" view-title="商铺详情" hide-tabs>
+    <ion-content>
+        <style>
+        .detail a.button .icon:before,
+        a.button.icon:before,
+        a.button.icon-left:before,
+        a.button.icon-right:before {
+            margin: 0px;
+        }
+        
+        .detail .button .icon:before,
+        .button.icon:before,
+        .button.icon-left:before,
+        .button.icon-right:before {
+            line-height: 30px;
+            font-size: 20px;
+        }
+        </style>
+        <div class="detail">
+            <!--旋转木马-->
+            <div class="carousel">
+                <ion-slide-box auto-play="true" does-continue="true" show-pager="false">
+                    <ion-slide>
+                        <img ng-src="img/test/banner1.jpg" width="100%" class="banner_1" />
+                    </ion-slide>
+                </ion-slide-box>
+            </div>
+            <!--地址和联系方式-->
+            <div class="list evaluation">
+                <a class="item">
+                    <h2>{{shopDetail.shopName}}</h2>
+                    <p>公司介绍</p>
+                </a>
+            </div>
+            <div class="row">
+                <div class="col col-90" style="border-right: 1px solid #eaeaea;" ng-click="transfer()">
+                    <a class="button" style="font-size: 13px; color: #9B9B9B; padding: 0px; margin: 0px; border: 0px; min-height: 20px; height: 20px; line-height: 30px; background: rgba(240, 248, 255, 0);">
+                        <i class="icon ion-location"></i> {{shopDetail.address}}
+                    </a>
+                </div>
+                <div class="col col-10" style="text-align: center;">
+                    <a href="tel:{{shopDetail.tel}}" style="font-size: 25px; color: #29D2B3;">
+                        <i class="icon ion-ios-telephone"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- 隔离条 -->
+            <p class="quarantine"></p>
+            <!--服务项-->
+            <div class="service">
+                <div class="list">
+                    <div class="row" style="border-bottom: 1px solid #D8D8D8;">
+                        <div class="col col-100">产品</div>
+                    </div>
+                    <a class="item item-thumbnail-left" ng-repeat="item in shopPros" ng-click="shopProDetails({{item.productid}})">
+                        <img src="{{item.productimgurl}}">
+                        <p class="weui_media_title product-buttom">
+                            <span class="product-show-title">{{item.productname}}</span>
+                        </p>
+                        <p class="weui_media_desc product-buttom">
+                            <span class="product-show-price">￥<font>{{item.productprice}}</font></span>
+                            <span class="product-show-discount">门市价:￥{{item.productmarket}}</span>
+                        </p>
+                        <p>
+                            <span class="product-show-sales">已售{{item.productbuynum}}</span>
+                            <span class="product-show-scan">已浏览{{item.productwain}}</span>
+                        </p>
+                    </a>
+                    <ul ng-if="!shopPros.length" class="ws-pdlist-all-res">
+                        <li class="ws-nothing" style="padding-top: 50px;">
+                            <i class="icon-ws-NGBQ" style="font-size: 30px; color: #DBDBDB;"></i>
+                            <br />
+                            <p>该商铺没有商品</p>
+                        </li>
+                    </ul>
+                    <fieldset ng-if="canbeLoadMore" class="line">
+                        <legend align="center">&nbsp;&nbsp;<a ng-click="loadShopPros()">查看更多</a>&nbsp;&nbsp;</legend>
+                    </fieldset>
+                    <fieldset ng-if="!canbeLoadMore && shopPros.length" class="line">
+                        <legend align="center">&nbsp;&nbsp;已全部加载&nbsp;&nbsp;</legend>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

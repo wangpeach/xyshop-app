@@ -1,0 +1,30 @@
+<ion-modal-view class="adModal">
+    <ion-header-bar>
+        <div class="buttons">
+            <button class="button button-clear button-dark icon-left ion-chevron-left" style="color:rgba(68, 68, 68, 0.6)" ng-click="adModal.hide();"></button>
+        </div>
+        <h1 class="title"></h1>
+    </ion-header-bar>
+    <ion-content>
+        <div class="list card">
+
+            <div class="item">
+                <h2>{{ads.name}}</h2>
+            </div>
+
+            <div class="item item-body">
+
+                <div class="ad-video" ng-if="ads.videoType" ng-bind-html="videoHtml">
+                </div>
+
+                <div ng-bind-html="adsDetail" class="adsDetail"></div>
+                <p class="ad-inner-p">
+                    <button class="button button-outline button-small">
+                        <a href="#" class="subdued">浏览 {{ads.hits}}</a>
+                    </button>
+                </p> 
+                <p class="ad-inner-p">{{ads.addTime}}</p>
+            </div>
+        </div>
+    </ion-content>
+</ion-modal-view>

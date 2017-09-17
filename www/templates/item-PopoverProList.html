@@ -1,0 +1,9 @@
+<ion-popover-view class="itemPopover">
+    <ion-content>
+        <div class="list">
+            <ion-radio ng-repeat="item in typeChild.childs"  name="proList" ng-value="item.uuid" ng-model="searchParams.targetChild" ng-change="openPopoverProList.hide();selected.type=item.name; anewSearch(item)">
+                {{ item.name }}
+            </ion-radio>
+        </div>
+    </ion-content>
+</ion-popover-view>

@@ -1,0 +1,31 @@
+
+<ion-modal-view class="homeModal modal geolocation">
+    <ion-header-bar class="bar-light">
+    	<a class="button button-icon icon ion-ios-close-empty" style="margin-top: 3px; color: rgb(41, 210, 179);" ng-click="seaModal.hide()"></a>
+    	<h6 style="margin: 15px auto; color: #616161;">切换地址</h6>
+        <div class="search">
+            <div class="search-city">
+                <i class="icon ion-ios-search placeholder-icon ws-search-icon"></i>
+                <form ng-submit="searchCity(searchSender)">
+                    <input type="search" placeholder="{{searchSender.geolocHolder}}" ng-change="inputtips(this.vlaue)" ng-model="searchSender.geolocKey">
+                </form>
+                <button class="button button-clear " style="font-size: 20px;" ng-if="searchSender.geolocKey!= null" ng-click="searchSender.geolocKey = null">
+                    <i class="ion-close-circled placeholder-icon ws-search-icon"></i>
+                </button>
+            </div>
+        </div>
+        <a class="button button-icon icon ion-ios-close-empty" style="color: white;"></a>
+    </ion-header-bar>
+    <ion-content>
+        <div class="city_selection">
+        	<div class="now_place" style="padding: 10px 8px;">
+                <a class="button button-small button-icon icon ion-pinpoint" ng-click="poscurloc()" style="line-height: 20px; margin: 0px auto;">&nbsp;&nbsp;定位当前位置</a>
+            </div>
+            <ion-list>
+				<ion-item ng-repeat="item in addrList" ng-click="swipeloc(item)">
+					{{item.name}}
+				</ion-item>
+			</ion-list>
+        </div>
+    </ion-content>
+</ion-modal-view>

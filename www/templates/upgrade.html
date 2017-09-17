@@ -1,0 +1,24 @@
+<ion-view view-title="账户升级">
+    <ion-content has-subheader="false" class="ws-upgrade">
+        <form name="payform" ng-submit="upgrade(ug)">
+            <p>会员等级: </p>
+            <ion-list>
+                 <!-- <ion-radio ng-model="ug.level" class="dark" ng-value="'4'">银钻会员(需缴纳费用 9 元)</ion-radio> -->
+                <!-- <ion-radio ng-model="ug.level" class="hide" ng-value="'99'">金钻会员(需缴纳费用 99 元)</ion-radio> -->
+                <ion-radio ng-model="ug.level" class="dark" required name="role" ng-value="2">铂钻会员 (需缴纳费用 2000 元)</ion-radio>
+            </ion-list>
+            <p>支付方式: </p>
+            <ion-list>
+                <ion-radio ng-model="ug.paywhy" ng-disabled="" class="dark" required name="paywhy" ng-value="'al'">支付宝支付</ion-radio>
+                <!-- <ion-radio ng-model="ug.paywhy" ng-disabled="true" class="dark" required name="paywhy" ng-value="'wx'">
+                        微信支付
+                        <span style="position: absolute; right: 10px; color: red;">暂不支持</span>
+                </ion-radio> -->
+                <ion-radio ng-model="ug.paywhy" ng-disabled="" class="dark" required name="paywhy" ng-value="'bl'">余额支付</ion-radio>
+            </ion-list>
+            <button ng-disabled="payform.$invalid" type="submit" type="submit" class="button button-block button-positive">
+                确&nbsp;&nbsp;&nbsp;&nbsp;定
+            </button>
+        </form>
+    </ion-content>
+</ion-view>

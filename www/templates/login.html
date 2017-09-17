@@ -1,0 +1,87 @@
+<style>
+.item-select,
+.item-input {
+    border-left: 0px;
+    border-right: 0px;
+}
+
+.button {
+    font-size: 15px;
+}
+
+.rg-tjr a.button {
+    font-size: 1.5rem;
+    margin-top: -0.7rem;
+}
+
+.TTPLayer {
+    position: fixed;
+    bottom: 0px;
+    width: 95%;
+    color: #DCDCDC;
+}
+fieldset.TTP {
+    width: 90%;
+    border: 1px solid #ecebeb;
+    border-left: 0px;
+    color: darkgrey;
+    border-right: 0px;
+    border-bottom: 0px;
+    margin: 0px auto;
+    padding: 0px;
+}
+</style>
+<ion-modal-view class="sinreg">
+    <ion-header-bar align-title="left" class="bar-green">
+        <div class="buttons">
+            <button class="button button-clear icon ion-android-close" ng-click="cancel()"></button>
+        </div>
+        <h1 class="title"></h1>
+        <div class="buttons">
+            <button class="button button-clear" ng-click="registerView()">新用户</button>
+        </div>
+    </ion-header-bar>
+    <ion-content class="lsr-content">
+        <div class="sr-content" style="padding-top: 1rem;">
+            <h1>畅行金州</h1>
+            <div class="sr-switch-content">
+                <div>
+                    <div class="logic">
+                        <form name="lcform" ng-submit="signIn(logic)">
+                            <div>
+                                <input type="text" required ng-model="logic.phoneNum" name="yhusername" id="yhusername" placeholder="&nbsp;&nbsp;手机号码" />
+                                <br>
+                                <input type="password" required ng-model="logic.password" name="yhuserpass" id="yhuserpass" placeholder="&nbsp;&nbsp;密码" />
+                            </div>
+                            <div id="get">
+                                <button id="submit" ng-disabled="wdform.$invalid" type="submit" class="button button-block button-green">登录</button>
+                            </div>
+                        </form>
+                        <a class="button button-clear" style="color: deepskyblue;" ng-click="repassView()">无法登陆?</a>
+                    </div>
+                </div>
+                <!-- <div class="TTPLayer">
+                    <div class="row">
+                        <div class="col col-100">
+                            <fieldset class="TTP"><legend align="center">&nbsp;&nbsp;第三方登录&nbsp;&nbsp;</legend></fieldset>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-25>"></div>
+                        <div class="col col-25">
+                            <a class="button button-clear" >
+                                <img src="img/icon32_qq_logo.png" alt="">
+                            </a>
+                        </div>
+                        <div class="col col-25">
+                            <a class="button button-clear" href="">
+                                <img src="img/icon32_wx_logo.png" alt="">
+                            </a>
+                        </div>
+                        <div class="col col-25>"></div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </ion-content>
+</ion-modal-view>

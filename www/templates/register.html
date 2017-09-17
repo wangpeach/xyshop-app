@@ -1,0 +1,62 @@
+<style>
+.item-select,
+.item-input {
+    border-left: 0px;
+    border-right: 0px;
+}
+
+.button {
+    font-size: 15px;
+}
+
+.rg-tjr a.button {
+    font-size: 1.5rem;
+    margin-top: -0.7rem;
+}
+</style>
+<ion-modal-view class="sinreg">
+    <ion-header-bar align-title="center" class="bar-green">
+        <div class="buttons">
+            <button class="button button-clear icon ion-chevron-left" ng-click="reglogin()"></button>
+        </div>
+        <h1 class="title">注册</h1>
+        <div class="buttons">
+        </div>
+    </ion-header-bar>
+    <ion-content class="lsr-content">
+        <div class="sr-content">
+            <div class="sr-switch-content">
+                <div>
+                    <ion-slide-box ng-init="disableSwipe()" does-continue="false" show-pager="false">
+                        <ion-slide>
+                            <form name="verifPhone" ng-submit="sendCode_Reg(_reguser.phoneNum)">
+                            <br>
+                                <input type="text" ng-pattern="regexp.phone" ng-model="_reguser.phoneNum" style="width: 70%; float: left;" id="userphone" required placeholder="&nbsp;&nbsp;手机号码" />
+                                <button class="button button-small button-green" ng-disabled="againNum > 0 || verifPhone.$invalid" ng-click="" type="submit" style="float: right; font-size: 12px;">
+                                    {{againText}}
+                                </button>
+                            </form>
+                            <form name="regform" ng-submit="idenSubmit(_reguser)">
+                            	<br><br><br>
+                            	<input type="text" ng-model="_reguser.code" ng-minlength="6" ng-maxlength="6" placeholder="&nbsp;&nbsp;验证码" />
+                                <br>
+                                <input type="text" ng-model="_reguser.name" id="name" required placeholder="&nbsp;&nbsp;用户名 (必填)" />
+                            	<br>
+                                <input type="password" ng-model="_reguser.password" id="password" required placeholder="&nbsp;&nbsp;密码 (必填)" />
+                                <br>
+                                <!--<div class="rg-tjr">
+                                    <input type="text" ng-model="_reguser.temptjrn" id="temptjrn" placeholder="&nbsp;&nbsp;推荐人" style="width: 80%;" />
+                                    <input type="hidden" ng-model="_reguser.usersTuijianren" id="usersTuijianren">
+                                    <a class="button button-clear" ng-click="scanCode($event)" style="color: cadetblue;">
+                                        <i class="icon-qr-code"></i>
+                                    </a>
+                                </div>-->
+                                <br>
+                                <button id="next" class="button button-block button-green" style="margin-top: 10px;" ng-disabled="regform.$invalid" type="submit">确定</button>
+                            </form>
+                        </ion-slide>
+                    </ion-slide-box>
+                </div>
+            </div>
+    </ion-content>
+</ion-modal-view>

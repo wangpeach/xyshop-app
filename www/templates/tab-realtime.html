@@ -1,0 +1,25 @@
+<ion-view view-title="实时路况" hide-nav-bar="true" class="merchant">
+    <ion-header-bar align-title="left" class="bar-stable" style="padding: 0px;">
+
+        <ion-slide-box auto-play="true" does-continue="true" show-pager="true" class="ad-slider">
+            <ion-slide ng-repeat="item in advs">
+                <img ng-src="{{item.imgUrlShow}}" ng-click="handleAd(item)" style="width: 100%; height: 13em;">
+            </ion-slide>
+        </ion-slide-box>
+        
+    </ion-header-bar>
+    <ion-content style="top: 13em;">
+        <ion-tree-list items="tasks" collapsed="false" myclick="toVideo()"></ion-tree-list>
+        <!--<ul ng-if="!searchSender.moreDataCanBeLoaded && scopeList.length == 0 && !searchSender.firstLoad" class="ws-pdlist-all-res">
+            <li class="ws-nothing" style="padding-top: 50px;">
+                <i class="icon-ws-NGBQ" style="font-size: 30px; color: #DBDBDB;"></i>
+                <br />
+                <p>附近没有监控设备</p>
+            </li>
+        </ul>-->
+        <fieldset ng-if="!searchSender.moreDataCanBeLoaded && scopeList.length > 0" class="line">
+            <legend align="center">&nbsp;&nbsp;已全部加载&nbsp;&nbsp;</legend>
+        </fieldset>
+        <ion-infinite-scroll ng-if="searchSender.moreDataCanBeLoaded && !searchSender.firstLoad" on-infinite="searchShop()" distance="10%"></ion-infinite-scroll>
+    </ion-content>
+</ion-view>

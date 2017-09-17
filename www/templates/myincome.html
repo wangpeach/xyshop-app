@@ -1,0 +1,48 @@
+<ion-view view-title="我的收益" hide-tabs>
+    <ion-nav-buttons side="right">
+      <button class="button button-clear" ng-click="getrecord()">
+        提现记录
+      </button>
+    </ion-nav-buttons>
+    <ion-content>
+        <div class="card">
+            <div class="item item-text-wrap">
+                <p>
+                    收益金额：<span style="font-size: 20px; color: red; float: right;">{{user.default6}}</span>
+                </p>
+                <p>
+                    待领取金额：<span style="font-size: 20px; color: red; float: right;">{{user.default7}}</span>
+                </p>
+                <p>
+                    已领取金额：<span style="font-size: 20px; color: red; float: right;">{{user.default8}}</span>
+                </p>
+            </div>
+        </div>
+        <form name="wdform" ng-submit="_wdform(user)">
+            <div class="list">
+                <label class="item item-input">
+                    <span class="input-label">提现卡号：</span>
+                    <input type="text" required placeholder="" ng-model="user.usersbankcard">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">卡主姓名：</span>
+                    <input type="text" required placeholder="" ng-model="user.userszhenshiname">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">开户行地址：</span>
+                    <input type="text" required placeholder="" ng-model="user.usersbankaddress">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">提现金额：</span>
+                    <input type="number" required max="{{user.default7}}" min="100" ng-pattern="/^\d+00$/" placeholder="" ng-model="user._amount">
+                </label>
+            </div>
+            <button ng-disabled="wdform.$invalid" type="submit" class="button button-block button-assertive">
+                保&nbsp;&nbsp;&nbsp;&nbsp;存
+            </button>
+            <ul class="cashprompt" style="margin-top: 1rem;">
+                <li>提现金额必须是100的倍数</li>
+            </ul>
+        </form>
+    </ion-content>
+</ion-view>

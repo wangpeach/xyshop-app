@@ -1,0 +1,25 @@
+<ion-modal-view>
+       <ion-header-bar>
+              <button ng-click="closePwModal()" class="button icon icon-left ion-chevron-left button-clear button-dark icon ion-ios-arrow-back"></button>
+              <h1 class="title">支付方式</h1>
+       </ion-header-bar>
+       <ion-content class="scroll-content-white has-cusfooter scroll-content-tansei">
+              <ion-list class="orders-paywhy-choose">
+                     <ion-checkbox ng-model="paywhy[0].active" ng-change="changePayWhy(paywhy[0])">
+                          <img src="img/zhifuboby.png" alt="">
+                     </ion-checkbox>
+                     <ion-checkbox ng-model="paywhy[1].active" ng-disabled="true" ng-change="changePayWhy(paywhy[1])">
+                          <img src="img/WePayLogo.png" style="filter: grayscale(100%); filter: gray; -webkit-filter: grayscale(100%); -o-filter: grayscale(100%);" alt="">
+                          <span style="float: right; line-height: 40px; color: red; font-size: 15px;">暂不支持</span>
+                     </ion-checkbox>
+                     <!-- <ion-checkbox ng-model="filter.pink">
+                          <<img src="img/zhifuboby.png" alt="">
+                     </ion-checkbox> -->
+              </ion-list>
+       </ion-content>
+       <div class="bar bar-footer bar-cusfooter-transparent bar-footer-nopadding">
+              <button class="button button-block button-assertive" ng-click="closePwModal()" style="margin: 3px auto; font-size: 15px;">
+                     确&nbsp;&nbsp;&nbsp;&nbsp;定
+              </button>
+       </div>
+</ion-modal-view>

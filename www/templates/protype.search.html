@@ -1,0 +1,41 @@
+<ion-view hide-nav-bar="true" hide-tabs class="proTypeSearch">
+    <ion-header-bar>
+        <div class="buttons">
+            <button class="button button-clear button-dark icon-left ion-chevron-left" style="color:rgba(68, 68, 68, 0.6)" ng-click="backWhere()"></button>
+        </div>
+        <div class="search-shop">
+            <i class="icon ion-ios-search placeholder-icon ws-search-icon"></i>
+            <form ng-submit="searchShop(searchShopSender.key)">
+                <input type="search" placeholder="{{key}}" ng-model="searchShopSender.key" ng-focus="searchSwipe(true)" ng-blur="searchSwipe(false)">
+            </form>
+            <button class="button button-clear " style="font-size: 20px;" ng-if="searchShopSender.key!= null" ng-click="clearShopKey(cancel)">
+                <i class="ion-close-circled placeholder-icon ws-search-icon"></i>
+            </button>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <div class="nearbyItem" ng-repeat="item in typeSearchList" >
+            <div class="row" ng-click="typeSearchShopDetails('{{item.shopid}}')">
+                <div class="col col-33">
+                    <img src="{{item.logo}}" height="80px" width="100px">
+                </div>
+                <div class="col col-77">
+                    <h4>{{item.shopname}}</h4>
+                    <p>{{item.address}}</p>
+                </div>
+            </div>
+            <p class="clear"></p>
+            <div class="row" ng-repeat="other in item.product" ng-click="typeSearchShopProDetails(other.productid)" style="    border-top: 1px solid #e5e5e5;">
+                <div class="col col-33">
+                    <span class="proprice">¥ {{other.productprice}}</span><br>
+                    <span class="marketprice">门市价：¥ {{other.productmarket}}</span>
+                </div>
+                <div class="col col-77">
+                    <span class="proname">{{other.productname}}</span><br>
+                    <span class="product-show-sales" style="font-size: 12px; color: #999;">已售{{other.productbuynum}}</span>
+                </div>
+            </div>  
+            <p class="quarantine"></p>
+        </div>
+    </ion-content>
+</ion-view>

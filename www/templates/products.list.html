@@ -1,0 +1,68 @@
+<ion-view hide-nav-bar="true">
+       <div class="bar bar-header item-input-inset" ng-class="hideClass">
+              <button ng-if="!prosen.cancel" ng-click="back()" class="button back-button button-dark buttons button-clear header-item">
+                     <i class="icon ion-ios-arrow-back"></i>
+              </button>
+              <div class="search">
+                     <i class="icon ion-ios-search placeholder-icon ws-search-icon"></i>
+                     <form ng-submit="search(prosen, true)">
+                            <input type="search" placeholder="{{prosen.placeholder}}" ng-model="prosen.key" ng-focus="searchSwipe(true)" ng-blur="searchSwipe(false)">
+                     </form>
+                     <button class="button button-clear " style="font-size: 20px;" ng-if="prosen.cancel" ng-click="clearKey(prosen.cancel)">
+                            <i class="ion-close-circled placeholder-icon ws-search-icon"></i>
+                     </button>
+              </div>
+              <button class="button button-dark button-clear" style="font-size: 13px;" ng-if="prosen.cancel" ng-click="searchSwipe(false)">
+                     取消
+              </button>
+              <button class="button button-dark button-clear" ng-if="!prosen.cancel" ng-click="swipeMode()">
+                     <i class="icon icon-product-list" ng-class="prosen.typesetting.mode ? prosen.typesetting.iconFlower : prosen.typesetting.iconList"></i>
+              </button>
+       </div>
+       <ion-content has-subheader="false" on-swipe-up="swipeUp()" on-swipe-down="swipeDown()" ng-class="prosen.hasSearchHeader">
+              <ul class="list6-n" ng-if="prosen.typesetting.mode">
+                     <li class="animated fadeInDown" ng-repeat="item in prosen.products">
+                            <a nav-transition="ios" ng-click="goDetails(item.productid)" nav-direction="forward">
+                                   <div class="pic">
+                                          <img src="{{item.productimgurl}}" alt="">
+                                   </div>
+                                   <div class="txt">
+                                          <h4>{{item.productname}}</h4>
+                                          <p>
+                                                 <b>
+                                                 		<i>¥</i>{{item.productprice}}
+                                                 </b>
+                                                 <i class="flower-zeng">赠</i>
+                                                 <!-- <span>好评度: {{goodDegree(item)}}%</span> -->
+                                                 <!-- <em>{{item.productzhekou}}折</em> -->
+                                                 <!-- <span>库存<i>{{item.productstock}}</i></span> -->
+                                          </p>
+                                   </div>
+                            </a>
+                     </li>
+              </ul>
+              <div class="list" ng-if="!prosen.typesetting.mode">
+                     <a class="item item-thumbnail-left animated fadeInDown" nav-transition="ios" nav-direction="forward" ng-click="goDetails(item.productid)" ng-repeat="item in prosen.products" style="border: 0px;">
+                            <img src="{{item.productimgurl}}">
+                            <h2 class="pdlist-name">{{item.productname}}</h2>
+                            <p>
+                                   <b style="color: red;"><i>¥&nbsp;</i><span style="font-size: 13px;">{{item.productprice}}</span></b>
+                                   <i class="ptlist-zeng">赠</i>
+                                   <!-- <span>库存<i>{{item.productstock}}</i></span> -->
+                            </p>
+                            <p class="goodbad">好评度: {{goodDegree(item)}}%</p>
+                     </a>
+              </div>
+               <ul class="ws-pdlist-all-res">
+                      <li class="ws-allload" ng-if="!prosen.hasLoadMore && prosen.products.length > 0">
+                             已全部加载
+                      </li>
+                      <li class="ws-nothing" ng-if="!prosen.hasLoadMore && prosen.products.length == 0">
+                             <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
+                             <br />
+                             <p>抱歉，没有找到相关商品</p>
+                      </li>
+               </ul>
+              <ion-infinite-scroll ng-if="prosen.hasLoadMore" on-infinite="loadProducts()" distance="30%"></ion-infinite-scroll>
+       </ion-content>
+</ion-view>

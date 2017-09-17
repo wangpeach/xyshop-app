@@ -1,0 +1,25 @@
+<ion-view view-title="设置" hide-tabs>
+        <ion-content has-subheader="false">
+                <div class="list ws-list">
+                        <a class="item item-button-right" ng-href="#/tab/account/setting/personal">
+                                个人资料
+                                <button class="button button-clear button-positive button-icon-right">
+                                        <i class="icon ion-ios-arrow-right"></i>
+                                </button>
+                        </a>
+                         <a class="item item-button-right" ng-href="#/tab/account/setting/address">
+                                地址管理
+                                <button class="button button-clear button-positive button-icon-right">
+                                        <i class="icon ion-ios-arrow-right"></i>
+                                </button>
+                        </a>
+                        <!-- <a class="item item-button-right">
+                                账户与安全
+                                <button class="button button-clear button-positive button-icon-right">
+                                        <i class="icon ion-ios-arrow-right"></i>
+                                </button>
+                        </a> -->
+                </div>
+                <button class="button button-block  button-assertive" ng-click="signOut()">退出登录</button>
+        </ion-content>
+</ion-view>
