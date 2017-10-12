@@ -32,7 +32,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
 
         /**
          * 定位用户坐标
-         * @return {[type]} [description]
+         * @return {[type]} [description] 
          */
         $rootScope.initMap = function () {
             $rootScope.mapObj = new AMap.Map('iCenter');
