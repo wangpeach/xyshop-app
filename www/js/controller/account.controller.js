@@ -412,12 +412,6 @@ angular.module("account.controller", ["ionic"])
                     cancel: function() {},
                     buttonClicked: function(index) {
                         base.takePictures(index).then(function(imgData) {
-                            $scope.data_header = "data:image/png;base64," + imgData;
-                            $scope.account.userheader = imgData;
-                            var bean = base.corvertBean("user", {
-                                usersId: $scope.account.usersid,
-                                usersHeadimgurl: imgData
-                            });
                             base.loading();
                             Account.updateUser(bean).then(function(res) {
                                 if (res && res.state == "ok") {
@@ -429,6 +423,15 @@ angular.module("account.controller", ["ionic"])
                                     base.prompt($scope, "修改头像失败");
                                 }
                             });
+                            
+                            base.request("user/mapi/upload-head", 0, {"base64": "data:image/png;base64," + imgData, "userid": Account.getUser().uuid}).then(function(data) {
+                                if(data.status == "success") {
+
+                                } else {
+                                    base.prompt($scope, "上传头像失败");
+                                }
+                            });
+
                         }, function(err) {
                             base.prompt($scope, "获取头像失败");
                         });

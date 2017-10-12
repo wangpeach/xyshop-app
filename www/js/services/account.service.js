@@ -125,42 +125,7 @@ angular.module('account.service', [])
                         });
                     return defer.promise;
                 },
-                /**
-                 * 更新用户
-                 * @param  {[type]} arg [description]
-                 * @return {[type]}     [description]
-                 */
-                updateUser: function(arg, usersId) {
-                    var _user = {},
-                        defer = $q.defer();
-                    base.request("usupduser", {'user.usersEmail': arg.email, 'user.usersId': usersId})
-                        .then(function(resp) {
-                            console.log(resp);
-                            defer.resolve(resp);
-                        }, function(resp) {
-                            defer.reject(resp);
-                        })
-                    return defer.promise;
-                },
-                /**
-                 * 会员升级，请求支付信息
-                 * @param  {[type]} params [description]
-                 * @return {[type]}        [description]
-                 */
-                upgrade: function(params) {
-                    var defer = $q.defer();
-                    params.usersid = this.getUser().usersid;
-                    //$http.jsonp(s.getUrl("mbus_mobile_AccUpgrade"), s.handleParams(params))
-                    base.request("mbus_mobile_AccUpgrade", params)
-                        .then(function(resp) {
-                            if (resp) {
-                                defer.resolve(resp);
-                            }
-                        }, function(resp) {
-                            defer.reject(resp);
-                        });
-                    return defer.promise;
-                },
+               
                 /**
                  * [获取余额]
                  * @return {[type]} [description]

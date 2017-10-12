@@ -91,9 +91,5 @@ angular.module('starter.controllers', ["ionic", "home.controller", "realtime.con
                     $scope.adModal.remove();
                 }, 1000);
             })
-
-            
-            
-            
         }
     }])
