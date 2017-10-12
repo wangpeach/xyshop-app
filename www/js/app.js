@@ -28,7 +28,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
             sessionStorage.setItem("curCity", "西安");
             sessionStorage.setItem("geolocation", "108.94787,34.269134");
         }
-
+        // 测试
 
         /**
          * 定位用户坐标
