@@ -2,7 +2,6 @@ angular.module("realtime.controller", ["ionic"])
     .controller('realtimeCtrl', ["$scope", "$rootScope", "$state", "$ionicScrollDelegate", "$ionicTabsDelegate", "$ionicSlideBoxDelegate", "$timeout", "$window", "base", "RealTime",
         function($scope, $rootScope, $state, $ionicScrollDelegate, $ionicTabsDelegate, $ionicSlideBoxDelegate, $timeout, $window, base, RealTime) {
 
-            
 
             $scope.loadAd = function() {
                 base.request("ad/mapi/loadAds", 0, { position: "monitorHomeTop" }).then(function(data) {
@@ -30,7 +29,7 @@ angular.module("realtime.controller", ["ionic"])
                     default:
                         return false;
                 }
-
+                // http://163.177.152.30:8000/
                 base.request("http://163.177.152.30:8000/" + next_addr + id, 0, {}).then(function(resp) {
                     for (var i = 0; i < resp.length; i++) {
                         resp[i].tree = new Array();
