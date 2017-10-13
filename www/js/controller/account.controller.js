@@ -413,20 +413,13 @@ angular.module("account.controller", ["ionic"])
                     buttonClicked: function(index) {
                         base.takePictures(index).then(function(imgData) {
                             base.loading();
-                            Account.updateUser(bean).then(function(res) {
-                                if (res && res.state == "ok") {
+                            
+                            base.request("user/mapi/upload-head", 0, {"base64": "data:image/png;base64," + imgData, "userid": Account.getUser().uuid}).then(function(data) {
+                                if(data.status == "success") {
                                     Account.reload().then(function() {
                                         base.loaded();
                                         base.prompt($scope, "修改头像成功");
                                     });
-                                } else {
-                                    base.prompt($scope, "修改头像失败");
-                                }
-                            });
-                            
-                            base.request("user/mapi/upload-head", 0, {"base64": "data:image/png;base64," + imgData, "userid": Account.getUser().uuid}).then(function(data) {
-                                if(data.status == "success") {
-
                                 } else {
                                     base.prompt($scope, "上传头像失败");
                                 }

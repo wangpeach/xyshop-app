@@ -9,8 +9,8 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
             var _config = JSON.parse(localStorage.getItem("config"));
 
             var services = {
-                hostHome: "http://192.168.0.28/xyshop/",
-                hostShop: "http://192.168.0.28/xyshop-supplier/",
+                hostHome: "http://127.0.0.1:8080/xyshop/",
+                hostShop: "http://127.0.0.1:8080/xyshop-supplier/",
                 upgrade_url: '',
                 //高德web服务api
                 GaodeRestapiKey: "13cdbb92be4fb255d52f4ca82863d949",
