@@ -413,7 +413,6 @@ angular.module("account.controller", ["ionic"])
                     buttonClicked: function(index) {
                         base.takePictures(index).then(function(imgData) {
                             base.loading();
-                            
                             base.request("user/mapi/upload-head", 0, {"base64": "data:image/png;base64," + imgData, "userid": Account.getUser().uuid}).then(function(data) {
                                 if(data.status == "success") {
                                     Account.reload().then(function() {
