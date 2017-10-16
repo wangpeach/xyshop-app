@@ -418,7 +418,7 @@ angular.module("account.controller", ["ionic"])
                                     Account.reload().then(function() {
                                         base.loaded();
                                         base.prompt($scope, "修改头像成功");
-                                    });
+                                    }); 
                                 } else {
                                     base.prompt($scope, "上传头像失败");
                                 }
