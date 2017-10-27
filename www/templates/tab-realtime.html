@@ -1,18 +1,11 @@
 <ion-view view-title="实时路况" hide-nav-bar="true" class="merchant">
     <ion-content >
-        <ion-slide-box auto-play="true" does-continue="true" show-pager="true" class="ad-slider">
-            <ion-slide ng-repeat="item in advs">
-                <img ng-src="{{item.imgUrlShow}}" ng-click="handleAd(item)" style="width: 100%; height: 13em;">
+        <ion-slide-box auto-play="true" does-continue="true" show-pager="true" class="ad-slider" delegate-handle="monitorAdvs" ng-style="slider_img_style">
+            <ion-slide ng-repeat="item in monitorAdvs">
+                <img ng-src="{{item.imgUrlShow}}" ng-click="handleAd(item)" ng-style="slider_img_style">
             </ion-slide>
         </ion-slide-box>
         <ion-tree-list items="tasks" collapsed="false" myclick="toVideo()"></ion-tree-list>
-        <!--<ul ng-if="!searchSender.moreDataCanBeLoaded && scopeList.length == 0 && !searchSender.firstLoad" class="ws-pdlist-all-res">
-            <li class="ws-nothing" style="padding-top: 50px;">
-                <i class="icon-ws-NGBQ" style="font-size: 30px; color: #DBDBDB;"></i>
-                <br />
-                <p>附近没有监控设备</p>
-            </li>
-        </ul>-->
         <fieldset ng-if="!searchSender.moreDataCanBeLoaded && scopeList.length > 0" class="line">
             <legend align="center">&nbsp;&nbsp;已全部加载&nbsp;&nbsp;</legend>
         </fieldset>

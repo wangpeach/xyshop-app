@@ -12,7 +12,7 @@ angular.module('home.service', [])
 			},
 
 			/**
-			 * »ð±¬ÉÌÆ·
+			 * ï¿½ï¿½ï¿½ï¿½Æ·
 			 * @param  {[type]} inx [description]
 			 * @return {[type]}     [description]
 			 */
@@ -24,7 +24,7 @@ angular.module('home.service', [])
 						defer.resolve(resp);
 					}
 				}, function(resp) {
-					base.prompt('»ñÈ¡ÉÌÆ·³ö´í');
+					base.prompt('ï¿½ï¿½È¡ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½');
 					defer.reject(resp);
 				});
 				return defer.promise;
@@ -32,7 +32,7 @@ angular.module('home.service', [])
 
 
 			/**
-			 * ËùÓÐ·ÖÀà
+			 * ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ï¿½
 			 * @return {[type]} [description]
 			 */
 			loadProty: function () {
@@ -45,10 +45,10 @@ angular.module('home.service', [])
 							sessionStorage.setItem("homeproty", JSON.stringify(resp));
 							defer.resolve(resp);
 						} else {
-							base.prompt("ÎÞ·¨ÕÒµ½Ïà¹ØÊý¾Ý");
+							base.prompt("ï¿½Þ·ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 						}
 					}, function(resp){
-						base.prompt("ÇëÇó´íÎó");
+						base.prompt("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 					});
 				} else {
 					defer.resolve(JSON.parse(sessionStorage.getItem("homeproty")));
@@ -57,7 +57,7 @@ angular.module('home.service', [])
 			},
 
 			/**
-			 * ËùÓÐµØÀíÎ»ÖÃ
+			 * ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½Î»ï¿½ï¿½
 			 */
 			// loadAllAddress: function() {
 			// 	var defer = $q.defer();
@@ -65,14 +65,14 @@ angular.module('home.service', [])
 			// 	.then(function(resp) {
 			// 		defer.resolve(resp);
 			// 	}, function(resp){
-			// 		base.prompt('»ñÈ¡µØÀíÎ»ÖÃ³ö´í');
+			// 		base.prompt('ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã³ï¿½ï¿½ï¿½');
 			// 		defer.reject(resp);
 			// 	});
 			// 	return defer.promise;
 			// },
 
 			// /**
-			//  * ÈÈÃÅ³ÇÊÐ
+			//  * ï¿½ï¿½ï¿½Å³ï¿½ï¿½ï¿½
 			//  */
 			// loadHotAddress: function() {
 			// 	var defer = $q.defer();
@@ -80,14 +80,14 @@ angular.module('home.service', [])
 			// 	.then(function(resp) {
 			// 		defer.resolve(resp);
 			// 	},function(resp) {
-			// 		base.prompt("»ñÈ¡ÈÈÃÅ³ÇÊÐ³ö´í");
+			// 		base.prompt("ï¿½ï¿½È¡ï¿½ï¿½ï¿½Å³ï¿½ï¿½Ð³ï¿½ï¿½ï¿½");
 			// 		defer.reject(resp);
 			// 	});
 			// 	return defer.promise;
 			// },
 
 			// /**
-			//  * ÇÐ»»ÏØÇø
+			//  * ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½
 			//  */
 			// loadRegionalAddress: function(addrs) {
 			// 	var defer = $q.defer();
@@ -95,14 +95,14 @@ angular.module('home.service', [])
 			// 		.then(function(resp) {
 			// 			defer.resolve(resp);
 			// 		},function(resp) {
-			// 			base.prompt("»ñÈ¡ÏØÇø³ö´í");
+			// 			base.prompt("ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 			// 			defer.reject(resp);
 			// 		});
 			// 	return defer.promise;
 			// },
 			
 			/**
-			 * ËÑË÷ÉÌÆ·»òÕßµêÆÌ
+			 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½
 			 */
 			searchShopOrGoods: function(arg){
 				var defer = $q.defer();

@@ -1,27 +1,16 @@
 <ion-view view-title="首页" hide-nav-bar="true" class="home">
-
-
     <ion-content delegate-handle="scroll-ct">
         <ion-refresher on-refresh="doRefresh()">
         </ion-refresher>
         <div class="title title-center header-item bar-transparent bar bar-header" ng-click="openSearchPanel()">
-            <!--  <form class="search" ng-submit="search(searchSender)">
-                <input type="text" placeholder="{{searchSender.placeholder}}" ng-model="searchSender.key" class="inp">
-            </form> -->
             <form class="search">
                 <input type="text" placeholder="搜索商品类" class="inp">
             </form>
         </div>
 
-        <!--广告-->
-        <!--<ion-slides options="options" slider="data.slider"  auto-play="true" does-continue="true" style="height: 13em">
-            <ion-slide-page ng-repeat="item in advs">
-                <img ng-src="{{item.imgUrlShow}}" ng-click="lookAdv(item)" style="width: 100%; height: 13em;">
-            </ion-slide-page>
-        </ion-slides>-->
-        <ion-slide-box auto-play="true" does-continue="true" show-pager="true" class="ad-slider">
-            <ion-slide ng-repeat="item in advs">
-                <img ng-src="{{item.imgUrlShow}}" ng-click="handleAd(item)" style="width: 100%; height: 13em;">
+        <ion-slide-box auto-play="true" does-continue="true" show-pager="true" class="ad-slider" ng-style="slider_img_style" delegate-handle="homeAdvs">
+            <ion-slide ng-repeat="item in homeAdvs">
+                <img ng-src="{{item.imgUrlShow}}" ng-click="handleAd(item)" ng-style="slider_img_style">
             </ion-slide>
         </ion-slide-box>
         <!--分类-->

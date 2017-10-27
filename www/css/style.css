@@ -2383,6 +2383,11 @@ border: 1px solid red;
 .geolocation a.button-small.button-icon.icon.ion-pinpoint:before{
     font-size: 20px;
 }
+
+.coupon-view button.coupon-back.button-clear.icon:before {
+    font-size: 30px;
+}
+
 /* 商家 定位地址样式 */
 .geolocation a.button-small.button-icon.icon.ion-pinpoint:before{
     color:  rgb(41, 210, 179);
@@ -3512,8 +3517,8 @@ fieldset.line{
     border-top: 0;
     border-right: 0;
     border-radius: 0;
-    padding: 0px 4px 3px;
-    font-size: 23px;
+    padding: 0px 8px 3px;
+    font-size: 26px;
 }
 .proOrder .money .sumcount .button.left{
     color: #ef5d5d;
@@ -3521,8 +3526,8 @@ fieldset.line{
     border-top: 0;
     border-left: 0;
     border-radius: 0;
-    padding: 0px 4px 3px;
-    font-size: 23px;
+    padding: 0px 11px 3px;
+    font-size: 26px;
 }
 .proOrder .money .sumcount .count{
     width: 30px;
@@ -3536,7 +3541,7 @@ fieldset.line{
 }
 .proOrder .money .privilege{
     font-size: 15px;
-    padding: 8px 16px;
+    /*padding: 8px 16px;*/
 }
 .proOrder .money .privilegedetails{
     color: rgb(162, 162, 162);
