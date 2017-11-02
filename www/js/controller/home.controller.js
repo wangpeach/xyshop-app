@@ -12,7 +12,7 @@ angular.module("home.controller", ["ionic"])
 				loop: false,
 				maybeInx: 0,
 				moreDataCanBeLoaded: true
-			}
+			};
 			$scope.protys = new Array();
 			$scope.likes = new Array();
 
@@ -31,7 +31,7 @@ angular.module("home.controller", ["ionic"])
 						$scope.$broadcast('scroll.infiniteScrollComplete');
 					});
 				}
-			}
+			};
 
 
 			/**
@@ -85,6 +85,7 @@ angular.module("home.controller", ["ionic"])
 					var slider_width = document.querySelectorAll(".home .ad-slider")[0].clientWidth;
 					var slider_height = slider_width / 5 * 2.5;
 					$scope.slider_img_style = {"width": "100%", "height": slider_height + "px"};
+					$ionicSlideBoxDelegate.$getByHandle("homeAdvs").loop(true);
 					$ionicSlideBoxDelegate.$getByHandle("homeAdvs").update();
 				});
 			};
@@ -100,7 +101,7 @@ angular.module("home.controller", ["ionic"])
 			$scope.GoingAway = 1;
 			$scope.openSearchPanel = function () {
 				$scope.GoingAway = 1;
-				base.openModal($scope, "templates/home-search-modal.html", "slideInRight").then(function (modal) {
+				base.openModal($scope, "templates/home-search-modal.html", "slideInDown").then(function (modal) {
 					$scope.searchModal = modal;
 
 					if (localStorage.getItem('historysearch')) {
@@ -115,7 +116,7 @@ angular.module("home.controller", ["ionic"])
 					}
 
 				});
-			}
+			};
 
 			//搜索模块内的搜索框
 			$scope.searchShopSender = {
@@ -151,6 +152,12 @@ angular.module("home.controller", ["ionic"])
 
 				console.log($scope.GoingAway);
 				$state.go('tab.home-pro-list-details', {backWhere: 'tab.home', searchKey: true, key: arg});
+			};
+
+
+			$scope.searchSwipe = function(arg) {
+				$scope.cancel = arg;
+				return true;
 			};
 
 			$scope.clearShopKey = function (arg) {

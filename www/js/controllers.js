@@ -65,11 +65,11 @@ angular.module('starter.controllers', ["ionic", "home.controller", "realtime.con
                     $scope.ads.videoInfo = angular.fromJson(ad.videoInfo);
 
                     let playerId = "_" + Math.round(Math.random() * 100000000);
-                    $scope.videoHtml = $sce.trustAsHtml('<video id="' + playerId +'" class="video-js" poster="' + $scope.ads.videoInfo.imgShow + '" controls><source src="' + $scope.ads.videoInfo.videoShow + '"></source><p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to aweb browser that<a href="http://videojs.com/html5-video-support/" target="_blank">无法播放</a></p></video>');
+                    $scope.videoHtml = $sce.trustAsHtml('<video id="' + playerId +'" class="video-js vjs-sublime-skin" poster="' + $scope.ads.videoInfo.imgShow + '" controls><source src="' + $scope.ads.videoInfo.videoShow + '"></source><p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to aweb browser that<a href="http://videojs.com/html5-video-support/" target="_blank">无法播放</a></p></video>');
 
                     $timeout(function () {
 
-                        videojs(playerId, {
+                        let player = videojs(playerId, {
                             width: angular.element(document.querySelector(".ad-video"))[0].clientWidth
                         }).ready(function() {
                             // angular.element(document.querySelector(".video-js"))[0].style.display = "block";

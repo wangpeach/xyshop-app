@@ -138,17 +138,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
 				}
 			})
 
-			// tabs中more（更多）对应的视图和控制器
-			.state('tab.more', {
-				url: '/more',
-				views: {
-					'tab-more': {
-						templateUrl: 'templates/tab-more.html',
-						// controller: 'MoreCtrl'
-					}
-				}
-			})
-
 			//tabs中account（我的）对应的视图和控制器
 			.state('tab.account', {
 				url: '/account?where',
@@ -389,28 +378,19 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
 					}
 				}
 			})
-			.state('tab.realtime-shop-pro-order', {
-				url: '/realtime/shopProOrder/:backWhere/:product',
-				views: {
-					'tab-realtime': {
-						templateUrl: 'templates/pro.order.html',
-						controller: 'OrderCtrl'
-					}
-				}
-			})
-			.state('tab.account-shop-pro-order', {
-				url: '/accoun/order/shopProOrder/:backWhere/:product/:ordernumber',
-				views: {
-					'tab-account': {
-						templateUrl: 'templates/pro.order.html',
-						controller: 'OrderCtrl'
-					}
-				}
-			})
+			// .state('tab.account-shop-pro-order', {
+			// 	url: '/accoun/order/shopProOrder/:backWhere/:product/:ordernumber',
+			// 	views: {
+			// 		'tab-account': {
+			// 			templateUrl: 'templates/pro.order.html',
+			// 			controller: 'OrderCtrl'
+			// 		}
+			// 	}
+			// })
 			// end
 			// 支付商品订单 begin
 			.state('tab.home-shop-pro-pay', {
-				url: '/home/shopProPay/:backWhere/:product',
+				url: '/home/shopProPay/:backWhere/:order',
 				views: {
 					'tab-home': {
 						templateUrl: 'templates/pro.pay.html',
@@ -418,17 +398,8 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
 					}
 				}
 			})
-			.state('tab.realtime-shop-pro-pay', {
-				url: '/realtime/shopProPay/:backWhere/:product',
-				views: {
-					'tab-realtime': {
-						templateUrl: 'templates/pro.pay.html',
-						controller: 'PayCtrl'
-					}
-				}
-			})
 			.state('tab.account-shop-pro-pay', {
-				url: '/accoun/order/shopProPay/:backWhere/:product',
+				url: '/accoun/order/shopProPay/:backWhere/:order',
 				views: {
 					'tab-account': {
 						templateUrl: 'templates/pro.pay.html',
@@ -441,7 +412,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
 			/*个人中心*/
 			//我的订单
 			.state('tab.account-myorder', {
-				url: '/account/order/:backWhere/:number',
+				url: '/account/order/:backWhere/:status',
 				views: {
 					'tab-account': {
 						templateUrl: 'templates/myorder.html',

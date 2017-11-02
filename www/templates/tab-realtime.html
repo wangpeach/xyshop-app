@@ -1,6 +1,6 @@
 <ion-view view-title="实时路况" hide-nav-bar="true" class="merchant">
     <ion-content >
-        <ion-slide-box auto-play="true" does-continue="true" show-pager="true" class="ad-slider" delegate-handle="monitorAdvs" ng-style="slider_img_style">
+        <ion-slide-box auto-play="true" does-continue="true" show-pager="true" class="ad-slider" delegate-handle="monitorAdvs" ng-style="slider_img_style" on-slide-changed="slideChanged($index)">
             <ion-slide ng-repeat="item in monitorAdvs">
                 <img ng-src="{{item.imgUrlShow}}" ng-click="handleAd(item)" ng-style="slider_img_style">
             </ion-slide>

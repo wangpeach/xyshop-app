@@ -1,5 +1,5 @@
 angular.module('products.controller', ['ionic'])
-	.controller('shopDetailsCtrl', ['$scope', '$ionicTabsDelegate', '$stateParams', '$rootScope', '$state', '$window', '$ionicScrollDelegate', 'base', 'RealTime', function ($scope, $ionicTabsDelegate, $stateParams, $rootScope, $state, $window, $ionicScrollDelegate, base, RealTime) {
+	.controller('shopDetailsCtrl', ['$scope', '$ionicTabsDelegate', '$stateParams', '$rootScope', '$state', '$window', '$ionicScrollDelegate', 'base', 'Account', function ($scope, $ionicTabsDelegate, $stateParams, $rootScope, $state, $window, $ionicScrollDelegate, base, Account) {
 
 		$scope.firstLoad = true;
 		$scope.shop = angular.fromJson($stateParams.shop);
@@ -12,29 +12,80 @@ angular.module('products.controller', ['ionic'])
 		$scope.loadgoods = function () {
 			let params = {shop: $scope.shop.uuid, key: "", offset: 0};
 			base.request("goods/mapi/list", 1, params).then(function (result) {
-				if(result.length < 10) {
+				if (result.length < 10) {
 					$scope.canbeLoadMore = false;
 				}
 				$scope.goods = result;
 			});
-
-			// RealTime.getShopPros($scope.shop.shopId, $scope.curInx++).then(function (data) {
-			// 	if (data && data.length < 20) {
-			// 		$scope.canbeLoadMore = false;
-			// 	}
-			// 	for (let i = 0; i < data.length; i++) {
-			// 		data[i].productimgurl = data[i].productimgurl.split('，')[0];
-			// 		$scope.shopPros.push(data[i]);
-			// 	}
-			// 	$ionicScrollDelegate.resize();
-			// }, function (resp) {
-			// 	$rootScope.prompt("获取店铺商品失败");
-			// });
 		};
+
+
+
+
+
+		/**
+		 * 收藏店铺
+		 */
+		if(Account.signined) {
+			Account.takeCollects(false, 'shop').then(function (result) {
+				$scope._method = "save";
+				if (result && result.length > 0) {
+					for (let i = 0; i < result.length; i++) {
+						if (result[i].value === $scope.shop.uuid) {
+							$scope._method = "del";
+						}
+					}
+				}
+				if($scope._method === "save") {
+					$scope.star = " icon-favor-outline";
+				} else {
+					$scope.star = " icon-favor";
+				}
+			});
+		}
+
+
+		$scope.collection = function () {
+			let params = undefined;
+			if($scope._method === "save") {
+				params = {
+					userUuid: Account.getUser().uuid,
+					name: $scope.shop.name,
+					value: $scope.shop.uuid,
+					thumbImg: $scope.shop.thumbImg,
+					collectType: 'shop',
+					method: $scope._method
+				};
+			} else {
+				params = {
+					userUuid: Account.getUser().uuid,
+					value: $scope.shop.uuid,
+					method: $scope._method
+				};
+			}
+
+			base.request('collect/mapi/sd', 1, params).then(function (result) {
+				if (result === "error") {
+					base.prompt($scope, "收藏失败");
+				} else {
+					if($scope._method === "save") {
+						$scope.star = " icon-favor";
+						$scope._method = "del";
+					} else {
+						$scope._method = "save";
+						$scope.star = " icon-favor-outline";
+					}
+					Account.takeCollects(true, 'shop');
+				}
+			});
+		}
 
 		//点击店铺商品列表进入商品详情
 		$scope.shopProDetails = function (arg) {
-			$state.go($stateParams.backWhere + "-shop-pro-details", {backWhere: $stateParams.backWhere, good: angular.toJson(arg)});
+			$state.go($stateParams.backWhere + "-shop-pro-details", {
+				backWhere: $stateParams.backWhere,
+				good: angular.toJson(arg)
+			});
 		};
 
 		// 店铺高德地图导航
@@ -379,6 +430,23 @@ angular.module('products.controller', ['ionic'])
 				let params = {uuid: $scope.proDetails.shopUuid};
 				base.request("shop/mapi/only", 1, params).then(function (resp) {
 					$scope.shop = resp;
+					if(Account.signined) {
+						Account.takeCollects(false, 'good').then(function (result) {
+							$scope._method = "save";
+							if (result && result.length > 0) {
+								for (let i = 0; i < result.length; i++) {
+									if (result[i].value === $scope.shop.uuid) {
+										$scope._method = "del";
+									}
+								}
+							}
+							if($scope._method === "save") {
+								$scope.star = " icon-favor-outline";
+							} else {
+								$scope.star = " icon-favor";
+							}
+						})
+					}
 				});
 
 				//获取商品图文详情
@@ -391,11 +459,43 @@ angular.module('products.controller', ['ionic'])
 
 
 			/**
-			 * 收藏
+			 * 收藏商品
 			 */
-			$scope.star = "ion-android-star-outline";
-			$scope.collection = function () {
 
+
+			$scope.collection = function () {
+				let params = undefined;
+				if($scope._method === "save") {
+					params = {
+						userUuid: Account.getUser().uuid,
+						name: $scope.shop.name,
+						value: $scope.shop.uuid,
+						thumbImg: $scope.shop.thumbImg,
+						collectType: 'good',
+						method: $scope._method
+					};
+				} else {
+					params = {
+						userUuid: Account.getUser().uuid,
+						value: $scope.shop.uuid,
+						method: $scope._method
+					};
+				}
+
+				base.request('collect/mapi/sd', 1, params).then(function (result) {
+					if (result === "error") {
+						base.prompt($scope, "收藏失败");
+					} else {
+						if($scope._method === "save") {
+							$scope.star = " icon-favor";
+							$scope._method = "del";
+						} else {
+							$scope._method = "save";
+							$scope.star = " icon-favor-outline";
+						}
+						Account.takeCollects(true, 'good');
+					}
+				});
 			}
 
 

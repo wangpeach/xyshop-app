@@ -10,14 +10,15 @@ angular.module('account.service', [])
 				 * @return {[type]}      [description]
 				 */
 				singIn: function (data) {
-					let deferred = $q.defer();
+					let deferred = $q.defer(), that = this;
 					base.request("user/mapi/login", 1, data)
-						.then(function (rep) {
-							deferred.resolve(rep);
-							this.takeCoupons();
-							this.takeCollects();
-						}, function (rep) {
-							deferred.reject(rep);
+						.then(function (result) {
+							that.storeUser(result)
+							that.takeCoupons();
+							that.takeCollects();
+							deferred.resolve(result);
+						}, function (result) {
+							deferred.reject(result);
 						});
 					return deferred.promise;
 				},
@@ -87,9 +88,14 @@ angular.module('account.service', [])
 				takeCoupons: function (refresh) {
 					let def = $q.defer(), coupons = localStorage.getItem("coupons");
 					if(!coupons || refresh) {
-						let params = {user: this.getUser().uuid};
+						let params = {
+							user: this.getUser().uuid,
+							shopId: null,
+							cate: null,
+							good: null
+						};
 						base.request("usercoupon/mapi/list", 1, params).then(function (result) {
-							localStorage.setItem(result);
+							localStorage.setItem("coupons", result);
 							def.resolve(result);
 						})
 					} else {
@@ -101,16 +107,16 @@ angular.module('account.service', [])
 				 *  获取收藏
 				 * @returns {Promise}
 				 */
-				takeCollects: function (refresh) {
-					let def = $q.defer(), collects = localStorage.getItem("collection");
+				takeCollects: function (refresh, _type) {
+					let def = $q.defer(),  storageName = "collection" + _type, collects = localStorage.getItem(storageName);
 					if(!collects || refresh) {
-						let params = {user: this.getUser().uuid};
-						base.request("user/mapi/collects", 1, params).then(function (result) {
-							localStorage.setItem(result);
+						let params = {user: this.getUser().uuid, type: _type};
+						base.request("collect/mapi/list", 1, params).then(function (result) {
 							def.resolve(result);
+							localStorage.setItem(storageName, JSON.stringify(result));
 						});
 					} else {
-						def.resolve(collects);
+						def.resolve(JSON.parse(collects));
 					}
 					return def.promise;
 				},
@@ -301,64 +307,64 @@ angular.module('account.service', [])
 						defer = $q.defer();
 					base.request("osorders", params)
 						.then(function (resp) {
-							var data = resp;
-							switch (arg) {
-								case 0:
-									data = _this.handleOrder_all(data);
-									break;
-								case 1:
-									data = _this.handleOrder_waitPay(data);
-									break;
-								case 2:
-									data = _this.handleOrder_waitSent(data);
-									break;
-								case 3:
-									data = _this.handleOrder_waitTake(data);
-									break;
-								case 4:
-									data = _this.handleOrder_compalte(data);
-									break;
-							}
+							// var data = resp;
+							// switch (arg) {
+							// 	case 0:
+							// 		data = _this.handleOrder_all(data);
+							// 		break;
+							// 	case 1:
+							// 		data = _this.handleOrder_waitPay(data);
+							// 		break;
+							// 	case 2:
+							// 		data = _this.handleOrder_waitSent(data);
+							// 		break;
+							// 	case 3:
+							// 		data = _this.handleOrder_waitTake(data);
+							// 		break;
+							// 	case 4:
+							// 		data = _this.handleOrder_compalte(data);
+							// 		break;
+							// }
 							defer.resolve(data);
 						}, function (resp) {
 							defer.reject(resp);
 						});
 					return defer.promise;
 				},
-				handleOrder_all: function (data) {
-					angular.forEach(data, function (sen, inx) {
-						if (sen.status == "待收货" || sen.status == "待发货") {
-							sen.default10 = false;
-						} else {
-							sen.default10 = true;
-						}
-					});
-					return data;
-				},
-				handleOrder_waitPay: function (data) {
-					angular.forEach(data, function (sen, inx) {
-						sen.default10 = true;
-					});
-					return data;
-				},
-				handleOrder_waitSent: function (data) {
-					angular.forEach(data, function (sen, inx) {
-						sen.default10 = false;
-					});
-					return data;
-				},
-				handleOrder_waitTake: function (data) {
-					angular.forEach(data, function (sen, inx) {
-						sen.default10 = false;
-					});
-					return data;
-				},
-				handleOrder_compalte: function (data) {
-					angular.forEach(data, function (sen, inx) {
-						sen.default10 = true;
-					});
-					return data;
-				},
+				// handleOrder_all: function (data) {
+				// 	angular.forEach(data, function (sen, inx) {
+				// 		if (sen.status == "待收货" || sen.status == "待发货") {
+				// 			sen.default10 = false;
+				// 		} else {
+				// 			sen.default10 = true;
+				// 		}
+				// 	});
+				// 	return data;
+				// },
+				// handleOrder_waitPay: function (data) {
+				// 	angular.forEach(data, function (sen, inx) {
+				// 		sen.default10 = true;
+				// 	});
+				// 	return data;
+				// },
+				// handleOrder_waitSent: function (data) {
+				// 	angular.forEach(data, function (sen, inx) {
+				// 		sen.default10 = false;
+				// 	});
+				// 	return data;
+				// },
+				// handleOrder_waitTake: function (data) {
+				// 	angular.forEach(data, function (sen, inx) {
+				// 		sen.default10 = false;
+				// 	});
+				// 	return data;
+				// },
+				// handleOrder_compalte: function (data) {
+				// 	angular.forEach(data, function (sen, inx) {
+				// 		sen.default10 = true;
+				// 	});
+				// 	return data;
+				// },
 
 				chooseDate: function (_date) {
 					var defer = $q.defer();

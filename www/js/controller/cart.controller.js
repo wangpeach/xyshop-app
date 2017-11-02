@@ -68,24 +68,28 @@ angular.module("cart.controller", ["ionic"])
 			})
 		};
 
-		//点击提交订单进入支付订单
-		$scope.goPayOrder = function () {
+		/**
+		 * 点击提交订单进入支付订单
+		 */
+		$scope.gopay = function () {
 			base.loading();
 			var params = {
 				user: Account.getUser().uuid,
 				shop: $scope.product.shopUuid,
 				good: $scope.product.uuid,
-				num: $scope.parameters.sumcounts
+				num: $scope.parameters.sumcounts,
+				coupon: $scope.targetCp.uuid
 			};
 			base.request("order/mapi/create", 1, params).then(function (data) {
-				$scope.parameters.order = data;
-				$state.go($stateParams.backWhere + '-shop-pro-pay', {
-					backWhere: $stateParams.backWhere,
-					product: angular.toJson($scope.parameters)
-				});
-				console.log($scope.parameters.order);
-			}, function (resp) {
-				base.prompt("提交订单失败");
+				if(data) {
+					data.good = $scope.product;
+					$state.go($stateParams.backWhere + '-shop-pro-pay', {
+						backWhere: $stateParams.backWhere,
+						order: angular.toJson(data)
+					});
+				} else {
+					base.prompt($rootScope, '创建订单失败,请重试');
+				}
 			});
 		};
 
@@ -97,38 +101,33 @@ angular.module("cart.controller", ["ionic"])
 	//支付订单
 	.controller('PayCtrl', ['$scope', '$state', "$ionicHistory", '$stateParams', 'Cart', 'base', 'Account', function ($scope, $state, $ionicHistory, $stateParams, Cart, base, Account) {
 		//对支付订单页面数据的处理
-		$scope.parameters = angular.fromJson($stateParams.product);
-
+		$scope.order = angular.fromJson($stateParams.order);
+		console.log($stateParams.order);
 		//获取微信支付及支付宝支付
 		$scope.payways = [
-			{img: "img/WePayLogo.png", way: "wx"},
-			{img: "img/zhifuboby.png", way: "al"}
+			{img: "img/WXLogo.png", text: "微信支付", way: "wxpay"},
+			{img: "img/AliLogo.png", text: "支付宝支付", way: "alpay"},
+			{img: "img/sfpay.png", text: "金币支付", way: "gold"},
 		];
 
-		$scope.data = {method: "wx"};
+		$scope.paywhy = {
+			method: "wxpay"
+		}
 
 		$scope.getPay = function () {
-			//console.log($scope.parameters.order.orderNumber);
-			console.log($scope.data.method);
-			base.request("shcreatePaymentInfo", {
-				// "openid": Account.getUser().openid,
-				"userid": Account.getUser().usersid,
-				"ordernumber": $scope.parameters.order.orderNumber,
-				"amount": $scope.parameters.sumprices,
-				"addressid": $scope.parameters.addressId,
-				//支付类型:wxpay,alipay,wxalipay分别为app微信支付 app支付宝支付 微信端支付宝支付
-				"paytype": $scope.data.method
-			}).then(function (data) {
-				console.log(data);
+			var params = {
+				order: $scope.order.uuid,
+				paywhy: $scope.paywhy.method
+			};
+			base.request("order/mapi/payment", 1, params).then(function (data) {
 				if (data.state != undefined && data.state == "no") {
 					layer.alert(data.reason);
 				} else {
-					if ($scope.data.method == 'al') {
+					if ($scope.paywhy.method === 'alpay') {
 						window.Alipay.Base.pay(data, function (successResults) {
 							var payres = successResults.resultStatus;
 							if (payres === "9000") {
 								base.prompt($scope, "支付成功", function () {
-									// $state.go("");
 									$ionicHistory.goBack(2);
 								})
 							} else if (payres == "6001") {
@@ -143,7 +142,7 @@ angular.module("cart.controller", ["ionic"])
 						}, function (errorResult) {
 							base.prompt($scope, "发起支付失败");
 						});
-					} else {
+					} else if($scope.paywhy.method === "wxpay") {
 						var params = {
 							partnerid: data.partnerid,
 							prepayid: data.prepayid,

@@ -1,4 +1,4 @@
-<ion-modal-view class="homeSearchModal" ng-class="GoingAway==1 ? 'slideInRight ng-leave' : 'slideOutLeft ng-leave'">
+<ion-modal-view class="homeSearchModal" ng-class="GoingAway==1 ? 'slideInDown ng-leave' : 'slideOutLeft ng-leave'">
     <ion-header-bar>
         <div class="buttons">
             <button class="button button-clear button-dark icon-left ion-chevron-left" style="color:rgba(68, 68, 68, 0.6)" ng-click="searchModal.hide()"></button>
@@ -6,7 +6,7 @@
         <div class="search-shop">
             <i class="icon ion-ios-search placeholder-icon ws-search-icon"></i>
             <form ng-submit="searchShop(searchShopSender.key)">
-                <input type="search" placeholder="{{searchShopSender.placeholder}}" ng-model="searchShopSender.key" ng-focus="searchSwipe(true)" ng-blur="searchSwipe(false)">
+                <input type="search" placeholder="{{searchShopSender.placeholder}}" ng-model="searchShopSender.key" auto-focus>
             </form>
             <button class="button button-clear " style="font-size: 20px;" ng-if="searchShopSender.key!= null" ng-click="clearShopKey(cancel)">
                 <i class="ion-close-circled placeholder-icon ws-search-icon"></i>

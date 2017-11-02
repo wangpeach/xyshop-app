@@ -2,30 +2,36 @@
     <ion-content>
         <ion-refresher pulling-text="松开刷新" on-refresh="doRefresh()" disable-pulling-rotation="true">
         </ion-refresher>
-        <ion-list ng-repeat="item in items" item="item">
-            <ion-item class="y-item" ng-repeat="other in item">
-                <ul class="data-col">
-                    <li>{{fd(other.createdate)}}</li>
-                    <li>{{td(other.createdate)}}</li>
-                </ul>
-                <ul class="data-col">
-                    <li>{{other.remark}}</li>
-                </ul>
-                <ul class="data-col">
-                    <li>
-                        <font color="red">{{other.state}}</font>
-                    </li>
-                </ul>
-                <ul class="data-col">
-                    <li>
-                        <font>{{other.amount}}</font>
-                    </li>
-                    <li ng-show="other.paywhy=='提现'">
-                        {{other.kyamount}}
-                    </li>
-                </ul>
-            </ion-item>
-        </ion-list>
+        <div class="coupon">
+            <div class="content">
+                <div class="head"></div>
+                <div class="tail">
+                    <p>name</p>
+                    <p>介绍</p>
+                </div>
+            </div>
+            <div class="wave"></div>
+        </div>
+        <div class="coupon">
+            <div class="content">
+                <div class="head"></div>
+                <div class="tail">
+                    <p>name</p>
+                    <p>介绍</p>
+                </div>
+            </div>
+            <div class="wave"></div>
+        </div>
+        <div class="coupon">
+            <div class="content">
+                <div class="head"></div>
+                <div class="tail">
+                    <p>name</p>
+                    <p>介绍</p>
+                </div>
+            </div>
+            <div class="wave"></div>
+        </div>
         <ul>
             <li class="animate-repeat" ng-if="!moreDataCanBeLoaded" style="width: 100%; box-shadow: none;">
                 <div class="nothing">
@@ -36,3 +42,4 @@
         <ion-infinite-scroll ng-if="moreDataCanBeLoaded" on-infinite="loadMore()" distance="1%"></ion-infinite-scroll>
     </ion-content>
 </ion-view>
+

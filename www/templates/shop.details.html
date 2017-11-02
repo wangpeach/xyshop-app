@@ -1,13 +1,12 @@
 <ion-view class="shopDetails" view-title="商铺详情" hide-tabs>
-    <ion-content>
-        <style>
+    <style>
         .detail a.button .icon:before,
         a.button.icon:before,
         a.button.icon-left:before,
         a.button.icon-right:before {
             margin: 0px;
         }
-        
+
         .detail .button .icon:before,
         .button.icon:before,
         .button.icon-left:before,
@@ -15,13 +14,23 @@
             line-height: 30px;
             font-size: 20px;
         }
-        </style>
+
+        a.button.button-icon.icon-favor-outline:before, a.button.button-icon.icon-favor:before {
+            font-size: 25px;
+            color: orangered;
+        }
+    </style>
+    <ion-nav-buttons side="secondary">
+        <a class="button button-icon button-small icon" ng-click="collection()" ng-class="star"></a>
+    </ion-nav-buttons>
+    <ion-content>
+
         <div class="detail">
             <!--旋转木马-->
             <div class="carousel">
                 <ion-slide-box auto-play="true" does-continue="true" show-pager="false">
                     <ion-slide>
-                        <img ng-src="img/test/banner1.jpg" width="100%" class="banner_1" />
+                        <img ng-src="img/test/banner1.jpg" width="100%" class="banner_1"/>
                     </ion-slide>
                 </ion-slide-box>
             </div>
@@ -33,8 +42,11 @@
             </div>
             <p class="quarantine"></p>
             <div class="row">
-                <div class="col col-90" style="border-right: 1px solid #eaeaea; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;" ng-click="transfer()">
-                    <a class="button" style="font-size: 13px; color: #9B9B9B; padding: 0px; margin: 0px; border: 0px; min-height: 20px; height: 20px; line-height: 30px; background: rgba(240, 248, 255, 0);">
+                <div class="col col-90"
+                     style="border-right: 1px solid #eaeaea; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;"
+                     ng-click="transfer()">
+                    <a class="button"
+                       style="font-size: 13px; color: #9B9B9B; padding: 0px; margin: 0px; border: 0px; min-height: 20px; height: 20px; line-height: 30px; background: rgba(240, 248, 255, 0);">
                         <i class="icon ion-location"></i> {{shop.address}}
                     </a>
                 </div>
@@ -69,7 +81,7 @@
                     <ul ng-if="!goods.length" class="ws-pdlist-all-res">
                         <li class="ws-nothing" style="padding-top: 50px;">
                             <i class="icon-ws-NGBQ" style="font-size: 30px; color: #DBDBDB;"></i>
-                            <br />
+                            <br/>
                             <p>该商铺没有商品</p>
                         </li>
                     </ul>

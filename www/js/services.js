@@ -1,6 +1,7 @@
-angular.module('starter.services', ['home.service', 'realtime.service', 'cart.service', 'account.service', 'products.service', 'CordovaHTTP'])
-	.factory('base', ['$window', '$ionicPlatform', '$http', '$q', '$cordovaToast', '$ionicModal', '$ionicPopover', '$cordovaHTTP', "$ionicLoading", "$cordovaAppVersion", "$timeout", "$cordovaCamera", "$ionicPopup", "$rootScope",
-		function ($window, $ionicPlatform, $http, $q, $cordovaToast, $ionicModal, $ionicPopover, $cordovaHTTP, $ionicLoading, $cordovaAppVersion, $timeout, $cordovaCamera, $ionicPopup, $rootScope) {
+// , 'cordovaHTTP2'
+angular.module('starter.services', ['home.service', 'realtime.service', 'cart.service', 'account.service', 'products.service'])
+	.factory('base', ['$window', '$ionicPlatform', '$http', '$q', '$cordovaToast', '$ionicModal', '$ionicPopover', "$ionicLoading", "$cordovaAppVersion", "$timeout", "$cordovaCamera", "$ionicPopup", "$rootScope",
+		function ($window, $ionicPlatform, $http, $q, $cordovaToast, $ionicModal, $ionicPopover, $ionicLoading, $cordovaAppVersion, $timeout, $cordovaCamera, $ionicPopup, $rootScope) {
 			if (!localStorage.getItem("config")) {
 				localStorage.setItem("config", JSON.stringify({
 					showBalance: false
@@ -9,8 +10,8 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 			var _config = JSON.parse(localStorage.getItem("config"));
 
 			var services = {
-				hostHome: "http://127.0.0.1:8080/xyshop/",
-				hostShop: "http://127.0.0.1:8080/xyshop-supplier/",
+				hostHome: "http://192.168.0.116:8080/xyshop/",
+				hostShop: "http://192.168.0.116:8080/xyshop-supplier/",
 				upgrade_url: '',
 				//高德web服务api
 				GaodeRestapiKey: "13cdbb92be4fb255d52f4ca82863d949",
@@ -28,29 +29,34 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 
 				/**
 				 * 请求服务
-				 * @param  {[type]} service   [请求的服务]
-				 * @param  {[type]} data  [description]
-				 * @param  {[type]} cache [是否是否缓存]
-				 * @return {[type]}       [description]
+				 * @param  {[type]} service [description]
+				 * @param  {[type]} host    [指向哪个服务模块, 0 (主模块) / 1 (商家模块)]
+				 * @param  {[type]} data    [description]
+				 * @return {[type]}         [description]
 				 */
-				// request: function(service, data, cache) {
+				// request: function(service, host, data) {
 				//     var defer = $q.defer(),
 				//         that = this;
 				//     if ($window.cordova) {
-				//         if (service.indexOf("http") != 0) {
-				//             service = that.getUrl(service);
+				//         if (service.indexOf("http") !== 0) {
+				// 	        service = that.getUrl(service)[host];
 				//         }
 				//         that.handleParams(data).then(function(arg) {
-				//             $cordovaHTTP.post(service, arg, {}).then(function(response) {
-				//                 try {
-				//                     var result = eval("(" + response.data + ")");
-				//                     defer.resolve(result);
-				//                 } catch (e) {
-				//                     console.log('JSON parseing error');
-				//                 }
-				//             }, function(response) {
-				//                 that.req_error_handle(response.status);
-				//             });
+				// 	        cordovaHTTP2.post(service, arg, {}, function (response) {
+				// 		        try {
+				// 			        let ctype = response.headers["Content-Type"], result = undefined;
+				// 			        if(ctype.indexOf("application/json") === 0) {
+				// 				        result = JSON.parse(response.data);
+				// 			        } else {
+				// 				        result = response.data;
+				// 			        }
+				// 			        defer.resolve(result);
+				// 		        } catch (e) {
+				// 			        console.log('JSON parseing error');
+				// 		        }
+				// 	        },function(response) {
+				// 		        that.req_error_handle(response.status);
+				// 	        });
 				//         });
 				//     }
 				//     return defer.promise;
@@ -206,7 +212,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 					if (animate) {
 						animation += animate;
 					} else {
-						animation += "slideInRight";
+						animation += "slide-in-right";
 					}
 					$ionicModal.fromTemplateUrl(template, {
 						scope: _scope,

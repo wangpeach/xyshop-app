@@ -2,17 +2,26 @@
     <ion-content>
         <div class="list money">
             <a class="item item-avatar">
-                <img src="{{parameters.product.productimgurl.split('，')[0]}}">
-                <h2>¥ {{parameters.sumprices}}</h2>
-                <p>{{parameters.product.productname}}</p>
+                <img src="{{order.good.thumbImgShow}}">
+                <h2 style="font-size: 20px; color: #ff4d4d;"><b>￥</b> {{order.totalPrice}}</h2>
+                <p>
+                    {{order.good.name}}
+                    <span style="float: right; color: slategray;">商家：{{order.shopName}}</span>
+                </p>
+
             </a>
             <p class="quarantine"></p>
-            <ion-radio  class="payway" ng-repeat= "item in payways" ng-value="item.way" ng-model="data.method" name="way">
-                <img src="{{item.img}}" style="height: 25px; width: 80px;">
+            <ion-radio  class="payway" ng-repeat= "item in payways" ng-value="item.way" ng-model="paywhy.method" name="way">
+                <img src="{{item.img}}" class="pay-logo">
+                <span class="pay-text">{{item .text}}</span>
             </ion-radio>
         </div>
-        <div class="padding">
-            <a class="button button-block button-balanced" ng-click="getPay()">确认支付</a>
+
+        <div class="padding" style="text-align: center;">
+            <a class="button button-block button-carnation" ng-click="getPay()">确认支付 <span style="font-size: 20px;">￥{{order.payPrice}}</span></a>
+            <span ng-if="order.preferentialPrice" style="color: rgb(249, 82, 82);">优惠{{order.preferentialPrice}}元，实际支付 {{order.payPrice}}元</span>
         </div>
     </ion-content>
+
 </ion-view>
+

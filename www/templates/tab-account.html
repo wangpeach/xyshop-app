@@ -7,28 +7,19 @@
             <div class="plsummary">
                 <div class="head">
                     <a ng-href="#/tab/account/setting/personal">
-                        <img style="width: 60px; height: 60px; position: absolute;" ng-src="{{user.usersheadimgurl}}" alt="">
-                    </a> 
+                        <img style="width: 60px; height: 60px; position: absolute;" ng-src="{{user.usersheadimgurl}}"
+                             alt="">
+                    </a>
                 </div>
+                <!--<a style="font-size: 20px; float: right; margin-top: 8px;" ng-href="#/tab/account/setting">-->
+                <!--<i class="icon-permissions-outline"></i>-->
+                <!--</a>-->
                 <div class="sussmary">
-                    <ul>
-                        <li></li>
-                        <li>
-                            <!--<a style="font-size: 20px; float: right; margin-top: 8px;" ng-href="#/tab/account/setting">
-                                <i class="icon-permissions-outline"></i>
-                            </a>-->
-                        </li>
-                        <li>{{user.name}}</li>
-                        <li>
-                        </li>
-                        <li>
-                             我的金币：
-                             <span>{{user.coin}}</span>
-                        </li>
-                        <li></li>
-                        <li>
-                        </li>
-                    </ul>
+                    <p>{{user.name}}</p>
+                    <p>
+                        <span>我的金币：</span>
+                        <span>{{user.coin}}</span>
+                    </p>
                 </div>
             </div>
             <div class="clear"></div>
@@ -42,14 +33,14 @@
                         <img src="img/user_large.jpg" alt="">
                     </a>
                 </div>
-                <a class="logreg" style="position: absolute; left: 28%; top: 14%; color: white;" ng-click="signOrReg()">登录/注册</a>
+                <a class="logreg" style="color: white; line-height: 140px; margin-left: 30%;" ng-click="signOrReg()">登录/注册</a>
             </div>
         </div>
         <!-- END -->
         <div class="clear"></div>
         <!-- 功能模块 -->
         <div class="list card account-list order">
-            <a ng-click="checkGo('tab.myorder', 0)" class="item item-icon-left item-icon-right myorder">
+            <a ng-click="checkGo('tab.myorder', 'all')" class="item item-icon-left item-icon-right myorder">
                 <i class="icon icon-order"></i> 我的订单
                 <span>全部订单</span>
                 <i class="icon ion-ios-arrow-right"></i>
@@ -57,17 +48,17 @@
         </div>
         <p class="clear"></p>
         <div class="row" style="padding: 1px">
-            <div class="col" style="text-align: center" ng-click="checkGo('tab.myorder', 1)">
+            <div class="col" style="text-align: center" ng-click="checkGo('tab.myorder', 'waitPay')">
                 <i class="icon icon-yinxingqia " style="font-size: 25px"></i><br>
                 <div class="col-demo" style="color:#a2a2a2">待付款</div>
             </div>
-            <div class="col" style="text-align: center" ng-click="checkGo('tab.myorder', 2)">
+            <div class="col" style="text-align: center" ng-click="checkGo('tab.myorder', 'waitConsume')">
                 <i class="icon icon-deliver " style="font-size: 25px"></i><br>
                 <div class="col-demo" style="color:#a2a2a2">待使用</div>
             </div>
-            <div class="col" style="text-align: center" ng-click="checkGo('tab.myorder', 3)">
+            <div class="col" style="text-align: center" ng-click="checkGo('tab.myorder', 'consumed')">
                 <i class="icon icon-judge-a" style="font-size: 25px"></i><br>
-                <div class="col-demo" style="color:#a2a2a2">待评论</div>
+                <div class="col-demo" style="color:#a2a2a2">已完成</div>
             </div>
             <!--<div class="col" style="text-align: center" ng-click="checkGo('tab.myorder', 4)">
                 <i class="icon icon-order " style="font-size: 25px"></i><br>
@@ -77,7 +68,7 @@
         <p class="quarantine"></p>
 
         <div class="row" style="padding: 1px">
-            <div class="col" style="text-align: center" ng-click="checkGo('wait')">
+            <div class="col" style="text-align: center" ng-click="checkGo('tab.account-coupons')">
                 <i class="icon icon-juan-a" style="font-size: 25px"></i><br>
                 <div class="col-demo" style="color:#a2a2a2">优惠券</div>
             </div>
@@ -124,7 +115,7 @@
                 <i class="icon icon-about"></i> 关于
                 <i class="icon ion-ios-arrow-right"></i>
             </a>
-            
+
             <a ng-click="checkGo('clear') " class="item item-icon-left item-icon-right">
                 <i class="icon icon-about"></i> 清理缓存
                 <i class="icon ion-ios-arrow-right"></i>
