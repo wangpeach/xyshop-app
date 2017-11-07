@@ -78,7 +78,7 @@ angular.module("cart.controller", ["ionic"])
 				shop: $scope.product.shopUuid,
 				good: $scope.product.uuid,
 				num: $scope.parameters.sumcounts,
-				coupon: $scope.targetCp.uuid
+				coupon: $scope.targetCp ? $scope.targetCp.uuid : null
 			};
 			base.request("order/mapi/create", 1, params).then(function (data) {
 				if(data) {
@@ -99,69 +99,133 @@ angular.module("cart.controller", ["ionic"])
 	}])
 
 	//支付订单
-	.controller('PayCtrl', ['$scope', '$state', "$ionicHistory", '$stateParams', 'Cart', 'base', 'Account', function ($scope, $state, $ionicHistory, $stateParams, Cart, base, Account) {
+	.controller('PayCtrl', ['$scope', '$state', "$ionicHistory", '$stateParams', '$q', 'Cart', 'base', 'Account', function ($scope, $state, $ionicHistory, $stateParams, $q, Cart, base, Account) {
 		//对支付订单页面数据的处理
 		$scope.order = angular.fromJson($stateParams.order);
 		console.log($stateParams.order);
 		//获取微信支付及支付宝支付
 		$scope.payways = [
 			{img: "img/WXLogo.png", text: "微信支付", way: "wxpay"},
-			{img: "img/AliLogo.png", text: "支付宝支付", way: "alpay"},
-			{img: "img/sfpay.png", text: "金币支付", way: "gold"},
+			{img: "img/AliLogo.png", text: "支付宝支付", way: "alipay"},
+			{img: "img/sfpay.png", text: "金币支付", way: "coin"},
 		];
 
 		$scope.paywhy = {
 			method: "wxpay"
 		}
 
-		$scope.getPay = function () {
+		$scope.pay = function () {
+			$scope.payment().then(function (result) {
+				base.prompt($scope, "支付成功", function () {
+					if($stateParams.backWhere === "tab.home") {
+						$ionicHistory.goBack(2);
+					} else {
+						$ionicHistory.goBack();
+					}
+				})
+			})
+		}
+
+		$scope.payment = function () {
+			let defer = $q.defer();
 			var params = {
 				order: $scope.order.uuid,
-				paywhy: $scope.paywhy.method
 			};
-			base.request("order/mapi/payment", 1, params).then(function (data) {
+			switch ($scope.paywhy.method) {
+				case "alipay":
+					aliPayment(params).then(function (res) {
+						defer.resolve(res);
+					});
+					break;
+				case "wxpay":
+					wxPaymnet(params).then(function (res) {
+						defer.resolve(res);
+					});
+					break;
+				default:
+					coinPayment(params).then(function (res) {
+						defer.resolve(res);
+					});
+					break;
+			}
+			return defer.promise;
+		}
+
+		/**
+		 * 支付宝支付
+		 * @param data
+		 */
+		let aliPayment = function (params) {
+			let defer = $q.defer();
+			base.request("order/mapi/ali-payment", 1, params).then(function (data) {
 				if (data.state != undefined && data.state == "no") {
 					layer.alert(data.reason);
 				} else {
-					if ($scope.paywhy.method === 'alpay') {
-						window.Alipay.Base.pay(data, function (successResults) {
-							var payres = successResults.resultStatus;
-							if (payres === "9000") {
-								base.prompt($scope, "支付成功", function () {
-									$ionicHistory.goBack(2);
-								})
-							} else if (payres == "6001") {
-								base.prompt($scope, "已取消支付");
-							} else if (payres == "6002") {
-								base.prompt($scope, "网络连接出错");
-							} else if (payres == "4000") {
-								base.prompt($scope, "订单支付失败");
-							} else if (payres == "8000") {
-								base.prompt($scope, "正在处理中");
-							}
-						}, function (errorResult) {
-							base.prompt($scope, "发起支付失败");
-						});
-					} else if($scope.paywhy.method === "wxpay") {
-						var params = {
-							partnerid: data.partnerid,
-							prepayid: data.prepayid,
-							noncestr: data.noncestr,
-							timestamp: data.timestamp,
-							sign: data.sign
-						};
-
-						Wechat.sendPaymentRequest(params, function () {
-							base.prompt("订单支付成功", function () {
-								$state.go();
-							});
-						}, function (reason) {
-							console.log(reason);
-						});
-					}
+					window.Alipay.Base.pay(data, function (successResults) {
+						var payres = successResults.resultStatus;
+						if (payres === "9000") {
+								defer.resolve("success");
+						} else if (payres == "6001") {
+							base.prompt($scope, "已取消支付");
+						} else if (payres == "6002") {
+							base.prompt($scope, "网络连接出错");
+						} else if (payres == "4000") {
+							base.prompt($scope, "订单支付失败");
+						} else if (payres == "8000") {
+							base.prompt($scope, "正在处理中");
+						}
+					}, function (errorResult) {
+						base.prompt($scope, "发起支付失败");
+					});
 				}
 			}, function (resp) {
 				base.prompt('获取支付信息失败');
 			});
-		}
+			return defer.promise;
+		};
+
+		/**
+		 * 微信支付
+		 * @param data
+		 */
+		let wxPaymnet = function (params) {
+			let defer = $q.defer();
+			base.request("order/mapi/wx-payment", 1, params).then(function (data) {
+				var params = {
+					partnerid: data.partnerid,
+					prepayid: data.prepayid,
+					noncestr: data.noncestr,
+					timestamp: data.timestamp,
+					sign: data.sign
+				};
+
+				Wechat.sendPaymentRequest(params, function () {
+						defer.resolve("success");
+				}, function (reason) {
+					console.log(reason);
+				});
+			});
+			return defer.promise;
+		};
+
+		/**
+		 * 金币支付
+		 * @param data
+		 */
+		let coinPayment = function (params) {
+			let defer = $q.defer();
+			base.confirm($scope, "确实使用金币支付吗？").then(function (result) {
+				if(result) {
+					base.request("order/mapi/coin-payment", 1, params).then(function (result) {
+						if(result.status === "success") {
+							defer.resolve(result.status);
+						} else {
+							base.prompt($scope, result.tips);
+						}
+					});
+				}
+			});
+			return defer.promise;
+		};
+
 	}]);

@@ -468,16 +468,16 @@ angular.module('products.controller', ['ionic'])
 				if($scope._method === "save") {
 					params = {
 						userUuid: Account.getUser().uuid,
-						name: $scope.shop.name,
-						value: $scope.shop.uuid,
-						thumbImg: $scope.shop.thumbImg,
+						name: $scope.proDetails.name,
+						value: $scope.proDetails.uuid,
+						thumbImg: $scope.proDetails.thumbImg,
 						collectType: 'good',
 						method: $scope._method
 					};
 				} else {
 					params = {
 						userUuid: Account.getUser().uuid,
-						value: $scope.shop.uuid,
+						value: $scope.proDetails.uuid,
 						method: $scope._method
 					};
 				}
@@ -530,7 +530,7 @@ angular.module('products.controller', ['ionic'])
 						base.request("userfoot/mapi/addfoot", 1, {
 							good: $scope.proDetails.uuid,
 							user: Account.getUser().uuid
-						});
+						}, false);
 					}
 				}, 1500);
 			})

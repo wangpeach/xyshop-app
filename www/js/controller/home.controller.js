@@ -221,7 +221,6 @@ angular.module("home.controller", ["ionic"])
 				// $scope.loadMaybeLike();
 			});
 
-
 			$scope.loadAd();
 			$scope.loadProty();
 			$scope.loadHotGoods();

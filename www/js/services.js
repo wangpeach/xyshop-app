@@ -10,6 +10,8 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 			var _config = JSON.parse(localStorage.getItem("config"));
 
 			var services = {
+				// 192.168.0.116:8080
+				// 219.141.127.213:8087
 				hostHome: "http://192.168.0.116:8080/xyshop/",
 				hostShop: "http://192.168.0.116:8080/xyshop-supplier/",
 				upgrade_url: '',
@@ -69,10 +71,12 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * @param  {[type]} data    [description]
 				 * @return {[type]}         [description]
 				 */
-				request: function (service, host, data) {
+				request: function (service, host, data, isLoad) {
 					var defer = $q.defer(),
 						that = this;
-					that.loading();
+					if(isLoad === undefined || isLoad === null || isLoad !== false) {
+						that.loading();
+					}
 					data = that.handleAndroidParams(data, false);
 					if (service.indexOf("http") !== 0) {
 						service = that.getUrl(service)[host];

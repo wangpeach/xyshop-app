@@ -2524,7 +2524,21 @@ border: 1px solid red;
     top: 0px;
 }
 
-/******************* END ********************/
+.coupon .head .facevalue {
+    width:auto;
+    height:30%;
+    color: #fbecd7;
+    font-size: 25px;
+    text-align: center;
+    margin: 30% auto 0px auto;
+}
+
+.coupon .head p {
+    color: white;
+    text-align: center;
+}
+
+    /******************* END ********************/
 
 /* 动画 */
 

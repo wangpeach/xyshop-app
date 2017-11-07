@@ -72,15 +72,15 @@
                 <i class="icon icon-juan-a" style="font-size: 25px"></i><br>
                 <div class="col-demo" style="color:#a2a2a2">优惠券</div>
             </div>
-            <div class="col" style="text-align: center" ng-click="checkGo('wait')">
-                <i class="icon " style="font-size: 18px; line-height: 27px; color: coral;">100</i><br>
+            <div class="col" style="text-align: center" ng-click="checkGo('tab.collect', 'good')">
+                <i class="icon " style="font-size: 18px; line-height: 27px; color: coral;">{{collectGoods}}</i><br>
                 <div class="col-demo" style="color:#a2a2a2">商品收藏</div>
             </div>
-            <div class="col" style="text-align: center" ng-click="checkGo('wait')">
-                <i class="icon " style="font-size: 18px; line-height: 27px; color: coral;">15</i><br>
+            <div class="col" style="text-align: center" ng-click="checkGo('tab.collect', 'shop')">
+                <i class="icon " style="font-size: 18px; line-height: 27px; color: coral;">{{collectShops}}</i><br>
                 <div class="col-demo" style="color:#a2a2a2">商家收藏</div>
             </div>
-            <div class="col" style="text-align: center" ng-click="checkGo('wait')">
+            <div class="col" style="text-align: center" ng-click="checkGo('tab.account-footprints')">
                 <i class="icon icon-foot-outline" style="font-size: 25px"></i><br>
                 <div class="col-demo" style="color:#a2a2a2">我的足迹</div>
             </div>
@@ -111,7 +111,7 @@
         </div>
         <p class="quarantine "></p>-->
         <div class="list card account-list ">
-            <a ng-click="checkGo('tab.account-about') " class="item item-icon-left item-icon-right">
+            <a class="item item-icon-left item-icon-right">
                 <i class="icon icon-about"></i> 关于
                 <i class="icon ion-ios-arrow-right"></i>
             </a>

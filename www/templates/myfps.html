@@ -1,12 +1,10 @@
-<ion-view view-title="我的收藏" hide-tabs>
+<ion-view view-title="我的足迹" hide-tabs class="myfoots">
     <ion-content>
-        <ion-refresher pulling-text="松开刷新" on-refresh="doRefresh()" disable-pulling-rotation="true">
-        </ion-refresher>
         <ion-list   can-swipe="true">
-            <ion-item ng-repeat="item in items"
+            <ion-item ng-repeat="item in sender.items"
                       class="item-thumbnail-left">
-                <img ng-src="{{item.showThumbImg}}">
-                <h2>{{item.name}}</h2>
+                <img ng-src="{{item.thumbImg}}">
+                <h2 style="padding-top: 10px;">{{item.goodName}}</h2>
                 <p>{{item.addTime}}</p>
                 <ion-option-button class="button-assertive"
                                    ng-click="del(item)">
@@ -15,18 +13,19 @@
             </ion-item>
         </ion-list>
         <ul>
-            <li class="animate-repeat" ng-if="items.length > 0 && moreDataCanBeLoaded" style="width: 100%; box-shadow: none;">
+            <li class="animate-repeat" ng-if="sender.items.length > 0 && !moreDataCanBeLoaded" style="width: 100%; box-shadow: none;">
                 <div class="nothing">
                     <p>没有更多了</p>
                 </div>
             </li>
         </ul>
-        <ul ng-if="items.length == 0 && moreDataCanBeLoaded" class="ws-pdlist-all-res">
+        <ul ng-if="sender.items.length == 0 && !moreDataCanBeLoaded" class="ws-pdlist-all-res">
             <li class="ws-nothing">
                 <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
                 <br/>
-                <p>快去收藏一些喜欢的~</p>
+                <p>还没有您的浏览记录哦~</p>
             </li>
         </ul>
+        <ion-infinite-scroll ng-if="moreDataCanBeLoaded" on-infinite="loadMore()" distance="1%"></ion-infinite-scroll>
     </ion-content>
 </ion-view>

@@ -8,6 +8,9 @@ angular.module("account.controller", ["ionic"])
 			$scope.why = "Login";
 			$scope.shopActionName = "";
 
+			$scope.collectGoods = 0;
+			$scope.collectShops = 0;
+
 			//刚跳到个人账户时检测用户是否是老顾客
 			$scope.accountInfoModal = function () {
 				$scope.user = Account.getUser();
@@ -45,6 +48,8 @@ angular.module("account.controller", ["ionic"])
 					if (Account.signined) {
 						if (arg === "tab.myorder") {
 							$state.go('tab.account-myorder', {backWhere: 'tab.account', status: arg1});
+						} else if (arg === "tab.collect") {
+							$state.go('tab.account-collect', {type: arg1});
 						} else if (arg === 'wait') {
 							base.prompt($scope, "敬请期待...");
 						} else {
@@ -325,6 +330,18 @@ angular.module("account.controller", ["ionic"])
 			};
 
 
+			$scope.collects = function () {
+				$timeout(function () {
+					Account.takeCollects(false, "good").then(function (result) {
+						$scope.collectGoods = result.length;
+					});
+					Account.takeCollects(false, "shop").then(function (result) {
+						$scope.collectShops = result.length;
+					});
+				}, 1000);
+			}
+
+
 			//验证是否已登录
 			// $scope.varificationModel = function(arg, params) {
 			//     if (!$scope.signed) {
@@ -339,6 +356,7 @@ angular.module("account.controller", ["ionic"])
 				//是否登录
 				$scope.signed = Account.signined;
 				$scope.signed ? $scope.accountInfoModal() : $scope.sinregModal();
+				$scope.collects();
 			});
 
 			$scope.goWhered = false;
@@ -1295,107 +1313,188 @@ angular.module("account.controller", ["ionic"])
 		}
 	])
 	//我的收益
-	.controller('myincomeCtrl', ['$scope', '$state', 'Account', 'base',
-		function ($scope, $state, Account, base) {
-			$scope.user = Account.getUser();
-			$scope.user._amount = undefined;
-			console.log(JSON.stringify($scope.user));
-			$scope._wdform = function (userWithdraw) {
-				var sender = {
-					'user.usersZhenshiname': userWithdraw.userszhenshiname,
-					'user.usersBankcard': userWithdraw.default4,
-					'user.usersBankaddress': userWithdraw.usersbankaddress,
-					'fs.amount': userWithdraw._amount,
-					'user.usersId': $scope.user.usersid
-				};
-				base.request("uswithdraw", sender).then(function (data) {
-					console.log(data);
-					if (data.state == "ok") {
-						Account.reload().then(function (reg) {
-							$scope.user = reg;
-							base.prompt($scope, data.reason);
-						});
-					} else {
-						base.prompt($scope, "提现申请失败")
-					}
-				});
-			};
-			//跳转到提现记录页面
-			$scope.getrecord = function () {
-				$state.go('tab.account-myrecord');
-			}
-		}
-	])
-	//提现记录
-	.controller('myrecordCtrl', ['$scope', 'Account', 'base',
-		function ($scope, Account, base) {
-			$scope.user = Account.getUser();
-			$scope.loadMore = function () {
-				base.request('usgainuserwd', {'userid': $scope.user.usersid}).then(function (data) {
-					$scope.moreDataCanBeLoaded = true;
-					$scope.define = false;
-					$scope.details = [];
-
-					if (data && data.state === "ok" && data.data.length > 0) {
-						if (data.data.length < 20) {
-							$scope.moreDataCanBeLoaded = false;
-							$scope.define = "已全部加载";
-						}
-						for (var i = 0; i < data.data.length; i++) {
-							$scope.details.push(data.data[i]);
-						}
-					} else {
-						$scope.define = data.reason;
-						$scope.moreDataCanBeLoaded = false;
-					}
-					$scope.$broadcast('scroll.infiniteScrollComplete');
-				});
-			};
-			$scope.loadMore();
-
-			$scope.splitDate = function (arg) {
-				return arg.split(" ");
-			};
-
-			$scope.failStyle = function (status) {
-				if (status == "已拒绝") {
-					return {color: '#FC5757', 'text-decoration': 'underline'};
-				} else if (status == "已审核") {
-					return {color: '#08AE23'};
-				} else {
-					return {color: '#4C4C4C'};
-				}
-			};
-
-			$scope.failReason = function (status, reason) {
-				if (status == "已拒绝") {
-					if (!reason) {
-						reason = "无反馈信息";
-					}
-					base.alert($scope, "提示", reason);
-				}
-			}
-		}
-	])
+	// .controller('myincomeCtrl', ['$scope', '$state', 'Account', 'base',
+	// 	function ($scope, $state, Account, base) {
+	// 		$scope.user = Account.getUser();
+	// 		$scope.user._amount = undefined;
+	// 		console.log(JSON.stringify($scope.user));
+	// 		$scope._wdform = function (userWithdraw) {
+	// 			var sender = {
+	// 				'user.usersZhenshiname': userWithdraw.userszhenshiname,
+	// 				'user.usersBankcard': userWithdraw.default4,
+	// 				'user.usersBankaddress': userWithdraw.usersbankaddress,
+	// 				'fs.amount': userWithdraw._amount,
+	// 				'user.usersId': $scope.user.usersid
+	// 			};
+	// 			base.request("uswithdraw", sender).then(function (data) {
+	// 				console.log(data);
+	// 				if (data.state == "ok") {
+	// 					Account.reload().then(function (reg) {
+	// 						$scope.user = reg;
+	// 						base.prompt($scope, data.reason);
+	// 					});
+	// 				} else {
+	// 					base.prompt($scope, "提现申请失败")
+	// 				}
+	// 			});
+	// 		};
+	// 		//跳转到提现记录页面
+	// 		$scope.getrecord = function () {
+	// 			$state.go('tab.account-myrecord');
+	// 		}
+	// 	}
+	// ])
+	// //提现记录
+	// .controller('myrecordCtrl', ['$scope', 'Account', 'base',
+	// 	function ($scope, Account, base) {
+	// 		$scope.user = Account.getUser();
+	// 		$scope.loadMore = function () {
+	// 			base.request('usgainuserwd', {'userid': $scope.user.usersid}).then(function (data) {
+	// 				$scope.moreDataCanBeLoaded = true;
+	// 				$scope.define = false;
+	// 				$scope.details = [];
+	//
+	// 				if (data && data.state === "ok" && data.data.length > 0) {
+	// 					if (data.data.length < 20) {
+	// 						$scope.moreDataCanBeLoaded = false;
+	// 						$scope.define = "已全部加载";
+	// 					}
+	// 					for (var i = 0; i < data.data.length; i++) {
+	// 						$scope.details.push(data.data[i]);
+	// 					}
+	// 				} else {
+	// 					$scope.define = data.reason;
+	// 					$scope.moreDataCanBeLoaded = false;
+	// 				}
+	// 				$scope.$broadcast('scroll.infiniteScrollComplete');
+	// 			});
+	// 		};
+	// 		$scope.loadMore();
+	//
+	// 		$scope.splitDate = function (arg) {
+	// 			return arg.split(" ");
+	// 		};
+	//
+	// 		$scope.failStyle = function (status) {
+	// 			if (status == "已拒绝") {
+	// 				return {color: '#FC5757', 'text-decoration': 'underline'};
+	// 			} else if (status == "已审核") {
+	// 				return {color: '#08AE23'};
+	// 			} else {
+	// 				return {color: '#4C4C4C'};
+	// 			}
+	// 		};
+	//
+	// 		$scope.failReason = function (status, reason) {
+	// 			if (status == "已拒绝") {
+	// 				if (!reason) {
+	// 					reason = "无反馈信息";
+	// 				}
+	// 				base.alert($scope, "提示", reason);
+	// 			}
+	// 		}
+	// 	}
+	// ])
 	// 我的优惠卷
 	.controller('couponsCtrl', ['$scope', "Account", "base", function ($scope, Account, base) {
 
+
+	}])
+	.controller('collectCtrl', ['$scope', '$stateParams', '$timeout', "Account", 'base', function ($scope, $stateParams, $timeout, Account, base) {
+
+		$scope.moreDataCanBeLoaded = false;
+
+		$scope.getCollects = function (refresh) {
+			Account.takeCollects(refresh, $stateParams.type).then(function (result) {
+				$scope.items = result;
+				$scope.$broadcast('scroll.refreshComplete');
+
+				$timeout(function () {
+					$scope.moreDataCanBeLoaded = true;
+				}, 300);
+			});
+		};
+
+		$scope.doRefresh = function () {
+			$scope.getCollects(true);
+			$scope.refreshData = false;
+		};
+
+		$scope.refreshData = false;
+
+		$scope.del = function (item) {
+			base.request('collect/mapi/del', 1, {"key": item.uuid}).then(function (result) {
+				if (result === "success") {
+					base.prompt($scope, "删除成功");
+					let inx = $scope.items.indexOf(item);
+					$scope.items.splice(inx, 1);
+					$scope.refreshData = true;
+				} else {
+					base.prompt($scope, "删除失败");
+				}
+			});
+		};
+
+		$scope.firstLoad = true;
+		$scope.$on("$ionicView.enter", function () {
+			if ($scope.firstLoad) {
+				$scope.getCollects(false);
+			}
+		});
+		$scope.$on("$ionicView.leave", function () {
+			if ($scope.refreshData) {
+				Account.takeCollects(true, $stateParams.type);
+			}
+		});
+	}])
+	//我的足迹
+	.controller('footPrintsCtrl', ['$scope', 'Account', 'base', function ($scope, Account, base) {
+
+		$scope.inx = 1;
+		$scope.moreDataCanBeLoaded = true;
+		$scope.sender = {
+			items: new Array()
+		};
+		$scope.loadMore = function () {
+			let params = {"user": Account.getUser().uuid, "offset": $scope.inx};
+			base.request('userfoot/mapi/list', 1, params).then(function (result) {
+				if (result.length < 20) {
+					$scope.moreDataCanBeLoaded = false;
+				}
+				$scope.sender.items = $scope.sender.items.concat(result);
+				$scope.inx += 1;
+				$scope.$broadcast('scroll.infiniteScrollComplete');
+			});
+		};
+
+		$scope.refreshData = false;
+
+		$scope.del = function (item) {
+			base.request('collect/mapi/del', 1, {"key": item.uuid}).then(function (result) {
+				if (result === "success") {
+					base.prompt($scope, "删除成功");
+					let inx = $scope.items.indexOf(item);
+					$scope.items.splice(inx, 1);
+					$scope.refreshData = true;
+				} else {
+					base.prompt($scope, "删除失败");
+				}
+			});
+		};
 	}])
 	//我的二维码
-	.controller('qrCodeCtrl', ['$scope', 'Account', 'base',
-		function ($scope, Account, base) {
+	.controller('qrCodeCtrl', ['$scope', 'Account', 'base', function ($scope, Account, base) {
 
-			$scope.load = function () {
-				base.loading();
+		$scope.load = function () {
+			base.loading();
 
-				base.request('usmycode', {userid: Account.getUser().usersid}).then(function (data) {
-					$scope.qrcode = data.url;
-					base.loaded();
-				})
-			};
-			$scope.$on("$ionicView.enter", function () {
-				// $scope.shop = Account.getUser().shop;
-				$scope.load();
-			});
-		}
-	]);
+			base.request('usmycode', {userid: Account.getUser().usersid}).then(function (data) {
+				$scope.qrcode = data.url;
+				base.loaded();
+			})
+		};
+		$scope.$on("$ionicView.enter", function () {
+			// $scope.shop = Account.getUser().shop;
+			$scope.load();
+		});
+	}]);

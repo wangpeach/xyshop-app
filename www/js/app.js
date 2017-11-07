@@ -451,16 +451,24 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
 				}
 			})
 			.state('tab.account-collect', {
-				url: '/account/collect',
+				url: '/account/collect/:type',
 				views: {
 					'tab-account': {
 						templateUrl: 'templates/collect.html',
 						controller: 'collectCtrl'
 					}
 				}
+			})
+			.state('tab.account-footprints', {
+				url: '/account/fps',
+				views: {
+					'tab-account': {
+						templateUrl: 'templates/myfps.html',
+						controller: 'footPrintsCtrl'
+					}
+				}
 			});
 
 		// if none of the above states are matched, use this as the fallback
 		$urlRouterProvider.otherwise('/tab/home');
-
 	});
