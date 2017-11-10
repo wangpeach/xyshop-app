@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ["ionic", "home.controller", "realtime.controller", "cart.controller", "account.controller", "products.controller"])
-    .controller('baseCtrl', ["$rootScope", "$cordovaInAppBrowser", "$state", "$scope", "$sce", "$timeout", "base", "Account",
-    function ($rootScope, $cordovaInAppBrowser, $state, $scope, $sce, $timeout, base, Account) {
+    .controller('baseCtrl', ["$rootScope", "$cordovaInAppBrowser", "$state", "$scope", "$sce", "$timeout", "$ionicPlatform", "base", "Account",
+    function ($rootScope, $cordovaInAppBrowser, $state, $scope, $sce, $timeout, $ionicPlatform, base, Account) {
 
         $rootScope.regexp = {
             username: /[^\u4e00-\u9fa5]/g,
@@ -22,18 +22,24 @@ angular.module('starter.controllers', ["ionic", "home.controller", "realtime.con
                     $state.go("tab.home-shop-pro-details", { backWhere: 'tab.home', good: angular.toJson(resp) });
                 });
             } else {
-                $ionicPlatform.ready(function () {
-                    $cordovaInAppBrowser.open(ad.gotoInfo, '_system', options)
-                        .catch(function (event) {
-                            // error
-                            that.prompt("系统错误..");
-                        });
+                base.openModal($rootScope, "templates/outerUrl.html", "slideInRight").then(function (model) {
+	                $rootScope.adModel = model;
+	                $rootScope.adModel.show();
+	                $rootScope.outerName = ad.name;
+	                $rootScope.outerUrl = $sce.trustAsResourceUrl(ad.gotoInfo);
                 });
+                // $ionicPlatform.ready(function () {
+                //     $cordovaInAppBrowser.open(ad.gotoInfo, '_blank', {"location": "yes"})
+                //         .catch(function (event) {
+                //             // error
+                //             base.prompt("系统错误..");
+                //         });
+                // });
             }
             base.request("ad/mapi/hits", 0, { key: ad.uuid });
             // 奖励金
-            if (!ad.browsed) {
-                let user = Account.getUser();
+	        let user = Account.getUser();
+            if (!ad.browsed && user) {
                 base.request("user/mapi/coin-reward", 1, { "user": user.uuid, "ad": ad.uuid }).then(function (resp) {
                     if (resp.code === 0) {
                         ad.browsed = true;

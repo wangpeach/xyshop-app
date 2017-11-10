@@ -13,9 +13,11 @@ angular.module('account.service', [])
 					let deferred = $q.defer(), that = this;
 					base.request("user/mapi/login", 1, data)
 						.then(function (result) {
-							that.storeUser(result)
-							that.takeCoupons();
-							that.takeCollects();
+							if(result) {
+								that.storeUser(result);
+								that.takeCoupons();
+								that.takeCollects();
+							}
 							deferred.resolve(result);
 						}, function (result) {
 							deferred.reject(result);

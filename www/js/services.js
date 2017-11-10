@@ -78,10 +78,14 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 						that.loading();
 					}
 					data = that.handleAndroidParams(data, false);
+					// data = that.handleParams(data);
 					if (service.indexOf("http") !== 0) {
 						service = that.getUrl(service)[host];
 					}
-					$http.post(service, data).then(function (response) {
+					let config = {
+						timeout: 5000
+					};
+					$http.post(service, data, config).then(function (response) {
 						defer.resolve(response.data);
 						that.loaded();
 					}, function (response) {
@@ -118,7 +122,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 							this.prompt($rootScope, '无法访问服务');
 							break;
 						default:
-							// statements_def
+							this.prompt($rootScope, 'error');
 							break;
 					}
 				},

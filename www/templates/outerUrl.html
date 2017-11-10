@@ -1,0 +1,11 @@
+<ion-modal-view>
+    <ion-header-bar>
+        <div class="buttons">
+            <button class="button button-clear button-dark icon-left ion-chevron-left" style="color:rgba(68, 68, 68, 0.6)" ng-click="adModel.hide()"></button>
+        </div>
+        <h1 class="title">{{outerName}}</h1>
+    </ion-header-bar>
+    <ion-content scroll="true" overflow-scroll="true">
+        <iframe data-tap-disabled="true" data-ng-src="{{outerUrl}}" style="min-width:100%;min-height:100%;"></iframe>
+    </ion-content>
+</ion-modal-view>

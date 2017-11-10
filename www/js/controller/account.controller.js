@@ -44,6 +44,8 @@ angular.module("account.controller", ["ionic"])
 					sessionStorage.removeItem("geolocation");
 					sessionStorage.removeItem("geoloerror");
 					base.prompt($scope, "清理完成");
+				} else if (arg1 === "about") {
+					$state.go(arg);
 				} else {
 					if (Account.signined) {
 						if (arg === "tab.myorder") {

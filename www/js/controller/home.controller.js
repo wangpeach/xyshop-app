@@ -87,6 +87,8 @@ angular.module("home.controller", ["ionic"])
 					$scope.slider_img_style = {"width": "100%", "height": slider_height + "px"};
 					$ionicSlideBoxDelegate.$getByHandle("homeAdvs").loop(true);
 					$ionicSlideBoxDelegate.$getByHandle("homeAdvs").update();
+
+					$scope.$broadcast('scroll.refreshComplete');
 				});
 			};
 
@@ -224,6 +226,13 @@ angular.module("home.controller", ["ionic"])
 			$scope.loadAd();
 			$scope.loadProty();
 			$scope.loadHotGoods();
+			
+			
+			
+			$scope.doRefresh = function () {
+				$scope.loadAd();
+			}
+			
 
 			$scope.$on("$ionicView.beforeEnter", function () {
 			});

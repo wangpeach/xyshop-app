@@ -1,12 +1,38 @@
-<ion-view view-title="关于" hide-tabs>
+<ion-view view-title="关于我们" hide-tabs>
+    <style>
+        .about-logo {
+            width: 140px;
+            margin: 30px auto;
+            font-size: 20px;
+            height: 50px;
+        }
+        .about-logo span {
+            position: absolute;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+        .copyright {
+            text-align: center;
+            color: #a9a9a9;
+            text-shadow: 0 -1px 1px #eee;
+        }
+    </style>
     <ion-content>
-        <div class="list card" style="box-shadow: none">
-            <div class="item item-image">
-                <!--<img ng-src="{{qrcode}}" style="width:70%">-->
-            </div>
-            <div class="item" style="text-align:center;border-width:0px">
-                畅行金州
+        <div class="about-logo">
+            <img src="img/logo-x.png">
+            <span>畅行金州</span>
+        </div>
+        <div class="card">
+            <div class="item item-text-wrap">
+                <p style="text-indent: 30px;">
+                    贵州省多彩文化传媒有限公司成立于2014年11月。主要经营业务为广告代理，品牌推广，APP开发，产品包装销售、数字电视增值业务代理，移动网络安装、电视网络终端安装及维修、视频制作等。现代理兴义市广播电视台广告，从事产品销售、市场推广业务。是一家集销售代理、市场开发、APP开发运营市场销售服务型公司。
+                </p>
             </div>
         </div>
+        <p class="copyright">
+            Copyright &copy; 2017 贵州多彩传媒有限公司.
+            <br>
+            All rights reserved.
+        </p>
     </ion-content>
 </ion-view>

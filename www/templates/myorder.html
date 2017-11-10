@@ -41,7 +41,7 @@
                             </ion-item>
                             <div class="ws-order-action">
                                 <button ng-if="item.status === 'waitConsume'" class="button button-clear  button-small button-positive">
-                                    交易串码：{{item.cardCode}}
+                                    序列码：{{item.cardCode}}
                                 </button>
                                 <button class="button button-small button-outline button-light"
                                         ng-if="item.status == 'waitPay'"
@@ -158,7 +158,7 @@
                             </ion-item>
                             <div class="ws-order-action" ng-if="item.status != '已付款'">
                                 <button ng-if="item.status === 'waitConsume'" class="button button-clear  button-small button-positive">
-                                    交易串码：{{item.cardCode}}
+                                    序列码：{{item.cardCode}}
                                 </button>
                             </div>
                         </div>

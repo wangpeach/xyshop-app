@@ -467,7 +467,15 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
 						controller: 'footPrintsCtrl'
 					}
 				}
-			});
+			})
+			.state('tab.account-about', {
+			url: '/account/about',
+			views: {
+				'tab-account': {
+					templateUrl: 'templates/about.html'
+				}
+			}
+		});
 
 		// if none of the above states are matched, use this as the fallback
 		$urlRouterProvider.otherwise('/tab/home');
