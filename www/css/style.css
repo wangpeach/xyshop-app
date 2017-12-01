@@ -2473,7 +2473,7 @@ border: 1px solid red;
  */
 .coupon {
     position: relative;
-    width: 300px;
+    width: 85%;
     height: 92px;
     background-color: #fff;
     border-top: 1px solid #ccc;
@@ -2506,6 +2506,8 @@ border: 1px solid red;
     background-position: -4px 0px;
 }
 
+
+
 .coupon .head {
     left: 0px;
     width: 35%;
@@ -2536,6 +2538,27 @@ border: 1px solid red;
 .coupon .head p {
     color: white;
     text-align: center;
+}
+
+
+.coupon.overdue {
+    border-top: 1px solid #dcd8d8;
+    border-bottom: 1px solid #dcd8d8;
+    border-right: 1px solid #dcd8d8;
+}
+.coupon.overdue .wave {
+    background-image: -webkit-radial-gradient(rgba(175, 14, 14, 0) 0px, transparent 3px, #dcd8d8 3px, #dcd8d8 4px, #dcd8d8 4px, #dcd8d8);
+    background-image: -moz-radial-gradient(rgba(175, 14, 14, 0) 0px, transparent 3px, #dcd8d8 3px, #dcd8d8 4px, #dcd8d8 4px, #dcd8d8);
+    background-image: radial-gradient(rgba(175, 14, 14, 0) 0px, transparent 3px, #dcd8d8 3px, #dcd8d8 4px, #dcd8d8 4px, #dcd8d8);
+}
+.coupon.overdue .head {
+    background-color: #dcd8d8;
+}
+.coupon.overdue .head .facevalue {
+    color: #ffffff;
+}
+.coupon.overdue .head p {
+    color: #ffffff;
 }
 
     /******************* END ********************/
@@ -3247,7 +3270,7 @@ border: 1px solid red;
 }
 
 .homeSearchModal .scroll-content {
-    background: rgba(221, 221, 221, 0.39);
+    background: rgba(221, 221, 221, 0.25);
 }
 
 .homeSearchModal .history-search {

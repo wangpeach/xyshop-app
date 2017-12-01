@@ -10,7 +10,7 @@
         "spec": "latest",
         "type": "tag"
       },
-      "E:\\App\\xyshop-app\\node_modules"
+      "E:\\App\\xyshop-app"
     ]
   ],
   "_from": "cordova-plugin-app-version@latest",
@@ -45,7 +45,7 @@
   "_shasum": "9db0607863337a710489302e5f50a904f1449bdb",
   "_shrinkwrap": null,
   "_spec": "cordova-plugin-app-version",
-  "_where": "E:\\App\\xyshop-app\\node_modules",
+  "_where": "E:\\App\\xyshop-app",
   "author": {
     "name": "whiteoctober"
   },

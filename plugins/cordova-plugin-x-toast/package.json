@@ -10,7 +10,7 @@
         "spec": "latest",
         "type": "tag"
       },
-      "E:\\App\\xyshop-app\\node_modules"
+      "E:\\App\\xyshop-app"
     ]
   ],
   "_from": "cordova-plugin-x-toast@latest",
@@ -45,7 +45,7 @@
   "_shasum": "4778becb61e36c8951091a075850c28ded8f56a5",
   "_shrinkwrap": null,
   "_spec": "cordova-plugin-x-toast",
-  "_where": "E:\\App\\xyshop-app\\node_modules",
+  "_where": "E:\\App\\xyshop-app",
   "author": {
     "name": "Eddy Verbruggen",
     "email": "eddyverbruggen@gmail.com",

@@ -5,10 +5,17 @@
                 <img ng-src="{{item.imgUrlShow}}" ng-click="handleAd(item)" ng-style="slider_img_style">
             </ion-slide>
         </ion-slide-box>
+
         <ion-tree-list items="tasks" collapsed="false" myclick="toVideo()"></ion-tree-list>
-        <fieldset ng-if="!searchSender.moreDataCanBeLoaded && scopeList.length > 0" class="line">
-            <legend align="center">&nbsp;&nbsp;已全部加载&nbsp;&nbsp;</legend>
-        </fieldset>
-        <ion-infinite-scroll ng-if="searchSender.moreDataCanBeLoaded && !searchSender.firstLoad" on-infinite="searchShop()" distance="10%"></ion-infinite-scroll>
+        <button ng-if="loading" class="button button-full button-clear button-positive">
+            <ion-spinner icon="dots" ng-if="dotsHide"></ion-spinner>
+            <ul ng-if="!dotsHide" class="ws-pdlist-all-res">
+                <li class="ws-nothing" style="padding-top: 50px;">
+                    <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
+                    <br/>
+                    <p>加载摄像头失败</p>
+                </li>
+            </ul>
+        </button>
     </ion-content>
 </ion-view>

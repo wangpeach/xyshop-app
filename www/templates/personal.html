@@ -3,14 +3,14 @@
                 <div class="list ws-list pl-list">
                         <a class="item item-button-right" ng-click="changeHeader()">
                                 头像
-                                <img src="{{account.usersheadimgurl}}" data-ng-src="{{data_header}}" alt="">
+                                <img src="{{headImg}}" data-ng-src="{{data_header}}" alt="">
                                 <button class="button button-clear button-positive button-icon-right">
                                        <i class="icon ion-ios-arrow-right"></i>
                                 </button>
                         </a>
                         <a class="item item-button-right">
                                 会员名称
-                                <label>{{account.usersname}}</label>
+                                <label>{{account.name}}</label>
                                 <button class="button button-clear button-positive button-icon-right">
                                         <!-- <i class="icon ion-ios-arrow-right"></i> -->
                                 </button>
@@ -24,7 +24,7 @@
                         </a>-->
                         <a class="item item-button-right" ng-click="valid()">
                                 手机号码
-                                <label>{{account.usersphone}}</label>
+                                <label>{{account.phoneNum}}</label>
                                 <button class="button button-clear button-positive button-icon-right">
                                         <i class="icon ion-ios-arrow-right"></i>
                                 </button>

@@ -28,13 +28,6 @@ angular.module('starter.controllers', ["ionic", "home.controller", "realtime.con
 	                $rootScope.outerName = ad.name;
 	                $rootScope.outerUrl = $sce.trustAsResourceUrl(ad.gotoInfo);
                 });
-                // $ionicPlatform.ready(function () {
-                //     $cordovaInAppBrowser.open(ad.gotoInfo, '_blank', {"location": "yes"})
-                //         .catch(function (event) {
-                //             // error
-                //             base.prompt("系统错误..");
-                //         });
-                // });
             }
             base.request("ad/mapi/hits", 0, { key: ad.uuid });
             // 奖励金

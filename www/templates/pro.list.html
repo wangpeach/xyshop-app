@@ -12,7 +12,9 @@
             </button>
         </div>
     </ion-header-bar>
+
     <ion-header-bar class="bar-subheader">
+
         <div class="button-bar">
             <a class="button button-clear icon-right ion-android-arrow-dropdown" ng-click="openPopoverProList.show($event)">{{selected.type}}</a>
             <a class="button button-clear icon-right ion-android-arrow-dropdown" ng-click="openPopoverNearby.show($event)">{{selected.distance}}</a>
@@ -20,7 +22,11 @@
         </div>
     </ion-header-bar>
     <ion-content>
-
+        <ion-slide-box ng-if="adshow" auto-play="true" does-continue="true" show-pager="true" class="ad-slider" ng-style="slider_img_style" delegate-handle="protypesAdvs">
+            <ion-slide ng-repeat="item in ptsAdvs">
+                <img ng-src="{{item.imgUrlShow}}" ng-click="handleAd(item)" ng-style="slider_img_style">
+            </ion-slide>
+        </ion-slide-box>
         <div class="content-list">
             <div class="list">
                 <a class="item item-thumbnail-left" ng-repeat="item in shops" ng-click="typeProDetails(item)">

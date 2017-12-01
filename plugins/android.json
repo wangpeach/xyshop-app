@@ -1,62 +1,66 @@
 {
-    "prepare_queue": {
-        "installed": [],
-        "uninstalled": []
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "com.hutchind.cordova.plugins.streamingmedia": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
     },
-    "config_munge": {
-        "files": {}
+    "cordova-alipay-base": {
+      "APP_ID": "2017080208001883",
+      "PACKAGE_NAME": "com.xydc.rtshop"
     },
-    "installed_plugins": {
-        "cordova-plugin-app-version": {
-            "PACKAGE_NAME": "io.ionic.starter"
-        },
-        "cordova-plugin-camera": {
-            "PACKAGE_NAME": "io.ionic.starter"
-        },
-        "cordova-plugin-compat": {
-            "PACKAGE_NAME": "io.ionic.starter"
-        },
-        "cordova-plugin-console": {
-            "PACKAGE_NAME": "io.ionic.starter"
-        },
-        "cordova-plugin-crosswalk-webview": {
-            "XWALK_VERSION": "23+",
-            "XWALK_LITEVERSION": "xwalk_core_library_canary:17+",
-            "XWALK_COMMANDLINE": "--disable-pull-to-refresh-effect",
-            "XWALK_MODE": "embedded",
-            "XWALK_MULTIPLEAPK": "true",
-            "PACKAGE_NAME": "io.ionic.starter"
-        },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "io.ionic.starter"
-        },
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "io.ionic.starter"
-        },
-        "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "io.ionic.starter"
-        },
-        "cordova-plugin-http": {
-            "PACKAGE_NAME": "io.ionic.starter"
-        },
-        "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "io.ionic.starter"
-        },
-        "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "io.ionic.starter"
-        },
-        "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "io.ionic.starter"
-        },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "io.ionic.starter"
-        },
-        "cordova-plugin-x-toast": {
-            "PACKAGE_NAME": "io.ionic.starter"
-        },
-        "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "io.ionic.starter"
-        }
+    "cordova-plugin-app-version": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
     },
-    "dependent_plugins": {}
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
+    "cordova-plugin-console": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
+    "cordova-plugin-crosswalk-webview": {
+      "XWALK_VERSION": "23+",
+      "XWALK_LITEVERSION": "xwalk_core_library_canary:17+",
+      "XWALK_COMMANDLINE": "--disable-pull-to-refresh-effect",
+      "XWALK_MODE": "embedded",
+      "XWALK_MULTIPLEAPK": "true",
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
+    "cordova-plugin-http2": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
+    "cordova-plugin-x-toast": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
+    "ionic-plugin-keyboard": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    }
+  },
+  "dependent_plugins": {}
 }

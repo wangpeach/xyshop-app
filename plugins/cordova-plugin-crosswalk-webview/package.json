@@ -10,7 +10,7 @@
         "spec": "2.3.0",
         "type": "version"
       },
-      "E:\\App\\xyshop-app\\node_modules"
+      "E:\\App\\xyshop-app"
     ]
   ],
   "_from": "cordova-plugin-crosswalk-webview@2.3.0",
@@ -45,7 +45,7 @@
   "_shasum": "e2ee34ecfdaddd84bda84e72663539e40c99d324",
   "_shrinkwrap": null,
   "_spec": "cordova-plugin-crosswalk-webview@2.3.0",
-  "_where": "E:\\App\\xyshop-app\\node_modules",
+  "_where": "E:\\App\\xyshop-app",
   "author": "",
   "bugs": {
     "url": "https://crosswalk-project.org/jira"

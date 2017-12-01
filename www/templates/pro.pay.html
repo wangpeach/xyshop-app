@@ -18,7 +18,7 @@
         </div>
 
         <div class="padding" style="text-align: center;">
-            <a class="button button-block button-carnation" ng-click="payment()">确认支付 <span style="font-size: 20px;">￥{{order.payPrice}}</span></a>
+            <a class="button button-block button-carnation" ng-click="pay()">确认支付 <span style="font-size: 20px;">￥{{order.payPrice}}</span></a>
             <span ng-if="order.preferentialPrice" style="color: rgb(249, 82, 82);">优惠{{order.preferentialPrice}}元，实际支付 {{order.payPrice}}元</span>
         </div>
     </ion-content>

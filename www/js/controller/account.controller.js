@@ -14,14 +14,9 @@ angular.module("account.controller", ["ionic"])
 			//刚跳到个人账户时检测用户是否是老顾客
 			$scope.accountInfoModal = function () {
 				$scope.user = Account.getUser();
-				if ($scope.user.shop) {
-					$scope.shopActionName = "我的店铺";
-				} else {
-					$scope.shopActionName = "免费开店";
-				}
 
-				if (!$scope.user.usersheadimgurl) {
-					$scope.user.usersheadimgurl = "img/user_large.jpg";
+				if (!$scope.user.headImg) {
+					$scope.user.headImg = "img/user_large.jpg";
 				}
 
 				$scope.doRefresh = function () {
@@ -333,14 +328,16 @@ angular.module("account.controller", ["ionic"])
 
 
 			$scope.collects = function () {
-				$timeout(function () {
-					Account.takeCollects(false, "good").then(function (result) {
-						$scope.collectGoods = result.length;
-					});
-					Account.takeCollects(false, "shop").then(function (result) {
-						$scope.collectShops = result.length;
-					});
-				}, 1000);
+				if(Account.signed) {
+					$timeout(function () {
+						Account.takeCollects(false, "good").then(function (result) {
+							$scope.collectGoods = result.length;
+						});
+						Account.takeCollects(false, "shop").then(function (result) {
+							$scope.collectShops = result.length;
+						});
+					}, 1000);
+				}
 			}
 
 
@@ -400,6 +397,12 @@ angular.module("account.controller", ["ionic"])
 		function ($scope, $rootScope, $ionicPopup, $ionicHistory, $ionicLoading, $ionicActionSheet, $ionicModal, $q, $interval, Account, base) {
 
 			$scope.account = Account.getUser();
+			$scope.headImg = "";
+			if($scope.account.headImg) {
+				$scope.headImg = $scope.account.headImg;
+			} else {
+				$scope.headImg = "img/user_large.jpg";
+			}
 			console.log(JSON.stringify($scope.account));
 			$scope.data_header = "";
 
@@ -430,12 +433,15 @@ angular.module("account.controller", ["ionic"])
 					cancel: function () {
 					},
 					buttonClicked: function (index) {
+
 						base.takePictures(index).then(function (imgData) {
 							base.loading();
-							base.request("user/mapi/upload-head", 0, {
-								"base64": "data:image/png;base64," + imgData,
-								"userid": Account.getUser().uuid
-							}).then(function (data) {
+							let _base64 = imgData;
+							$scope.data_header = "data:image/png;base64," + _base64;
+							base.request("user/mapi/upload-head", 1, {
+								"base64": _base64,
+								"userId": Account.getUser().uuid
+							}, true, 100000).then(function (data) {
 								if (data.status == "success") {
 									Account.reload().then(function () {
 										base.loaded();
@@ -629,6 +635,7 @@ angular.module("account.controller", ["ionic"])
 				});
 				return defer.promise;
 			};
+
 		}
 	])
 	//收货地址
@@ -1399,8 +1406,9 @@ angular.module("account.controller", ["ionic"])
 	// ])
 	// 我的优惠卷
 	.controller('couponsCtrl', ['$scope', "Account", "base", function ($scope, Account, base) {
+		 Account.takeCoupons().then(function (data) {
 
-
+		 });
 	}])
 	.controller('collectCtrl', ['$scope', '$stateParams', '$timeout', "Account", 'base', function ($scope, $stateParams, $timeout, Account, base) {
 

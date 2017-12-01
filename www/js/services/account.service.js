@@ -13,7 +13,7 @@ angular.module('account.service', [])
 					let deferred = $q.defer(), that = this;
 					base.request("user/mapi/login", 1, data)
 						.then(function (result) {
-							if(result) {
+							if (result) {
 								that.storeUser(result);
 								that.takeCoupons();
 								that.takeCollects();
@@ -38,12 +38,12 @@ angular.module('account.service', [])
 				reload: function () {
 					var deferred = $q.defer(),
 						self = this;
-					base.request("user/mapi/reload", 1, {uuid: self.getUser().uuid})
+					base.request("user/mapi/reload", 1, {uuid: self.getUser().uuid}, false)
 						.then(function (resp) {
-							if (resp.state == "ok") {
-								self.storeUser(resp.data);
-								this.takeCoupons();
-								this.takeCollects();
+							if (resp) {
+								self.storeUser(resp);
+								self.takeCoupons();
+								self.takeCollects();
 							}
 							deferred.resolve(resp.data);
 						}, function (resp) {
@@ -83,26 +83,28 @@ angular.module('account.service', [])
 					this.signined = false;
 					localStorage.removeItem("account");
 				},
+
 				/**
 				 * 获取优惠卷
 				 * @returns {Promise}
 				 */
 				takeCoupons: function (refresh) {
-					let def = $q.defer(), coupons = localStorage.getItem("coupons");
-					if(!coupons || refresh) {
-						let params = {
-							user: this.getUser().uuid,
-							shopId: null,
-							cate: null,
-							good: null
-						};
-						base.request("usercoupon/mapi/list", 1, params).then(function (result) {
-							localStorage.setItem("coupons", result);
-							def.resolve(result);
-						})
-					} else {
-						def.resolve(coupons);
-					}
+					let def = $q.defer();
+					// coupons = localStorage.getItem("coupons");
+					// if(!coupons || refresh) {
+					let params = {
+						user: this.getUser().uuid,
+						shopId: null,
+						cate: null,
+						good: null
+					};
+					base.request("usercoupon/mapi/list", 1, params, false).then(function (result) {
+						localStorage.setItem("coupons", result);
+						def.resolve(result);
+					})
+					// } else {
+					// 	def.resolve(coupons);
+					// }
 					return def.promise;
 				},
 				/**
@@ -110,10 +112,11 @@ angular.module('account.service', [])
 				 * @returns {Promise}
 				 */
 				takeCollects: function (refresh, _type) {
-					let def = $q.defer(),  storageName = "collection" + _type, collects = localStorage.getItem(storageName);
-					if(!collects || refresh) {
+					let def = $q.defer(), storageName = "collection" + _type,
+						collects = localStorage.getItem(storageName);
+					if (!collects || refresh) {
 						let params = {user: this.getUser().uuid, type: _type};
-						base.request("collect/mapi/list", 1, params).then(function (result) {
+						base.request("collect/mapi/list", 1, params, false).then(function (result) {
 							def.resolve(result);
 							localStorage.setItem(storageName, JSON.stringify(result));
 						});

@@ -81,7 +81,7 @@ angular.module("cart.controller", ["ionic"])
 				coupon: $scope.targetCp ? $scope.targetCp.uuid : null
 			};
 			base.request("order/mapi/create", 1, params).then(function (data) {
-				if(data) {
+				if (data) {
 					data.good = $scope.product;
 					$state.go($stateParams.backWhere + '-shop-pro-pay', {
 						backWhere: $stateParams.backWhere,
@@ -93,8 +93,10 @@ angular.module("cart.controller", ["ionic"])
 			});
 		};
 
+		$scope.loadCoupon();
+
 		$scope.$on("$ionicView.enter", function () {
-			$scope.loadCoupon();
+
 		});
 	}])
 
@@ -107,7 +109,7 @@ angular.module("cart.controller", ["ionic"])
 		$scope.payways = [
 			{img: "img/WXLogo.png", text: "微信支付", way: "wxpay"},
 			{img: "img/AliLogo.png", text: "支付宝支付", way: "alipay"},
-			{img: "img/sfpay.png", text: "金币支付", way: "coin"},
+			{img: "img/coin.png", text: "金币支付", way: "coin"},
 		];
 
 		$scope.paywhy = {
@@ -115,10 +117,10 @@ angular.module("cart.controller", ["ionic"])
 		}
 
 		$scope.pay = function () {
-			$scope.payment().then(function (result) {
+			payment().then(function (result) {
 				base.prompt($scope, "支付成功", function () {
 					if($stateParams.backWhere === "tab.home") {
-						$ionicHistory.goBack(2);
+						$ionicHistory.goBack(-2);
 					} else {
 						$ionicHistory.goBack();
 					}
@@ -126,7 +128,7 @@ angular.module("cart.controller", ["ionic"])
 			})
 		}
 
-		$scope.payment = function () {
+		let payment = function () {
 			let defer = $q.defer();
 			var params = {
 				order: $scope.order.uuid,
@@ -164,7 +166,7 @@ angular.module("cart.controller", ["ionic"])
 					window.Alipay.Base.pay(data, function (successResults) {
 						var payres = successResults.resultStatus;
 						if (payres === "9000") {
-								defer.resolve("success");
+							defer.resolve("success");
 						} else if (payres == "6001") {
 							base.prompt($scope, "已取消支付");
 						} else if (payres == "6002") {
@@ -200,7 +202,7 @@ angular.module("cart.controller", ["ionic"])
 				};
 
 				Wechat.sendPaymentRequest(params, function () {
-						defer.resolve("success");
+					defer.resolve("success");
 				}, function (reason) {
 					console.log(reason);
 				});
@@ -215,9 +217,9 @@ angular.module("cart.controller", ["ionic"])
 		let coinPayment = function (params) {
 			let defer = $q.defer();
 			base.confirm($scope, "确实使用金币支付吗？").then(function (result) {
-				if(result) {
+				if (result) {
 					base.request("order/mapi/coin-payment", 1, params).then(function (result) {
-						if(result.status === "success") {
+						if (result.status === "success") {
 							defer.resolve(result.status);
 						} else {
 							base.prompt($scope, result.tips);

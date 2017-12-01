@@ -40,6 +40,9 @@
                                 </a>
                             </ion-item>
                             <div class="ws-order-action">
+                                <button class="button button-clear button-small" style="float: left; color: #a09c9c;">
+                                    {{item.shopName}}
+                                </button>
                                 <button ng-if="item.status === 'waitConsume'" class="button button-clear  button-small button-positive">
                                     序列码：{{item.cardCode}}
                                 </button>
@@ -100,6 +103,9 @@
                                 </a>
                             </ion-item>
                             <div class="ws-order-action">
+                                <button class="button button-clear button-small" style="float: left; color: #a09c9c;">
+                                    {{item.shopName}}
+                                </button>
                                 <button class="button button-small button-outline button-light"
                                         ng-if="item.status == 'waitPay'"
                                         ng-click="gopay(item)">&nbsp;&nbsp;&nbsp;&nbsp;付款&nbsp;&nbsp;&nbsp;&nbsp;
@@ -157,6 +163,9 @@
                                 </a>
                             </ion-item>
                             <div class="ws-order-action" ng-if="item.status != '已付款'">
+                                <button class="button button-clear button-small" style="float: left; color: #a09c9c;">
+                                    {{item.shopName}}
+                                </button>
                                 <button ng-if="item.status === 'waitConsume'" class="button button-clear  button-small button-positive">
                                     序列码：{{item.cardCode}}
                                 </button>
@@ -211,6 +220,9 @@
                                 </a>
                             </ion-item>
                             <div class="ws-order-action">
+                                <button class="button button-clear button-small" style="float: left; color: #a09c9c;">
+                                    {{item.shopName}}
+                                </button>
                                 <button class="button button-small button-outline button-light"
                                          ng-click="delOrder(item.id, $index)">&nbsp;&nbsp;评论&nbsp;&nbsp;
                                 </button>

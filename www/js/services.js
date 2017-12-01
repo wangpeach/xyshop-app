@@ -8,12 +8,14 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				}));
 			}
 			var _config = JSON.parse(localStorage.getItem("config"));
-
 			var services = {
-				// 192.168.0.116:8080
+				// 192.168.0.117:8080
 				// 219.141.127.213:8087
-				hostHome: "http://192.168.0.116:8080/xyshop/",
-				hostShop: "http://192.168.0.116:8080/xyshop-supplier/",
+				hostHome: "http://192.168.0.117:8080/xyshop/",
+				hostShop: "http://192.168.0.117:8080/xyshop-supplier/",
+				// 用生产服务器测试
+				// ipcurl: "http://219.141.127.213:81/",
+				ipcurl: "http://192.168.0.117:2211/",
 				upgrade_url: '',
 				//高德web服务api
 				GaodeRestapiKey: "13cdbb92be4fb255d52f4ca82863d949",
@@ -26,13 +28,13 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * @return {[type]}         [description]
 				 */
 				getUrl: function (service) {
-					return [this.hostHome + service, this.hostShop + service];
+					return [this.hostHome + service, this.hostShop + service, this.ipcurl + service];
 				},
 
 				/**
 				 * 请求服务
 				 * @param  {[type]} service [description]
-				 * @param  {[type]} host    [指向哪个服务模块, 0 (主模块) / 1 (商家模块)]
+				 * @param  {[type]} host    [指向哪个服务模块, 0 (主模块) / 1 (商家模块) / 2(监控模块)]
 				 * @param  {[type]} data    [description]
 				 * @return {[type]}         [description]
 				 */
@@ -71,7 +73,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * @param  {[type]} data    [description]
 				 * @return {[type]}         [description]
 				 */
-				request: function (service, host, data, isLoad) {
+				request: function (service, host, data, isLoad, _timeout) {
 					var defer = $q.defer(),
 						that = this;
 					if(isLoad === undefined || isLoad === null || isLoad !== false) {
@@ -82,8 +84,11 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 					if (service.indexOf("http") !== 0) {
 						service = that.getUrl(service)[host];
 					}
+					if(!_timeout) {
+						_timeout = 5000
+					};
 					let config = {
-						timeout: 5000
+						timeout: _timeout
 					};
 					$http.post(service, data, config).then(function (response) {
 						defer.resolve(response.data);
@@ -91,6 +96,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 					}, function (response) {
 						that.req_error_handle(response.status);
 						that.loaded();
+						defer.reject(response.status);
 					});
 					return defer.promise;
 				},

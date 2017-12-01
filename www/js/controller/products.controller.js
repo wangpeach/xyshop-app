@@ -214,9 +214,9 @@ angular.module('products.controller', ['ionic'])
 		});
 	}])
 
-	//产品列表控制器
-	.controller("proListCtrl", ["$scope", "$ionicTabsDelegate", "$ionicHistory", "$stateParams", "$state", "$timeout", "base", "Home", "Products",
-		function ($scope, $ionicTabsDelegate, $ionicHistory, $stateParams, $state, $timeout, base, Home, Products) {
+	//商家列表控制器
+	.controller("proListCtrl", ["$scope", "$ionicTabsDelegate", "$ionicHistory", "$stateParams", "$state", "$timeout", "$ionicSlideBoxDelegate", "base", "Home", "Products",
+		function ($scope, $ionicTabsDelegate, $ionicHistory, $stateParams, $state, $timeout, $ionicSlideBoxDelegate, base, Home, Products) {
 
 			$scope.title = $stateParams.title;
 
@@ -238,6 +238,29 @@ angular.module('products.controller', ['ionic'])
 				key: $stateParams.key,
 				position: sessionStorage.getItem("geolocation")
 			};
+
+
+			/**
+			 * 加载广告
+			 * @return {[type]} [description]
+			 */
+			$scope.adshow = true;
+			$scope.loadAd = function () {
+				base.request("ad/mapi/loadAds", 0, {position: "cateTop"}).then(function (data) {
+					if(data && data.length > 0) {
+						$scope.ptsAdvs = data;
+						var slider_width = document.querySelectorAll(".shopList .ad-slider")[0].clientWidth;
+						var slider_height = slider_width / 5 * 1.5;
+						$scope.slider_img_style = {"width": "100%", "height": slider_height + "px"};
+						$ionicSlideBoxDelegate.$getByHandle("protypesAdvs").loop(true);
+						$ionicSlideBoxDelegate.$getByHandle("protypesAdvs").update();
+						$scope.$broadcast('scroll.refreshComplete');
+					} else {
+						$scope.adshow = false;
+					}
+				});
+			};
+
 
 			$scope.selected = {
 				type: '',
@@ -412,6 +435,7 @@ angular.module('products.controller', ['ionic'])
 					$scope.firstLoad = false;
 					$scope.getTypeChild();
 					$scope.loadShops(true);
+					$scope.loadAd();
 				}
 			});
 		}

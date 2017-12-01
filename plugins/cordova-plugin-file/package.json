@@ -10,7 +10,7 @@
         "spec": "latest",
         "type": "tag"
       },
-      "E:\\App\\xyshop-app\\node_modules"
+      "E:\\App\\xyshop-app"
     ]
   ],
   "_from": "cordova-plugin-file@latest",
@@ -45,7 +45,7 @@
   "_shasum": "012e97aa1afb91f84916e6341b548366d23de9b9",
   "_shrinkwrap": null,
   "_spec": "cordova-plugin-file",
-  "_where": "E:\\App\\xyshop-app\\node_modules",
+  "_where": "E:\\App\\xyshop-app",
   "author": {
     "name": "Apache Software Foundation"
   },
