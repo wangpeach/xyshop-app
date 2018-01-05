@@ -25,14 +25,6 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-file": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-file"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova-plugin-compat": {
     "source": {
       "type": "registry",
@@ -52,7 +44,7 @@
   "cordova-plugin-app-version": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-app-version"
+      "id": "cordova-plugin-app-version@^0.1.9"
     },
     "is_top_level": true,
     "variables": {}
@@ -127,7 +119,13 @@
       "id": "cordova-plugin-crosswalk-webview@2.3.0"
     },
     "is_top_level": true,
-    "variables": {}
+    "variables": {
+      "XWALK_VERSION": "23+",
+      "XWALK_LITEVERSION": "xwalk_core_library_canary:17+",
+      "XWALK_COMMANDLINE": "--disable-pull-to-refresh-effect",
+      "XWALK_MODE": "embedded",
+      "XWALK_MULTIPLEAPK": "true"
+    }
   },
   "com.hutchind.cordova.plugins.streamingmedia": {
     "source": {
@@ -136,5 +134,47 @@
     },
     "is_top_level": true,
     "variables": {}
+  },
+  "cordova-plugin-file-transfer": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-file-transfer@^1.7.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-file": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-file@5.0.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-file-opener2": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-file-opener2"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-networkinterface": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-networkinterface"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-wechat": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-wechat@2.1.0"
+    },
+    "is_top_level": true,
+    "variables": {
+      "WECHATAPPID": "wx9b1fa09595b5d87c"
+    }
   }
 }

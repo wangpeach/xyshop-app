@@ -152,7 +152,7 @@ angular.module('account.service', [])
 				 */
 				sendCode: function (arg) {
 					var deferred = $q.defer();
-					base.request("sms/mapi/sendcode", 0, {'phone': arg})
+					base.request("sms/mapi/reg-code", 0, {'phone': arg})
 						.then(function (resp) {
 							deferred.resolve(resp);
 						}, function (resp) {

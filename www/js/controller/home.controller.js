@@ -17,11 +17,11 @@ angular.module("home.controller", ["ionic"])
 			$scope.likes = new Array();
 
 
-			$scope.loadHotGoods = function () {
+			$scope.loadHotGoods = function (isload) {
 				if ($scope.options.maybeInx >= 5) {
 					$scope.options.moreDataCanBeLoaded = false;
 				} else {
-					Home.hotGoods($scope.options.maybeInx++).then(function (data) {
+					Home.hotGoods($scope.options.maybeInx++, isload).then(function (data) {
 						if (data.length < 20) {
 							$scope.options.moreDataCanBeLoaded = false;
 						}
@@ -38,8 +38,8 @@ angular.module("home.controller", ["ionic"])
 			 * 加载首页分类
 			 * @return {[type]} [description]
 			 */
-			$scope.loadProty = function () {
-				Home.loadProty().then(function (data) {
+			$scope.loadProty = function (isload) {
+				Home.loadProty(isload).then(function (data) {
 					data.push({
 						name: '全部分类',
 						iconImgPath: 'img/more.png',
@@ -79,8 +79,8 @@ angular.module("home.controller", ["ionic"])
 			 * 加载广告
 			 * @return {[type]} [description]
 			 */
-			$scope.loadAd = function () {
-				base.request("ad/mapi/loadAds", 0, {position: "shopHomeTop"}).then(function (data) {
+			$scope.loadAd = function (isload) {
+				base.request("ad/mapi/loadAds", 0, {position: "shopHomeTop"}, isload).then(function (data) {
 					$scope.homeAdvs = data;
 					var slider_width = document.querySelectorAll(".home .ad-slider")[0].clientWidth;
 					var slider_height = slider_width / 5 * 2.5;
@@ -223,14 +223,16 @@ angular.module("home.controller", ["ionic"])
 				// $scope.loadMaybeLike();
 			});
 
-			$scope.loadAd();
-			$scope.loadProty();
-			$scope.loadHotGoods();
+			$scope.loadAd(true);
+			$scope.loadProty(true);
+			$scope.loadHotGoods(true);
 			
 			
 			
 			$scope.doRefresh = function () {
-				$scope.loadAd();
+				$scope.loadAd(false);
+				$scope.loadProty(false);
+				$scope.loadHotGoods(false);
 			}
 			
 

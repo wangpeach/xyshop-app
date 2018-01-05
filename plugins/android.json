@@ -37,6 +37,12 @@
     "cordova-plugin-file": {
       "PACKAGE_NAME": "com.xydc.rtshop"
     },
+    "cordova-plugin-file-opener2": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
+    "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
     "cordova-plugin-geolocation": {
       "PACKAGE_NAME": "com.xydc.rtshop"
     },
@@ -46,10 +52,17 @@
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "com.xydc.rtshop"
     },
+    "cordova-plugin-networkinterface": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "com.xydc.rtshop"
     },
     "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
+    "cordova-plugin-wechat": {
+      "WECHATAPPID": "wx9b1fa09595b5d87c",
       "PACKAGE_NAME": "com.xydc.rtshop"
     },
     "cordova-plugin-whitelist": {

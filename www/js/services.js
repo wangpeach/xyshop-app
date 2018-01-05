@@ -1,7 +1,7 @@
 // , 'cordovaHTTP2'
 angular.module('starter.services', ['home.service', 'realtime.service', 'cart.service', 'account.service', 'products.service'])
-	.factory('base', ['$window', '$ionicPlatform', '$http', '$q', '$cordovaToast', '$ionicModal', '$ionicPopover', "$ionicLoading", "$cordovaAppVersion", "$timeout", "$cordovaCamera", "$ionicPopup", "$rootScope",
-		function ($window, $ionicPlatform, $http, $q, $cordovaToast, $ionicModal, $ionicPopover, $ionicLoading, $cordovaAppVersion, $timeout, $cordovaCamera, $ionicPopup, $rootScope) {
+	.factory('base', ['$window', '$ionicPlatform', '$http', '$q', '$cordovaToast', '$ionicModal', '$ionicPopover', "$ionicLoading", "$cordovaAppVersion", "$cordovaFileTransfer", "$cordovaFile", "$cordovaFileOpener2", "$timeout", "$cordovaCamera", "$ionicPopup", "$rootScope",
+		function ($window, $ionicPlatform, $http, $q, $cordovaToast, $ionicModal, $ionicPopover, $ionicLoading, $cordovaAppVersion, $cordovaFileTransfer, $cordovaFile, $cordovaFileOpener2, $timeout, $cordovaCamera, $ionicPopup, $rootScope) {
 			if (!localStorage.getItem("config")) {
 				localStorage.setItem("config", JSON.stringify({
 					showBalance: false
@@ -9,18 +9,67 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 			}
 			var _config = JSON.parse(localStorage.getItem("config"));
 			var services = {
-				// 192.168.0.117:8080
-				// 219.141.127.213:8087
-				hostHome: "http://192.168.0.117:8080/xyshop/",
-				hostShop: "http://192.168.0.117:8080/xyshop-supplier/",
+				debug: true,
+				hostHome: "http://192.168.0.2:8080/xyshop/",
+				hostShop: "http://192.168.0.2:8080/xyshop-supplier/",
 				// 用生产服务器测试
-				// ipcurl: "http://219.141.127.213:81/",
-				ipcurl: "http://192.168.0.117:2211/",
+				// hostHome: "http://219.141.127.213:8087/xyshop/",
+				// hostShop: "http://219.141.127.213:8087/xyshop-supplier/",
+				ipcurl: "http://219.141.127.213:81/",
+
 				upgrade_url: '',
 				//高德web服务api
 				GaodeRestapiKey: "13cdbb92be4fb255d52f4ca82863d949",
 				//高德本地检索tableid
 				GaodeTableId: '58354330afdf520ea8ecb6b8',
+
+				// 检查更新
+				upgrade: function (showtips) {
+					let that = this;
+					$ionicPlatform.ready(function () {
+						return;
+						that.getVersion().then(function (_version) {
+							that.request("params/app-version", 0, {"version": _version}).then(function (result) {
+								if (result.url) {
+									console.log(result);
+									that.confirm($rootScope, "提示", "发现新版本,是否更新?").then(function (res) {
+										if (res) {
+											$ionicLoading.show({
+												template: "已经下载：0%"
+											});
+											let targetApk = cordova.file.dataDirectory + "xyshop.apk";
+											$cordovaFileTransfer.download(result.url, targetApk, {}, true).then(function () {
+												$ionicLoading.hide();
+												$cordovaFileOpener2.open(targetApk, 'application/vnd.android.package-archive'
+												).then(function () {
+												}, function (err) {
+													that.prompt($rootScope, "请手动安装应用程序");
+												});
+											}, function () {
+												that.prompt($rootScope, "下载失败");
+											}, function (progress) {
+												$timeout(function () {
+													var downloadProgress = (progress.loaded / progress.total) * 100;
+													$ionicLoading.show({
+														template: "已下载：" + Math.floor(downloadProgress) + "%"
+													});
+													if (downloadProgress > 99) {
+														$ionicLoading.hide();
+													}
+												})
+											});
+
+										}
+									});
+								} else {
+									if(showtips) {
+										that.prompt($rootScope, "已是最新版本");
+									}
+								}
+							});
+						});
+					});
+				},
 
 				/**
 				 * 获取Url
@@ -76,7 +125,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				request: function (service, host, data, isLoad, _timeout) {
 					var defer = $q.defer(),
 						that = this;
-					if(isLoad === undefined || isLoad === null || isLoad !== false) {
+					if (isLoad === undefined || isLoad === null || isLoad !== false) {
 						that.loading();
 					}
 					data = that.handleAndroidParams(data, false);
@@ -84,9 +133,10 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 					if (service.indexOf("http") !== 0) {
 						service = that.getUrl(service)[host];
 					}
-					if(!_timeout) {
-						_timeout = 5000
-					};
+					if (!_timeout) {
+						_timeout = 30000
+					}
+					;
 					let config = {
 						timeout: _timeout
 					};
@@ -301,32 +351,19 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 					});
 					return defer.promise;
 				},
-
-				/**
-				 * 版本更新
-				 * @return {[type]} [description]
-				 */
-				upgrade: function () {
-					if (!sessionStorage.getItem("ischecked")) {
-						this.request("houpdateVersion", {}, false).then(function (response) {
-							if (response.data.data.version != rk.options.version) {
-								if (data.data.available == "false") {
-									sessionStorage.setItem("available", true);
-									layer.alert("发现新版本，此版本必须升级", function (res) {
-										cordova.InAppBrowser.open(data.data.appurl, '_system', 'location=yes')
-									});
-								} else {
-									layer.confirm("发现新版本，是否需要升级?", function (inx) {
-										cordova.InAppBrowser.open(data.data.appurl, '_system', 'location=yes')
-										layer.close(inx);
-									});
-								}
-								sessionStorage.setItem("ischecked", true);
-							}
+				getIPAddress: function () {
+					var defer = $q.defer();
+					if(!this.debug) {
+						networkinterface.getWiFiIPAddress(function (ip, subnet) {
+							defer.resolve(ip);
+						}, function (error) {
+							defer.resolve("127.0.0.1");
 						});
+					} else {
+						defer.resolve("127.0.0.1");
 					}
+					return defer.promise;
 				},
-
 				/**
 				 * 加载动画
 				 * @return {[type]} [description]

@@ -21,14 +21,15 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
 			}
 		});
 
-
+// 测试
 		if (!sessionStorage.getItem("curCity")) {
 			// sessionStorage.setItem("curCity", "兴义");
 			// sessionStorage.setItem("geolocation", "104.895467,25.09204");
 			sessionStorage.setItem("curCity", "西安");
 			sessionStorage.setItem("geolocation", "108.94787,34.269134");
 		}
-		// 测试
+
+		base.upgrade();
 
 		/**
 		 * 定位用户坐标

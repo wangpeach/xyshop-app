@@ -20,13 +20,10 @@ angular.module('products.controller', ['ionic'])
 		};
 
 
-
-
-
 		/**
 		 * 收藏店铺
 		 */
-		if(Account.signined) {
+		if (Account.signined) {
 			Account.takeCollects(false, 'shop').then(function (result) {
 				$scope._method = "save";
 				if (result && result.length > 0) {
@@ -36,7 +33,7 @@ angular.module('products.controller', ['ionic'])
 						}
 					}
 				}
-				if($scope._method === "save") {
+				if ($scope._method === "save") {
 					$scope.star = " icon-favor-outline";
 				} else {
 					$scope.star = " icon-favor";
@@ -47,7 +44,7 @@ angular.module('products.controller', ['ionic'])
 
 		$scope.collection = function () {
 			let params = undefined;
-			if($scope._method === "save") {
+			if ($scope._method === "save") {
 				params = {
 					userUuid: Account.getUser().uuid,
 					name: $scope.shop.name,
@@ -68,7 +65,7 @@ angular.module('products.controller', ['ionic'])
 				if (result === "error") {
 					base.prompt($scope, "收藏失败");
 				} else {
-					if($scope._method === "save") {
+					if ($scope._method === "save") {
 						$scope.star = " icon-favor";
 						$scope._method = "del";
 					} else {
@@ -215,12 +212,18 @@ angular.module('products.controller', ['ionic'])
 	}])
 
 	//商家列表控制器
-	.controller("proListCtrl", ["$scope", "$ionicTabsDelegate", "$ionicHistory", "$stateParams", "$state", "$timeout", "$ionicSlideBoxDelegate", "base", "Home", "Products",
-		function ($scope, $ionicTabsDelegate, $ionicHistory, $stateParams, $state, $timeout, $ionicSlideBoxDelegate, base, Home, Products) {
+	.controller("proListCtrl", ["$scope", "$ionicTabsDelegate", "$ionicHistory", "$stateParams", "$state", "$timeout", "$ionicSlideBoxDelegate", "base", "Home", "Products", "Account",
+		function ($scope, $ionicTabsDelegate, $ionicHistory, $stateParams, $state, $timeout, $ionicSlideBoxDelegate, base, Home, Products, Account) {
 
 			$scope.title = $stateParams.title;
 
 			$scope.firstLoad = true;
+			let searchUser = undefined;
+			if (Account.getUser()) {
+				searchUser = Account.getUser().uuid;
+			} else {
+				searchUser = "unknown";
+			}
 
 			//获取产品分类商品列表传的对象
 			$scope.searchParams = {
@@ -236,7 +239,8 @@ angular.module('products.controller', ['ionic'])
 				orderBy: 0,
 				distance: null,
 				key: $stateParams.key,
-				position: sessionStorage.getItem("geolocation")
+				position: sessionStorage.getItem("geolocation"),
+				user: searchUser
 			};
 
 
@@ -247,7 +251,7 @@ angular.module('products.controller', ['ionic'])
 			$scope.adshow = true;
 			$scope.loadAd = function () {
 				base.request("ad/mapi/loadAds", 0, {position: "cateTop"}).then(function (data) {
-					if(data && data.length > 0) {
+					if (data && data.length > 0) {
 						$scope.ptsAdvs = data;
 						var slider_width = document.querySelectorAll(".shopList .ad-slider")[0].clientWidth;
 						var slider_height = slider_width / 5 * 1.5;
@@ -454,7 +458,7 @@ angular.module('products.controller', ['ionic'])
 				let params = {uuid: $scope.proDetails.shopUuid};
 				base.request("shop/mapi/only", 1, params).then(function (resp) {
 					$scope.shop = resp;
-					if(Account.signined) {
+					if (Account.signined) {
 						Account.takeCollects(false, 'good').then(function (result) {
 							$scope._method = "save";
 							if (result && result.length > 0) {
@@ -464,7 +468,7 @@ angular.module('products.controller', ['ionic'])
 									}
 								}
 							}
-							if($scope._method === "save") {
+							if ($scope._method === "save") {
 								$scope.star = " icon-favor-outline";
 							} else {
 								$scope.star = " icon-favor";
@@ -489,7 +493,7 @@ angular.module('products.controller', ['ionic'])
 
 			$scope.collection = function () {
 				let params = undefined;
-				if($scope._method === "save") {
+				if ($scope._method === "save") {
 					params = {
 						userUuid: Account.getUser().uuid,
 						name: $scope.proDetails.name,
@@ -510,7 +514,7 @@ angular.module('products.controller', ['ionic'])
 					if (result === "error") {
 						base.prompt($scope, "收藏失败");
 					} else {
-						if($scope._method === "save") {
+						if ($scope._method === "save") {
 							$scope.star = " icon-favor";
 							$scope._method = "del";
 						} else {

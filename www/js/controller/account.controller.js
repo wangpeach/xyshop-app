@@ -41,6 +41,8 @@ angular.module("account.controller", ["ionic"])
 					base.prompt($scope, "清理完成");
 				} else if (arg1 === "about") {
 					$state.go(arg);
+				} else if( arg === "upgrade") {
+					base.upgrade(true);
 				} else {
 					if (Account.signined) {
 						if (arg === "tab.myorder") {
@@ -1319,6 +1321,16 @@ angular.module("account.controller", ["ionic"])
 					$scope.firstLoad = false;
 				}
 			});
+
+
+			$rootScope.$on("orderReload", function (event, data) {
+				$scope.reset_all();
+				$scope.reset_waitPay();
+				$scope.reset_waitConsume();
+				$scope.reset_consumed();
+				$scope.reset_refunded();
+				$scope.loadMore(data, true);
+			})
 		}
 	])
 	//我的收益

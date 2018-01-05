@@ -16,9 +16,9 @@ angular.module('home.service', [])
 			 * @param  {[type]} inx [description]
 			 * @return {[type]}     [description]
 			 */
-			hotGoods: function(inx) {
+			hotGoods: function(inx, isload) {
 				var defer = $q.defer();
-				base.request('goods/mapi/list', 1, { shop: null, key: null, offset: inx})
+				base.request('goods/mapi/list', 1, { shop: null, key: null, offset: inx}, isload)
 				.then(function(resp) {
 					if(resp) {
 						defer.resolve(resp);
@@ -35,20 +35,20 @@ angular.module('home.service', [])
 			 * ���з���
 			 * @return {[type]} [description]
 			 */
-			loadProty: function () {
+			loadProty: function (isload) {
 				var defer = $q.defer();
 				var homeproty = sessionStorage.getItem("homeproty");
 				if (!homeproty || homeproty == "undefined") {
-					base.request("shop-categroy/mapi/list", 1, {})
+					base.request("shop-categroy/mapi/list", 1, {}, isload)
 					.then(function(resp) {
 						if(resp.length > 0) {
 							sessionStorage.setItem("homeproty", JSON.stringify(resp));
 							defer.resolve(resp);
 						} else {
-							base.prompt("�޷��ҵ��������");
+							base.prompt("加载失败");
 						}
 					}, function(resp){
-						base.prompt("�������");
+						base.prompt("error");
 					});
 				} else {
 					defer.resolve(JSON.parse(sessionStorage.getItem("homeproty")));

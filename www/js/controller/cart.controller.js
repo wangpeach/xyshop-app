@@ -101,7 +101,7 @@ angular.module("cart.controller", ["ionic"])
 	}])
 
 	//支付订单
-	.controller('PayCtrl', ['$scope', '$state', "$ionicHistory", '$stateParams', '$q', 'Cart', 'base', 'Account', function ($scope, $state, $ionicHistory, $stateParams, $q, Cart, base, Account) {
+	.controller('PayCtrl', ['$scope', '$rootScope', '$state', "$ionicHistory", '$stateParams', '$q', 'Cart', 'base', 'Account', function ($scope, $rootScope, $state, $ionicHistory, $stateParams, $q, Cart, base, Account) {
 		//对支付订单页面数据的处理
 		$scope.order = angular.fromJson($stateParams.order);
 		console.log($stateParams.order);
@@ -117,18 +117,26 @@ angular.module("cart.controller", ["ionic"])
 		}
 
 		$scope.pay = function () {
-			payment().then(function (result) {
-				base.prompt($scope, "支付成功", function () {
-					if($stateParams.backWhere === "tab.home") {
-						$ionicHistory.goBack(-2);
-					} else {
-						$ionicHistory.goBack();
-					}
+			base.getIPAddress().then(function (ip) {
+				payment(ip).then(function (result) {
+					base.prompt($scope, "支付成功", function () {
+						if($stateParams.backWhere === "tab.home") {
+							$ionicHistory.goBack(-2);
+						} else {
+							$ionicHistory.goBack();
+						}
+						// 通知我的订单里待支付订单列表更新
+						let params = {
+							'event': 'orderReload',
+							'arg': 'waitPay'
+						}
+						$scope.$emit("deliver", params);
+					})
 				})
-			})
+			});
 		}
 
-		let payment = function () {
+		let payment = function (_ip) {
 			let defer = $q.defer();
 			var params = {
 				order: $scope.order.uuid,
@@ -140,6 +148,7 @@ angular.module("cart.controller", ["ionic"])
 					});
 					break;
 				case "wxpay":
+					params.ip = _ip;
 					wxPaymnet(params).then(function (res) {
 						defer.resolve(res);
 					});
@@ -193,7 +202,9 @@ angular.module("cart.controller", ["ionic"])
 		let wxPaymnet = function (params) {
 			let defer = $q.defer();
 			base.request("order/mapi/wx-payment", 1, params).then(function (data) {
-				var params = {
+				// "return_code" : "FAIL"
+
+				var wx_params = {
 					partnerid: data.partnerid,
 					prepayid: data.prepayid,
 					noncestr: data.noncestr,
@@ -201,10 +212,12 @@ angular.module("cart.controller", ["ionic"])
 					sign: data.sign
 				};
 
-				Wechat.sendPaymentRequest(params, function () {
+				Wechat.sendPaymentRequest(wx_params, function () {
 					defer.resolve("success");
 				}, function (reason) {
-					console.log(reason);
+					if(reason.indexOf("返回") !== -1) {
+						base.prompt($scope, "已取消支付");
+					}
 				});
 			});
 			return defer.promise;
