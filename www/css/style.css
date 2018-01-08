@@ -23,6 +23,10 @@ body {
 .scroll-content.scroll-content-cyan {
     background: #FBFDFF;
 }
+.scroll-content.scroll-content-gray {
+    background: #eceeef;
+}
+
 
 .myorder .scroll-content.scroll-content-cyan {
     background: #f1f1f1;
@@ -2474,16 +2478,18 @@ border: 1px solid red;
 .coupon {
     position: relative;
     width: 85%;
-    height: 92px;
+    height: 90px;
     background-color: #fff;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    /*border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;*/
     padding: 0 4px;
     background-clip: content-box;
-    border-top: 1px solid #ff8080;
+   /* border-top: 1px solid #ff8080;
     border-bottom: 1px solid #ff8080;
-    border-right: 1px solid #ff8080;
+    border-right: 1px solid #ff8080;*/
     margin: 10px auto;
+    -moz-box-shadow: 5px 5px 5px #d8d8d8; /* 老的 Firefox */
+    box-shadow: 5px 5px 5px #d8d8d8;
 }
 
 .coupon .content {
@@ -2499,9 +2505,9 @@ border: 1px solid red;
     top: 0;
     height: 100%;
     width: 4px;
-    background-image: -webkit-radial-gradient(rgba(175, 14, 14, 0) 0px, transparent 3px, #ff8080 3px, #ff8080 4px, #ff8080 4px, #ff8080);
-    background-image: -moz-radial-gradient(rgba(175, 14, 14, 0) 0px, transparent 3px, #ff8080 3px, #ff8080 4px, #ff8080 4px, #ff8080);
-    background-image: radial-gradient(rgba(175, 14, 14, 0) 0px, transparent 3px, #ff8080 3px, #ff8080 4px, #ff8080 4px, #ff8080);
+    background-image: -webkit-radial-gradient(rgba(175, 14, 14, 0) 0px, transparent 3px, gold 3px, gold 4px, gold 4px, gold);
+    background-image: -moz-radial-gradient(rgba(175, 14, 14, 0) 0px, transparent 3px, gold 3px, gold 4px, gold 4px, gold);
+    background-image: radial-gradient(rgba(175, 14, 14, 0) 0px, transparent 3px, gold 3px, gold 4px, gold 4px, gold);
     background-size: 8px 10px;
     background-position: -4px 0px;
 }
@@ -2513,12 +2519,17 @@ border: 1px solid red;
     width: 35%;
     height: 98%;
     background-color: #ff8080;
+    background: -webkit-linear-gradient(90deg, gold, orange); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(90deg, gold, orange); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(90deg, gold, orange); /* Firefox 3.6 - 15 */
+    background: linear-gradient(90deg, gold, orange); /* 标准的语法（必须放在最后） */
 }
 
 .coupon .tail {
     left: 37%;
     width: 70%;
     height: 98%;
+    padding: 2px;
 }
 
 .coupon .head, .coupon .tail {
@@ -2532,6 +2543,7 @@ border: 1px solid red;
     color: #fbecd7;
     font-size: 25px;
     text-align: center;
+    font-weight: bold;
     margin: 30% auto 0px auto;
 }
 

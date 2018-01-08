@@ -1,34 +1,28 @@
 <ion-view view-title="我的优惠卷">
-    <ion-content>
+    <ion-content class="scroll-content-gray">
         <ion-refresher pulling-text="松开刷新" on-refresh="doRefresh()" disable-pulling-rotation="true">
         </ion-refresher>
-        <div class="coupon">
+        <div class="coupon" ng-repeat="item in items">
             <div class="content">
                 <div class="head">
-                    <div class="facevalue">10</div>
-                    <p>减免卷</p>
+                    <div class="facevalue">
+                        <span style="font-size: 18px; font-weight: 400;" ng-if="item.coupon.ruleMark">{{item.coupon.ruleMark}}</span>
+                        {{item.coupon.ruleValue}}</div>
+                    <p>{{"满" + item.coupon.toUserValue + "元可用"}}</p>
                 </div>
                 <div class="tail">
-                    <p>name</p>
-                    <p>介绍</p>
+                    <span style="background: orange; padding: 0px 5px 2px 5px; color: white;">{{item.coupon.ruleText}}</span>
+                    <span>{{item.coupon.name}}</span>
+                    <p style="color: #635f5a;">{{item.coupon.description}}</p>
+                    <p style="position: absolute; bottom: 0px; color: #c5c3c3; width: 95%;">
+                        <span>{{item.coupon.timeLine}}</span>
+                        <span style="float: right; color: #8a8a8a;">适用 {{item.coupon.shopName}}</span>
+                    </p>
                 </div>
             </div>
             <div class="wave"></div>
         </div>
-        <div class="coupon overdue">
-            <div class="content">
-                <div class="head">
-                    <div class="facevalue">50</div>
-                    <p>减免卷</p>
-                </div>
-                <div class="tail">
-                    <p>name</p>
-                    <p>介绍</p>
-                </div>
-            </div>
-            <div class="wave"></div>
-        </div>
-        <div class="coupon">
+        <!--<div class="coupon">
             <div class="content">
                 <div class="head">
                     <div class="facevalue">100</div>
@@ -40,15 +34,16 @@
                 </div>
             </div>
             <div class="wave"></div>
-        </div>
-        <ul>
+        </div>-->
+
+       <!-- <ul>
             <li class="animate-repeat" ng-if="!moreDataCanBeLoaded" style="width: 100%; box-shadow: none;">
                 <div class="nothing">
                     <p>没有更多了</p>
                 </div>
             </li>
-        </ul>
-        <ion-infinite-scroll ng-if="moreDataCanBeLoaded" on-infinite="loadMore()" distance="1%"></ion-infinite-scroll>
+        </ul>-->
+        <!--<ion-infinite-scroll ng-if="moreDataCanBeLoaded" on-infinite="loadMore()" distance="1%"></ion-infinite-scroll>-->
     </ion-content>
 </ion-view>
 

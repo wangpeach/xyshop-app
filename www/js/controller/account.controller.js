@@ -41,7 +41,7 @@ angular.module("account.controller", ["ionic"])
 					base.prompt($scope, "清理完成");
 				} else if (arg1 === "about") {
 					$state.go(arg);
-				} else if( arg === "upgrade") {
+				} else if (arg === "upgrade") {
 					base.upgrade(true);
 				} else {
 					if (Account.signined) {
@@ -330,7 +330,7 @@ angular.module("account.controller", ["ionic"])
 
 
 			$scope.collects = function () {
-				if(Account.signed) {
+				if (Account.signed) {
 					$timeout(function () {
 						Account.takeCollects(false, "good").then(function (result) {
 							$scope.collectGoods = result.length;
@@ -400,7 +400,7 @@ angular.module("account.controller", ["ionic"])
 
 			$scope.account = Account.getUser();
 			$scope.headImg = "";
-			if($scope.account.headImg) {
+			if ($scope.account.headImg) {
 				$scope.headImg = $scope.account.headImg;
 			} else {
 				$scope.headImg = "img/user_large.jpg";
@@ -1418,9 +1418,68 @@ angular.module("account.controller", ["ionic"])
 	// ])
 	// 我的优惠卷
 	.controller('couponsCtrl', ['$scope', "Account", "base", function ($scope, Account, base) {
-		 Account.takeCoupons().then(function (data) {
+		Account.takeCoupons().then(function (data) {
+			$scope.items = new Array();
 
-		 });
+			let params = {
+				user: Account.getUser().uuid,
+				shopId: '',
+				cate: '',
+				good: ''
+			};
+
+			var insert_flg = function (str, flg, sn) {
+				var newstr = "", mark = flg;
+				if(sn == 0) {
+					sn = 1;
+				}
+				for (var i = 0; i < str.length; i += sn) {
+					if(i == sn) {
+						mark = "";
+					}
+					var tmp = str.substring(i, i + sn);
+					newstr += tmp + mark;
+				}
+				return newstr;
+			}
+
+			$scope.loadCoupons = function () {
+
+				base.request("usercoupon/mapi/list", 1, params).then(function (result) {
+					for (var i = 0; i < result.length; i++) {
+						switch (result[i].coupon.rule) {
+							case "recoupon":
+								result[i].coupon.ruleValue = "劵";
+								result[i].coupon.ruleText = "返 券";
+								break;
+							case "discount":
+								result[i].coupon.ruleValue = insert_flg(result[i].coupon.ruleValue, ".", 1);
+								result[i].coupon.ruleText = "折 扣";
+								break;
+							case "fulldown":
+								result[i].coupon.ruleMark = "¥";
+								result[i].coupon.ruleText = "满 减";
+								break;
+						}
+						if (result[i].coupon.endTime == "forever") {
+							result[i].coupon.timeLine = "永久有效";
+						} else {
+							let start = result[i].coupon.startTime.replace("-", ".");
+							let end = result[i].coupon.endTime.replace("-", ".");
+							result[i].coupon.timeLine = start + "-" + end;
+						}
+
+						$scope.items.push(result[i]);
+					}
+					console.log(angular.toJson($scope.items));
+				});
+			}
+
+			$scope.loadCoupons();
+			$scope.$on("$ionicView.enter", function () {
+
+			});
+		});
 	}])
 	.controller('collectCtrl', ['$scope', '$stateParams', '$timeout', "Account", 'base', function ($scope, $stateParams, $timeout, Account, base) {
 
