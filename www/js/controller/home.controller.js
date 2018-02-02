@@ -18,10 +18,14 @@ angular.module("home.controller", ["ionic"])
 
 
 			$scope.loadHotGoods = function (isload) {
+
 				if ($scope.options.maybeInx >= 5) {
 					$scope.options.moreDataCanBeLoaded = false;
 				} else {
 					Home.hotGoods($scope.options.maybeInx++, isload).then(function (data) {
+						if(!isload) {
+							$scope.likes = new Array();
+						}
 						if (data.length < 20) {
 							$scope.options.moreDataCanBeLoaded = false;
 						}
@@ -230,6 +234,7 @@ angular.module("home.controller", ["ionic"])
 			
 			
 			$scope.doRefresh = function () {
+
 				$scope.loadAd(false);
 				$scope.loadProty(false);
 				$scope.loadHotGoods(false);
