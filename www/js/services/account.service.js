@@ -1,6 +1,6 @@
 angular.module('account.service', [])
 	.factory('Account', ["$http", "$q", "$ionicPlatform", "$cordovaCamera", "$cordovaToast", "$cordovaDatePicker", "$cordovaContacts", "base",
-		function ($http, $q, $ionicPlatform, $cordovaCamera, $cordovaToast, $cordovaDatePicker, $cordovaContacts, base) {
+		function($http, $q, $ionicPlatform, $cordovaCamera, $cordovaToast, $cordovaDatePicker, $cordovaContacts, base) {
 			var account = {
 
 				signined: !!localStorage.getItem("account"),
@@ -9,17 +9,18 @@ angular.module('account.service', [])
 				 * @param  {[type]} data [description]
 				 * @return {[type]}      [description]
 				 */
-				singIn: function (data) {
-					let deferred = $q.defer(), that = this;
+				singIn: function(data) {
+					let deferred = $q.defer(),
+						that = this;
 					base.request("user/mapi/login", 1, data)
-						.then(function (result) {
+						.then(function(result) {
 							if (result) {
 								that.storeUser(result);
 								that.takeCoupons();
 								that.takeCollects();
 							}
 							deferred.resolve(result);
-						}, function (result) {
+						}, function(result) {
 							deferred.reject(result);
 						});
 					return deferred.promise;
@@ -29,24 +30,26 @@ angular.module('account.service', [])
 				 * @param  {[type]} arg [description]
 				 * @return {[type]}     [description]
 				 */
-				storeUser: function (arg) {
+				storeUser: function(arg) {
 					this.signined = true;
 					localStorage.setItem("account", JSON.stringify(arg));
 				},
 
 
-				reload: function () {
+				reload: function() {
 					var deferred = $q.defer(),
 						self = this;
-					base.request("user/mapi/reload", 1, {uuid: self.getUser().uuid}, false)
-						.then(function (resp) {
+					base.request("user/mapi/reload", 1, {
+							uuid: self.getUser().uuid
+						}, false)
+						.then(function(resp) {
 							if (resp) {
 								self.storeUser(resp);
 								self.takeCoupons();
 								self.takeCollects();
 							}
 							deferred.resolve(resp.data);
-						}, function (resp) {
+						}, function(resp) {
 							deferred.reject(resp);
 						})
 					return deferred.promise;
@@ -56,13 +59,13 @@ angular.module('account.service', [])
 				 * @param  {[type]} arg [description]
 				 * @return {[type]}     [description]
 				 */
-				checkusr: function (arg) {
+				checkusr: function(arg) {
 					var deferred = $q.defer();
 					//$http.jsonp(s.getUrl("mblr_checkreg"), s.handleParams(arg))
 					base.request("mblr_checkreg", arg)
-						.then(function (resp) {
+						.then(function(resp) {
 							deferred.resolve(resp);
-						}, function (resp) {
+						}, function(resp) {
 							deferred.reject(resp);
 						});
 					return deferred.promise;
@@ -71,7 +74,7 @@ angular.module('account.service', [])
 				 * [getUser description]
 				 * @return {[type]} [description]
 				 */
-				getUser: function () {
+				getUser: function() {
 					return JSON.parse(localStorage.getItem("account"));
 				},
 
@@ -79,7 +82,7 @@ angular.module('account.service', [])
 				 * [signOut description]
 				 * @return {[type]} [description]
 				 */
-				signOut: function () {
+				signOut: function() {
 					this.signined = false;
 					localStorage.removeItem("account");
 				},
@@ -88,7 +91,7 @@ angular.module('account.service', [])
 				 * 获取优惠卷
 				 * @returns {Promise}
 				 */
-				takeCoupons: function (refresh) {
+				takeCoupons: function(refresh) {
 					let def = $q.defer();
 					// coupons = localStorage.getItem("coupons");
 					// if(!coupons || refresh) {
@@ -98,7 +101,7 @@ angular.module('account.service', [])
 						cate: null,
 						good: null
 					};
-					base.request("usercoupon/mapi/list", 1, params, false).then(function (result) {
+					base.request("usercoupon/mapi/list", 1, params, false).then(function(result) {
 						localStorage.setItem("coupons", result);
 						def.resolve(result);
 					})
@@ -111,12 +114,16 @@ angular.module('account.service', [])
 				 *  获取收藏
 				 * @returns {Promise}
 				 */
-				takeCollects: function (refresh, _type) {
-					let def = $q.defer(), storageName = "collection" + _type,
+				takeCollects: function(refresh, _type) {
+					let def = $q.defer(),
+						storageName = "collection" + _type,
 						collects = localStorage.getItem(storageName);
 					if (!collects || refresh) {
-						let params = {user: this.getUser().uuid, type: _type};
-						base.request("collect/mapi/list", 1, params, false).then(function (result) {
+						let params = {
+							user: this.getUser().uuid,
+							type: _type
+						};
+						base.request("collect/mapi/list", 1, params, false).then(function(result) {
 							def.resolve(result);
 							localStorage.setItem(storageName, JSON.stringify(result));
 						});
@@ -130,16 +137,16 @@ angular.module('account.service', [])
 				 * [获取余额]
 				 * @return {[type]} [description]
 				 */
-				getBalance: function () {
+				getBalance: function() {
 					var deferred = $q.defer();
 					var sender = {
 						usersid: this.getUser().usersid
 					}
 					//$http.jsonp(s.getUrl("mbus_balance"), s.handleParams(sender))
 					base.request("mbus_balance", sender)
-						.then(function (resp) {
+						.then(function(resp) {
 							deferred.resolve(resp);
-						}, function (resp) {
+						}, function(resp) {
 							deferred.reject(resp);
 						})
 					return deferred.promise;
@@ -150,12 +157,14 @@ angular.module('account.service', [])
 				 * @param  {[type]} effect [description]
 				 * @return {[type]}        [description]
 				 */
-				sendCode: function (arg) {
+				sendCode: function(arg) {
 					var deferred = $q.defer();
-					base.request("sms/mapi/reg-code", 0, {'phone': arg})
-						.then(function (resp) {
+					base.request("sms/mapi/reg-code", 0, {
+							'phone': arg
+						})
+						.then(function(resp) {
 							deferred.resolve(resp);
-						}, function (resp) {
+						}, function(resp) {
 							deferred.reject(resp);
 						});
 					return deferred.promise;
@@ -166,13 +175,13 @@ angular.module('account.service', [])
 				 * @param  {[type]} arg [description]
 				 * @return {[type]}     [description]
 				 */
-				modPass: function (arg) {
+				modPass: function(arg) {
 					var deferred = $q.defer();
 					//$http.jsonp(s.getUrl("uschangePass"), s.handleParams(arg))
 					base.request("uschangePass", arg)
-						.then(function (resp) {
+						.then(function(resp) {
 							deferred.resolve(resp);
-						}, function (resp) {
+						}, function(resp) {
 							deferred.reject(resp);
 						});
 					return deferred.promise;
@@ -183,17 +192,17 @@ angular.module('account.service', [])
 				 * @param  {[type]} arg [description]
 				 * @return {[type]}     [description]
 				 */
-				register: function (arg) {
+				register: function(arg) {
 					var deferred = $q.defer();
 					base.request("user/mapi/register", 1, arg)
-						.then(function (resp) {
+						.then(function(resp) {
 							deferred.resolve(resp);
-						}, function (resp) {
+						}, function(resp) {
 							deferred.reject(resp);
 						})
 					return deferred.promise;
 				},
-				chooseDate: function (_date) {
+				chooseDate: function(_date) {
 					var defer = $q.defer();
 					if (!_date) {
 						_date = new Date();
@@ -206,26 +215,26 @@ angular.module('account.service', [])
 						}
 					}
 
-					$ionicPlatform.ready(function () {
+					$ionicPlatform.ready(function() {
 						var options = {
 							mode: 'date',
 							date: _date,
 							allowOldDates: true,
 							allowFutureDates: false
 						}
-						$cordovaDatePicker.show(options).then(function (date) {
+						$cordovaDatePicker.show(options).then(function(date) {
 							defer.resolve(date);
 						});
 					});
 					return defer.promise;
 				},
 
-				chooseContact: function () {
+				chooseContact: function() {
 					var defer = $q.defer();
-					$ionicPlatform.ready(function () {
-						$cordovaContacts.pickContact().then(function (contcat) {
+					$ionicPlatform.ready(function() {
+						$cordovaContacts.pickContact().then(function(contcat) {
 							var arr = new Array();
-							angular.forEach(contcat.phoneNumbers, function (o, i) {
+							angular.forEach(contcat.phoneNumbers, function(o, i) {
 								var temp = o.value;
 								while (temp.includes('-') || temp.includes(' ')) {
 									temp = temp.replace(' ', '').replace(/(-)/, '');
@@ -238,7 +247,7 @@ angular.module('account.service', [])
 								phones: arr
 							}
 							defer.resolve(_contcat);
-						}, function (error) {
+						}, function(error) {
 							var errMsg = undefined;
 							switch (error) {
 								case ContactError.UNKNOWN_ERROR:

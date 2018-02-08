@@ -79,7 +79,7 @@ angular.module("realtime.controller", ["ionic"])
 					return false;
 				}
 				$scope._curVID = item.Id;
-				base.request("app/Prepare/" + item.Id, 2, {}, true, 5000).then(function (result) {
+				base.request("app/Prepare/" + item.Id, 2, {}, true, 3000).then(function (result) {
 					if (result.ok) {
 						// var url = "http://" + item.IP + ":8000/" + item.app + "/" + item.Id + "/index.m3u8";
 						console.log(result.url);

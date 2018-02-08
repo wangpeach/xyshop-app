@@ -23,13 +23,13 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
 
 // 测试
 		if (!sessionStorage.getItem("curCity")) {
-			// sessionStorage.setItem("curCity", "兴义");
-			// sessionStorage.setItem("geolocation", "104.895467,25.09204");
-			sessionStorage.setItem("curCity", "西安");
-			sessionStorage.setItem("geolocation", "108.94787,34.269134");
+			sessionStorage.setItem("curCity", "兴义");
+			sessionStorage.setItem("geolocation", "104.895467,25.09204");
+			// sessionStorage.setItem("curCity", "西安");
+			// sessionStorage.setItem("geolocation", "108.94787,34.269134");
 		}
-
 		base.upgrade();
+		base.loadAppName();
 
 		/**
 		 * 定位用户坐标
@@ -349,16 +349,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
 					}
 				}
 			})
-			//商铺路线规划
-			.state('tab.home-shop-transfer', {
-				url: '/home/shopTransfer/:backWhere/:shop',
-				views: {
-					'tab-home': {
-						templateUrl: 'templates/map-modal.html',
-						controller: 'shopTransferCtrl'
-					}
-				}
-			})
 			// 商品信息详情 begin
 			.state('tab.home-shop-pro-details', {
 				url: '/home/shopProDetails/:backWhere/:good',
@@ -457,6 +447,34 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
 					'tab-account': {
 						templateUrl: 'templates/collect.html',
 						controller: 'collectCtrl'
+					}
+				}
+			})
+			.state('tab.account-shop-list', {
+				url: '/account/shopDetails/:backWhere/:shop',
+				views: {
+					'tab-account': {
+						templateUrl: 'templates/shop.details.html',
+						controller: 'shopDetailsCtrl'
+					}
+				}
+			})
+			// 商品信息详情 begin
+			.state('tab.account-shop-pro-details', {
+				url: '/account/shopProDetails/:backWhere/:good',
+				views: {
+					'tab-account': {
+						templateUrl: 'templates/pro.details.html',
+						controller: 'proDetailsCtrl'
+					}
+				}
+			})
+			.state('tab.account-shop-pro-order', {
+				url: '/account/shopProOrder/:backWhere/:product',
+				views: {
+					'tab-account': {
+						templateUrl: 'templates/pro.order.html',
+						controller: 'OrderCtrl'
 					}
 				}
 			})

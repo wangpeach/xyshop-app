@@ -1,7 +1,7 @@
 // , 'cordovaHTTP2'
 angular.module('starter.services', ['home.service', 'realtime.service', 'cart.service', 'account.service', 'products.service'])
 	.factory('base', ['$window', '$ionicPlatform', '$http', '$q', '$cordovaToast', '$ionicModal', '$ionicPopover', "$ionicLoading", "$cordovaAppVersion", "$cordovaFileTransfer", "$cordovaFile", "$cordovaFileOpener2", "$timeout", "$cordovaCamera", "$ionicPopup", "$rootScope",
-		function ($window, $ionicPlatform, $http, $q, $cordovaToast, $ionicModal, $ionicPopover, $ionicLoading, $cordovaAppVersion, $cordovaFileTransfer, $cordovaFile, $cordovaFileOpener2, $timeout, $cordovaCamera, $ionicPopup, $rootScope) {
+		function($window, $ionicPlatform, $http, $q, $cordovaToast, $ionicModal, $ionicPopover, $ionicLoading, $cordovaAppVersion, $cordovaFileTransfer, $cordovaFile, $cordovaFileOpener2, $timeout, $cordovaCamera, $ionicPopup, $rootScope) {
 			if (!localStorage.getItem("config")) {
 				localStorage.setItem("config", JSON.stringify({
 					showBalance: false
@@ -24,31 +24,30 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				GaodeTableId: '58354330afdf520ea8ecb6b8',
 
 				// 检查更新
-				upgrade: function (showtips) {
+				upgrade: function(showtips) {
 					let that = this;
-					$ionicPlatform.ready(function () {
-						return;
-						that.getVersion().then(function (_version) {
-							that.request("params/app-version", 0, {"version": _version}).then(function (result) {
+					$ionicPlatform.ready(function() {
+						that.getVersion().then(function(_version) {
+							that.request("params/app-version", 0, {
+								"version": _version
+							}).then(function(result) {
 								if (result.url) {
 									console.log(result);
-									that.confirm($rootScope, "提示", "发现新版本,是否更新?").then(function (res) {
+									that.confirm($rootScope, "提示", "发现新版本,是否更新?").then(function(res) {
 										if (res) {
 											$ionicLoading.show({
 												template: "已经下载：0%"
 											});
 											let targetApk = cordova.file.dataDirectory + "xyshop.apk";
-											$cordovaFileTransfer.download(result.url, targetApk, {}, true).then(function () {
+											$cordovaFileTransfer.download(result.url, targetApk, {}, true).then(function() {
 												$ionicLoading.hide();
-												$cordovaFileOpener2.open(targetApk, 'application/vnd.android.package-archive'
-												).then(function () {
-												}, function (err) {
+												$cordovaFileOpener2.open(targetApk, 'application/vnd.android.package-archive').then(function() {}, function(err) {
 													that.prompt($rootScope, "请手动安装应用程序");
 												});
-											}, function () {
+											}, function() {
 												that.prompt($rootScope, "下载失败");
-											}, function (progress) {
-												$timeout(function () {
+											}, function(progress) {
+												$timeout(function() {
 													var downloadProgress = (progress.loaded / progress.total) * 100;
 													$ionicLoading.show({
 														template: "已下载：" + Math.floor(downloadProgress) + "%"
@@ -62,7 +61,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 										}
 									});
 								} else {
-									if(showtips) {
+									if (showtips) {
 										that.prompt($rootScope, "已是最新版本");
 									}
 								}
@@ -76,7 +75,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * @param  {[type]} service [description]
 				 * @return {[type]}         [description]
 				 */
-				getUrl: function (service) {
+				getUrl: function(service) {
 					return [this.hostHome + service, this.hostShop + service, this.ipcurl + service];
 				},
 
@@ -122,7 +121,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * @param  {[type]} data    [description]
 				 * @return {[type]}         [description]
 				 */
-				request: function (service, host, data, isLoad, _timeout) {
+				request: function(service, host, data, isLoad, _timeout) {
 					var defer = $q.defer(),
 						that = this;
 					if (isLoad === undefined || isLoad === null || isLoad !== false) {
@@ -135,15 +134,14 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 					}
 					if (!_timeout) {
 						_timeout = 30000
-					}
-					;
+					};
 					let config = {
 						timeout: _timeout
 					};
-					$http.post(service, data, config).then(function (response) {
+					$http.post(service, data, config).then(function(response) {
 						defer.resolve(response.data);
 						that.loaded();
-					}, function (response) {
+					}, function(response) {
 						that.req_error_handle(response.status);
 						that.loaded();
 						defer.reject(response.status);
@@ -151,16 +149,16 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 					return defer.promise;
 				},
 
-				get: function (service, host, data) {
+				get: function(service, host, data) {
 					var defer = $q.defer(),
 						that = this;
 					data = that.handleAndroidParams(data, false);
 					if (service.indexOf("http") != 0) {
 						service = that.getUrl(service)[host];
 					}
-					$http.get(service, data).then(function (response) {
+					$http.get(service, data).then(function(response) {
 						defer.resolve(response.data);
-					}, function (response) {
+					}, function(response) {
 						that.req_error_handle(response.status);
 					});
 					return defer.promise;
@@ -171,7 +169,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * @param  {[type]} code [description]
 				 * @return {[type]}      [description]
 				 */
-				req_error_handle: function (code) {
+				req_error_handle: function(code) {
 					switch (code) {
 						case 404:
 							console.log('无法访问服务');
@@ -188,24 +186,47 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * @param  {[type]} data [description]
 				 * @return {[type]}      [description]
 				 */
-				handleParams: function (data) {
+				handleParams: function(data) {
 					var defer = $q.defer();
 					data = data || {};
-					data.source = $ionicPlatform.is('ios') ? "IOS" : "Android";
-					this.getVersion().then(function (version) {
+					data.source = this.getSystem();
+					this.getVersion().then(function(version) {
 						data.version = version;
 						defer.resolve(data);
 					});
 					return defer.promise;
 				},
 
-				getVersion: function () {
-					var defer = $q.defer();
-					$ionicPlatform.ready(function () {
-						$cordovaAppVersion.getVersionNumber().then(function (version) {
-							defer.resolve(version);
-						});
+				/**
+				 * 获取系统
+				 * @return {[type]} [description]
+				 */
+				getSystem: function() {
+					return $ionicPlatform.is('ios') ? "IOS" : "Android";
+				},
+
+				loadAppName: function() {
+					let defer = $q.defer();
+					$ionicPlatform.ready(function() {
+						if (window.cordova) {
+							cordova.getAppVersion.getAppName(function(name) {
+								sessionStorage.setItem("appName", name);
+								defer.resolve(name);
+							});
+						}
 					});
+					return defer.promise;
+				},
+
+				getVersion: function() {
+					let defer = $q.defer();
+					if (window.cordova) {
+						$ionicPlatform.ready(function() {
+							$cordovaAppVersion.getVersionNumber().then(function(version) {
+								defer.resolve(version);
+							});
+						});
+					}
 					return defer.promise;
 				},
 
@@ -215,7 +236,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * @param  {[type]} cache [description]
 				 * @return {[type]}       [description]
 				 */
-				handleAndroidParams: function (data, cache) {
+				handleAndroidParams: function(data, cache) {
 					// var sender = {};
 					data = data || {};
 					// data.callback = "JSON_CALLBACK";
@@ -237,7 +258,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * @param  {[type]} phone [description]
 				 * @return {[type]}       [description]
 				 */
-				formatPhone: function (phone) {
+				formatPhone: function(phone) {
 					if (phone) {
 						return phone.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2");
 					}
@@ -249,14 +270,14 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * @param  {[type]} paras [description]
 				 * @return {[type]}       [description]
 				 */
-				getUrlParams: function (url, paras) {
+				getUrlParams: function(url, paras) {
 					var paraString = url.substring(url.indexOf("?") + 1, url.length).split("&");
 					var paraObj = {}
 					for (i = 0; j = paraString[i]; i++) {
 						paraObj[j.substring(0, j.indexOf("=")).toLowerCase()] = j.substring(j.indexOf("=") + 1, j.length);
 					}
 					var returnValue = paraObj[paras.toLowerCase()];
-					if (typeof (returnValue) == "undefined") {
+					if (typeof(returnValue) == "undefined") {
 						return "";
 					} else {
 						return (unescape(returnValue.replace(/\\u/gi, '%u')));
@@ -270,7 +291,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * @param  {[type]} animate  [description]
 				 * @return {[type]}          [description]
 				 */
-				openModal: function (_scope, template, animate) {
+				openModal: function(_scope, template, animate) {
 					var animation = "animated ",
 						defer = $q.defer();
 					if (animate) {
@@ -281,7 +302,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 					$ionicModal.fromTemplateUrl(template, {
 						scope: _scope,
 						animation: animation
-					}).then(function (modal) {
+					}).then(function(modal) {
 						defer.resolve(modal);
 					});
 					return defer.promise;
@@ -293,11 +314,11 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * @param  {[type]} _scope   [description]
 				 * @return {[type]}          [description]
 				 */
-				openPopover: function (template, _scope) {
+				openPopover: function(template, _scope) {
 					var defer = $q.defer();
 					$ionicPopover.fromTemplateUrl(template, {
 						scope: _scope,
-					}).then(function (popover) {
+					}).then(function(popover) {
 						defer.resolve(popover);
 					});
 					return defer.promise;
@@ -309,16 +330,16 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * @param  {[type]} msg [description]
 				 * @return {[type]}     [description]
 				 */
-				prompt: function (_scope, msg, callback) {
+				prompt: function(_scope, msg, callback) {
 					var sender = {
 						template: '<span style="color: white; font-size: 13px; padding: 0.5rem; background: #464646;">' + msg + '</span>',
 						scope: _scope ? _scope : null,
 						duration: 2000,
 						noBackdrop: true
 					};
-					$ionicLoading.show(sender).then(function () {
+					$ionicLoading.show(sender).then(function() {
 						if (callback) {
-							$timeout(function () {
+							$timeout(function() {
 								callback.call(this);
 							}, 2000);
 						}
@@ -326,7 +347,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 					});
 				},
 
-				alert: function (_scope, title, msg) {
+				alert: function(_scope, title, msg) {
 					var params = {
 						title: title,
 						template: msg,
@@ -336,7 +357,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 					$ionicPopup.alert(params);
 				},
 
-				confirm: function (_scope, title, msg) {
+				confirm: function(_scope, title, msg) {
 					var defer = $q.defer();
 					var params = {
 						title: title, // String. The title of the popup.
@@ -346,17 +367,17 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 						okText: '确定', // String (default: 'OK'). The text of the OK button.
 						okType: '', // String (default: 'button-positive'). The type of the OK button.
 					}
-					$ionicPopup.confirm(params).then(function (res) {
+					$ionicPopup.confirm(params).then(function(res) {
 						defer.resolve(res);
 					});
 					return defer.promise;
 				},
-				getIPAddress: function () {
+				getIPAddress: function() {
 					var defer = $q.defer();
-					if(!this.debug) {
-						networkinterface.getWiFiIPAddress(function (ip, subnet) {
+					if (!this.debug) {
+						networkinterface.getWiFiIPAddress(function(ip, subnet) {
 							defer.resolve(ip);
-						}, function (error) {
+						}, function(error) {
 							defer.resolve("127.0.0.1");
 						});
 					} else {
@@ -368,7 +389,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * 加载动画
 				 * @return {[type]} [description]
 				 */
-				loading: function () {
+				loading: function() {
 					$ionicLoading.show({
 						template: '<ion-spinner icon="ios" class="spinner-dark"></ion-spinner>',
 						noBackdrop: true
@@ -379,7 +400,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * 隐藏动画
 				 * @return {[type]} [description]
 				 */
-				loaded: function () {
+				loaded: function() {
 					$ionicLoading.hide();
 				},
 
@@ -388,10 +409,10 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * @param  {[type]} source [0:拍照获取， 1:相册获取]
 				 * @return {[type]}        [description]
 				 */
-				takePictures: function (source) {
+				takePictures: function(source) {
 					var defer = $q.defer(),
 						_this = this;
-					$ionicPlatform.ready(function () {
+					$ionicPlatform.ready(function() {
 						var options = {
 							quality: 80,
 							destinationType: Camera.DestinationType.DATA_URL,
@@ -405,10 +426,10 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 							targetWidth: 100,
 							targetHeight: 100
 						};
-						$cordovaCamera.getPicture(options).then(function (imageData) {
+						$cordovaCamera.getPicture(options).then(function(imageData) {
 							// _this.uploadHeader(imageData);
 							defer.resolve(imageData);
-						}, function (err) {
+						}, function(err) {
 							defer.reject(err);
 						})
 					});
@@ -420,7 +441,7 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 				 * @param  {[type]} obj    [description]
 				 * @return {[type]}        [description]
 				 */
-				corvertBean: function (_class, obj) {
+				corvertBean: function(_class, obj) {
 					var bean = new Object();
 					for (item in obj) {
 						var property = '' + _class + '.' + item;

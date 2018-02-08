@@ -1,7 +1,7 @@
 angular.module("account.controller", ["ionic"])
-//我的主页
+	//我的主页
 	.controller('AccountCtrl', ["$scope", "$rootScope", "$ionicTabsDelegate", "$state", "$stateParams", "$location", "$ionicPlatform", "$ionicModal", "$ionicLoading", "$timeout", "$interval", "$ionicSlideBoxDelegate", "$cordovaBarcodeScanner", "Account", "base",
-		function ($scope, $rootScope, $ionicTabsDelegate, $state, $stateParams, $location, $ionicPlatform, $ionicModal, $ionicLoading, $timeout, $interval, $ionicSlideBoxDelegate, $cordovaBarcodeScanner, Account, base) {
+		function($scope, $rootScope, $ionicTabsDelegate, $state, $stateParams, $location, $ionicPlatform, $ionicModal, $ionicLoading, $timeout, $interval, $ionicSlideBoxDelegate, $cordovaBarcodeScanner, Account, base) {
 
 
 			//默认显示登陆
@@ -12,27 +12,30 @@ angular.module("account.controller", ["ionic"])
 			$scope.collectShops = 0;
 
 			//刚跳到个人账户时检测用户是否是老顾客
-			$scope.accountInfoModal = function () {
+			$scope.accountInfoModal = function() {
 				$scope.user = Account.getUser();
 
 				if (!$scope.user.headImg) {
 					$scope.user.headImg = "img/user_large.jpg";
 				}
 
-				$scope.doRefresh = function () {
-					Account.reload().then(function (data) {
-						$scope.user = data;
-						$scope.accountInfoModal();
-					}, function () {
+				$scope.doRefresh = function() {
+					if (Account.signined) {
+						Account.reload().then(function(data) {
+							$scope.user = data;
+							$scope.accountInfoModal();
+							$scope.collects();
+						}, function() {
 
-					}).finally(function () {
-						$scope.$broadcast('scroll.refreshComplete');
-					})
+						}).finally(function() {
+							$scope.$broadcast('scroll.refreshComplete');
+						})
+					}
 				}
 			};
 
 			//跳转功能
-			$scope.checkGo = function (arg, arg1) {
+			$scope.checkGo = function(arg, arg1) {
 				if (arg === "clear") {
 					sessionStorage.removeItem("homeproty");
 					sessionStorage.removeItem("curCity");
@@ -46,16 +49,21 @@ angular.module("account.controller", ["ionic"])
 				} else {
 					if (Account.signined) {
 						if (arg === "tab.myorder") {
-							$state.go('tab.account-myorder', {backWhere: 'tab.account', status: arg1});
+							$state.go('tab.account-myorder', {
+								backWhere: 'tab.account',
+								status: arg1
+							});
 						} else if (arg === "tab.collect") {
-							$state.go('tab.account-collect', {type: arg1});
+							$state.go('tab.account-collect', {
+								type: arg1
+							});
 						} else if (arg === 'wait') {
 							base.prompt($scope, "敬请期待...");
 						} else {
 							$state.go(arg);
 						}
 					} else {
-						base.prompt($scope, "请先登录", function () {
+						base.prompt($scope, "请先登录", function() {
 							$scope.signOrReg();
 						});
 					}
@@ -63,7 +71,7 @@ angular.module("account.controller", ["ionic"])
 			};
 
 			//账户登陆注册模块
-			$scope.sinregModal = function () {
+			$scope.sinregModal = function() {
 				$scope.shopActionName = "免费开店";
 				$scope._reguser = {};
 
@@ -80,33 +88,33 @@ angular.module("account.controller", ["ionic"])
 				$ionicModal.fromTemplateUrl('templates/login.html', {
 					scope: $scope,
 					animation: 'slide-in-up'
-				}).then(function (modal) {
+				}).then(function(modal) {
 					$scope.logmodal = modal;
 				});
 
 				//显示账户模块
-				$scope.signOrReg = function () {
+				$scope.signOrReg = function() {
 					$scope.why = "Login";
 					$scope.logmodal.show();
 				};
 				//取消登陆
-				$scope.cancel = function () {
+				$scope.cancel = function() {
 					$scope.logmodal.hide();
 				};
 
 				/*
 				跳到注册模块
 				 */
-				$scope.registerView = function () {
+				$scope.registerView = function() {
 					$ionicModal.fromTemplateUrl('templates/register.html', {
 						scope: $scope,
 						animation: 'animated modal fadeInRight'
-					}).then(function (modal) {
+					}).then(function(modal) {
 						$scope.regmodal = modal;
 						modal.show();
 					});
 					//取消注册
-					$scope.reglogin = function () {
+					$scope.reglogin = function() {
 						$scope.regmodal.hide();
 					}
 				};
@@ -114,16 +122,16 @@ angular.module("account.controller", ["ionic"])
 				/*
 				修改密码模块
 				 */
-				$scope.repassView = function () {
+				$scope.repassView = function() {
 					$ionicModal.fromTemplateUrl('templates/repass.html', {
 						scope: $scope,
 						animation: 'animated modal fadeInRight'
-					}).then(function (modal) {
+					}).then(function(modal) {
 						$scope.repassmodal = modal;
 						modal.show();
 					});
 					//取消修改密码
-					$scope.replogin = function () {
+					$scope.replogin = function() {
 						$scope.repassmodal.hide();
 					}
 				};
@@ -174,13 +182,13 @@ angular.module("account.controller", ["ionic"])
 				/*
 				获取验证码
 				 */
-				$scope.sendCode_Reg = function (arg) {
+				$scope.sendCode_Reg = function(arg) {
 					base.loading();
-					Account.sendCode(arg).then(function (data) {
+					Account.sendCode(arg).then(function(data) {
 						if (data.status) {
 							base.loaded();
 							$scope.againNum = 60;
-							var stop = $interval(function () {
+							var stop = $interval(function() {
 								if ($scope.againNum > 0) {
 									$scope.againNum--;
 									$scope.againText = "请等待(" + $scope.againNum + ")";
@@ -194,7 +202,7 @@ angular.module("account.controller", ["ionic"])
 						} else {
 							base.prompt($scope, data.msg);
 						}
-					}, function (resp) {
+					}, function(resp) {
 						base.prompt($scope, "error");
 					});
 				};
@@ -202,23 +210,23 @@ angular.module("account.controller", ["ionic"])
 				/*
 				注册
 				 */
-				$scope.idenSubmit = function (arg) {
+				$scope.idenSubmit = function(arg) {
 					base.loading();
 					base.request("sms/mapi/valid-code", 0, {
 						"phone": arg.phoneNum,
 						"code": arg.code
-					}).then(function (resp) {
+					}).then(function(resp) {
 						base.loaded();
 						if (resp) {
-							Account.register(arg).then(function (data) {
+							Account.register(arg).then(function(data) {
 								if (data.status) {
-									base.prompt($scope, data.msg, function () {
+									base.prompt($scope, data.msg, function() {
 										$scope.regmodal.hide();
 									});
 								} else {
 									base.prompt($scope, data.msg);
 								}
-							}, function (resp) {
+							}, function(resp) {
 								base.prompt($scope, "error");
 							})
 						} else {
@@ -237,19 +245,19 @@ angular.module("account.controller", ["ionic"])
 				/*
 				修改密码， 通过手机号码获取验证码
 				 */
-				$scope.sendCode_forget = function (arg) {
+				$scope.sendCode_forget = function(arg) {
 					$ionicLoading.show({
 						template: '<ion-spinner  class="spinner-dark" icon="ios"></ion-spinner>',
 						showBackdrop: false
 					});
-					Account.sendCode(arg.num, 1).then(function (data) {
+					Account.sendCode(arg.num, 1).then(function(data) {
 						if (data.state == "ok") {
 							$ionicLoading.hide();
 							$scope.code = data.reason;
 							base.prompt($scope, "验证码已发送");
 							$scope.againNum = 60;
 							$scope.againText = "请等待(60)";
-							var stop = $interval(function () {
+							var stop = $interval(function() {
 								if ($scope.againNum > 0) {
 									$scope.againNum--;
 									$scope.againText = "请等待(" + $scope.againNum + ")";
@@ -261,7 +269,7 @@ angular.module("account.controller", ["ionic"])
 						} else {
 							base.prompt($scope, data.reason);
 						}
-					}, function (resp) {
+					}, function(resp) {
 						base.prompt($scope, "error");
 					});
 				};
@@ -279,7 +287,7 @@ angular.module("account.controller", ["ionic"])
 				/*
 				修改密码
 				 */
-				$scope.savePass = function (arg) {
+				$scope.savePass = function(arg) {
 					$ionicLoading.show({
 						template: '<ion-spinner  class="spinner-dark" icon="ios"></ion-spinner>',
 						showBackdrop: false
@@ -288,19 +296,19 @@ angular.module("account.controller", ["ionic"])
 						phone: $scope.phone.num,
 						password: arg.pass
 					}
-					Account.modPass(params).then(function (data) {
+					Account.modPass(params).then(function(data) {
 						if (data.state == "ok") {
 							$ionicLoading.show({
 								template: '修改成功'
 							});
-							$timeout(function () {
+							$timeout(function() {
 								$ionicLoading.hide();
 								$scope.why = "Login";
 							}, 1500);
 						} else {
 							base.prompt($scope, data.reason);
 						}
-					}, function (resp) {
+					}, function(resp) {
 
 					})
 				};
@@ -308,34 +316,35 @@ angular.module("account.controller", ["ionic"])
 				/*
 				登录
 				 */
-				$scope.signIn = function (arg) {
+				$scope.signIn = function(arg) {
 					$ionicLoading.show({
 						template: '<ion-spinner  class="spinner-dark" icon="ios"></ion-spinner>',
 						showBackdrop: false
 					});
-					var result = Account.singIn(arg).then(function (data) {
+					var result = Account.singIn(arg).then(function(data) {
 						if (data) {
 							$scope.logmodal.remove();
 							$ionicLoading.hide();
 							$scope.signed = true;
 							$scope.accountInfoModal();
+							$scope.collects();
 						} else {
 							base.prompt($scope, "手机号或密码错误");
 						}
-					}, function (rep) {
+					}, function(rep) {
 						base.prompt($scope, '登陆超时');
 					});
 				}
 			};
 
 
-			$scope.collects = function () {
-				if (Account.signed) {
-					$timeout(function () {
-						Account.takeCollects(false, "good").then(function (result) {
+			$scope.collects = function() {
+				if (Account.signined) {
+					$timeout(function() {
+						Account.takeCollects(false, "good").then(function(result) {
 							$scope.collectGoods = result.length;
 						});
-						Account.takeCollects(false, "shop").then(function (result) {
+						Account.takeCollects(false, "shop").then(function(result) {
 							$scope.collectShops = result.length;
 						});
 					}, 1000);
@@ -353,7 +362,28 @@ angular.module("account.controller", ["ionic"])
 			//     }
 			// }
 
-			$scope.$on("$ionicView.enter", function () {
+
+			$rootScope.$on("singout", function() {
+				$scope.collectGoods = 0;
+				$scope.collectShops = 0;
+			})
+
+			// 商品收藏更新通知
+			$scope.$on("gc-Change", function() {
+				Account.takeCollects(true, "good").then(function(result) {
+					$scope.collectGoods = result.length;
+				});
+
+			});
+			// 商铺收藏更新通知
+			$scope.$on("sc-Change", function() {
+				Account.takeCollects(true, "shop").then(function(result) {
+					$scope.collectShops = result.length;
+				});
+			});
+
+
+			$scope.$on("$ionicView.enter", function() {
 				//是否登录
 				$scope.signed = Account.signined;
 				$scope.signed ? $scope.accountInfoModal() : $scope.sinregModal();
@@ -361,12 +391,12 @@ angular.module("account.controller", ["ionic"])
 			});
 
 			$scope.goWhered = false;
-			$scope.$on("$ionicView.afterEnter", function () {
+			$scope.$on("$ionicView.afterEnter", function() {
 				if ($stateParams.where) {
 					// $location.search("where", '');
 					var where = $stateParams.where;
 					$location.url($location.path());
-					$timeout(function () {
+					$timeout(function() {
 						$scope.varificationModel(where, {});
 					}, 50);
 				}
@@ -396,7 +426,7 @@ angular.module("account.controller", ["ionic"])
 	//     ])
 	//个人资料
 	.controller('personalCtrl', ['$scope', '$rootScope', '$ionicPopup', '$ionicHistory', '$ionicLoading', '$ionicActionSheet', '$ionicModal', '$q', '$interval', 'Account', 'base',
-		function ($scope, $rootScope, $ionicPopup, $ionicHistory, $ionicLoading, $ionicActionSheet, $ionicModal, $q, $interval, Account, base) {
+		function($scope, $rootScope, $ionicPopup, $ionicHistory, $ionicLoading, $ionicActionSheet, $ionicModal, $q, $interval, Account, base) {
 
 			$scope.account = Account.getUser();
 			$scope.headImg = "";
@@ -405,47 +435,47 @@ angular.module("account.controller", ["ionic"])
 			} else {
 				$scope.headImg = "img/user_large.jpg";
 			}
-			console.log(JSON.stringify($scope.account));
 			$scope.data_header = "";
 
 
-			$scope.signOut = function () {
+			$scope.signOut = function() {
 				$ionicPopup.confirm({
 					title: "确定退出吗?",
 					cancelText: "取消",
 					cancelType: "button-light",
 					okText: "确定",
 					okType: "button-assertive"
-				}).then(function (res) {
+				}).then(function(res) {
 					if (res) {
 						Account.signOut();
+						$scope.$emit("convery-singout");
 						$ionicHistory.goBack();
 					}
 				});
 			};
 
 			//修改头像
-			$scope.changeHeader = function () {
+			$scope.changeHeader = function() {
 				$ionicActionSheet.show({
-					buttons: [
-						{text: "拍照"},
-						{text: "我的相册"}
-					],
+					buttons: [{
+						text: "拍照"
+					}, {
+						text: "我的相册"
+					}],
 					cancelText: "取消",
-					cancel: function () {
-					},
-					buttonClicked: function (index) {
+					cancel: function() {},
+					buttonClicked: function(index) {
 
-						base.takePictures(index).then(function (imgData) {
+						base.takePictures(index).then(function(imgData) {
 							base.loading();
 							let _base64 = imgData;
 							$scope.data_header = "data:image/png;base64," + _base64;
 							base.request("user/mapi/upload-head", 1, {
 								"base64": _base64,
 								"userId": Account.getUser().uuid
-							}, true, 100000).then(function (data) {
+							}, true, 100000).then(function(data) {
 								if (data.status == "success") {
-									Account.reload().then(function () {
+									Account.reload().then(function() {
 										base.loaded();
 										base.prompt($scope, "修改头像成功");
 									});
@@ -454,7 +484,7 @@ angular.module("account.controller", ["ionic"])
 								}
 							});
 
-						}, function (err) {
+						}, function(err) {
 							base.prompt($scope, "获取头像失败");
 						});
 						return true;
@@ -463,25 +493,25 @@ angular.module("account.controller", ["ionic"])
 			};
 
 			//修改手机号获取验证码
-			$scope.valid = function () {
+			$scope.valid = function() {
 				$scope.againValText = "获取验证码";
 
-				$scope.openModel("templates/personal-chphoneval.html").then(function (model) {
+				$scope.openModel("templates/personal-chphoneval.html").then(function(model) {
 					model.show();
 
-					$scope.takeValCode = function () {
+					$scope.takeValCode = function() {
 						$ionicLoading.show({
 							template: '<ion-spinner  class="spinner-dark" icon="ios"></ion-spinner>',
 							showBackdrop: false
 						});
-						Account.sendCode($scope.account.usersphone, 2).then(function (data) {
+						Account.sendCode($scope.account.usersphone, 2).then(function(data) {
 							if (data.state == "ok") {
 								$ionicLoading.hide();
 								$scope.cpcode = data.reason;
 								base.prompt($scope, "验证码已发送");
 								$scope.againValNum = 60;
 								$scope.againValText = "请等待(60)";
-								var stop = $interval(function () {
+								var stop = $interval(function() {
 									if ($scope.againValNum > 0) {
 										$scope.againValNum--;
 										$scope.againValText = "请等待(" + $scope.againValNum + ")";
@@ -493,12 +523,12 @@ angular.module("account.controller", ["ionic"])
 							} else {
 								base.prompt($scope, data.reason);
 							}
-						}, function (resp) {
+						}, function(resp) {
 							base.prompt($scope, "error");
 						});
 					};
 
-					$scope.validCode = function (arg) {
+					$scope.validCode = function(arg) {
 						if ($scope.cpcode == arg.code) {
 							$scope.changePhone();
 						} else {
@@ -506,19 +536,19 @@ angular.module("account.controller", ["ionic"])
 						}
 					};
 
-					$scope.closeValModel = function () {
+					$scope.closeValModel = function() {
 						model.hide();
 					};
 
-					$scope.$on('$destroy', function () {
+					$scope.$on('$destroy', function() {
 						model.remove();
 					});
 				});
 			};
 
 			//修改手机号码
-			$scope.changePhone = function () {
-				$scope.openModel("templates/personal-change-phone.html").then(function (model) {
+			$scope.changePhone = function() {
+				$scope.openModel("templates/personal-change-phone.html").then(function(model) {
 					$scope.againNPText = "获取验证码";
 					model.show();
 
@@ -528,8 +558,8 @@ angular.module("account.controller", ["ionic"])
 						phone: ''
 					};
 
-					$scope.takeNPCode = function () {
-						Account.sendCode($scope.account.usersphone, 3).then(function (data) {
+					$scope.takeNPCode = function() {
+						Account.sendCode($scope.account.usersphone, 3).then(function(data) {
 							console.log(data);
 							if (data.state == "ok") {
 								$ionicLoading.hide();
@@ -537,7 +567,7 @@ angular.module("account.controller", ["ionic"])
 								base.prompt($scope, "验证码已发送");
 								$scope.againNPNum = 60;
 								$scope.againNPText = "请等待(60)";
-								var stop = $interval(function () {
+								var stop = $interval(function() {
 									if ($scope.againNPNum > 0) {
 										$scope.againNPNum--;
 										$scope.againNPText = "请等待(" + $scope.againNPNum + ")";
@@ -549,25 +579,25 @@ angular.module("account.controller", ["ionic"])
 							} else {
 								base.prompt($scope, data.reason);
 							}
-						}, function (resp) {
+						}, function(resp) {
 							base.prompt($scope, "error");
 						});
 					};
 
-					$scope.closeNPModel = function () {
+					$scope.closeNPModel = function() {
 						model.hide();
 					};
 
-					$scope.savePhone = function () {
+					$scope.savePhone = function() {
 						if ($scope.chobj.code != $scope.chobj.inCode) {
 							$scope.prompt('验证码错误');
 						} else {
 							var params = {
 								userphone: $scope.chobj.phone
 							}
-							Account.updateUser(params).then(function (data) {
+							Account.updateUser(params).then(function(data) {
 								base.prompt($scope, data.reason);
-							}, function (resp) {
+							}, function(resp) {
 								base.prompt($scope, "error");
 							});
 							$scope.account.userphone = $scope.chobj.phone;
@@ -576,63 +606,63 @@ angular.module("account.controller", ["ionic"])
 						}
 					};
 
-					$scope.$on('$destroy', function () {
+					$scope.$on('$destroy', function() {
 						model.remove();
 					});
 				})
 			};
 
 			//修改邮箱
-			$scope.changeEmail = function () {
-				$scope.openModel("templates/personal-change-email.html").then(function (model) {
+			$scope.changeEmail = function() {
+				$scope.openModel("templates/personal-change-email.html").then(function(model) {
 					model.show();
 
-					$scope.saveEmail = function (arg) {
-						Account.updateUser(arg, $scope.account.usersid).then(function (data) {
+					$scope.saveEmail = function(arg) {
+						Account.updateUser(arg, $scope.account.usersid).then(function(data) {
 							base.prompt($scope, "修改邮箱成功");
 							//console.log(JSON.stringify($scope.account));
 							$scope.account.usersemail = arg.email;
 							Account.storeUser($scope.account);
-						}, function (resp) {
+						}, function(resp) {
 							base.prompt($scope, "error");
 						});
 						model.hide();
 					};
 
-					$scope.closeEmailModel = function () {
+					$scope.closeEmailModel = function() {
 						model.hide();
 					}
 				})
 			};
 
 			//修改出生日期
-			$scope.chooseBirthday = function () {
+			$scope.chooseBirthday = function() {
 				var date = undefined,
 					birday = undefined;
 				if ($scope.account.userbirthday != null && $scope.account.userbirthday != "") {
 					birday = $scope.account.userbirthday.split("-");
 					date = new Date(parseInt(birday[0]), parseInt(birday[1]), parseInt(birday[2]));
 				}
-				Account.chooseDate(date).then(function (_date) {
+				Account.chooseDate(date).then(function(_date) {
 					var bir = _date.getFullYear() + "-" + (_date.getMonth() + 1) + "-" + _date.getDate();
 					$scope.account.userbirthday = bir;
 					var params = {
 						userbirthday: bir
 					}
-					Account.updateUser(params).then(function (data) {
+					Account.updateUser(params).then(function(data) {
 						base.prompt($scope, data.reason);
-					}, function (resp) {
+					}, function(resp) {
 						base.prompt($scope, "error");
 					});
 				});
 			};
 
-			$scope.openModel = function (file) {
+			$scope.openModel = function(file) {
 				var defer = $q.defer();
 				$ionicModal.fromTemplateUrl(file, {
 					scope: $scope,
 					animation: 'animated slideInRight'
-				}).then(function (model) {
+				}).then(function(model) {
 					defer.resolve(model);
 				});
 				return defer.promise;
@@ -642,20 +672,20 @@ angular.module("account.controller", ["ionic"])
 	])
 	//收货地址
 	.controller('addrCtrl', ["$scope", "$rootScope", "$state", "$ionicLoading", "$ionicTabsDelegate", "$ionicPopup", "Account", "base",
-		function ($scope, $rootScope, $state, $ionicLoading, $ionicTabsDelegate, $ionicPopup, Account, base) {
+		function($scope, $rootScope, $state, $ionicLoading, $ionicTabsDelegate, $ionicPopup, Account, base) {
 			$scope.noaddr = false;
 
 			//加载所有地址
-			$scope.loadAddrs = function () {
+			$scope.loadAddrs = function() {
 				$ionicLoading.show({
 					template: '<ion-spinner class="spinner-dark" icon="ios"></ion-spinner>',
 					showBackdrop: false
 				});
 				Account.takeAddrs()
-					.then(function (data) {
+					.then(function(data) {
 						if (data.state == "ok") {
 							var _addr = [];
-							angular.forEach(data.data, function (obj, inx) {
+							angular.forEach(data.data, function(obj, inx) {
 								obj.isdefault = (obj.isdefault == "true" ? true : false);
 								_addr.push(obj);
 							})
@@ -666,17 +696,17 @@ angular.module("account.controller", ["ionic"])
 							$scope.prompt = data.reason;
 							$scope.addrs = new Array();
 						}
-					}, function () {
+					}, function() {
 						base.prompt($scope, 'error');
 					})
-					.finally(function () {
+					.finally(function() {
 						$ionicLoading.hide();
 					});
 			};
 
 			//默认地址
-			$scope.swipeDefault = function (item, _default) {
-				angular.forEach($scope.addrs, function (obj, inx) {
+			$scope.swipeDefault = function(item, _default) {
+				angular.forEach($scope.addrs, function(obj, inx) {
 					obj.isdefault = false;
 				});
 				item.isdefault = true;
@@ -688,44 +718,47 @@ angular.module("account.controller", ["ionic"])
 					template: '<ion-spinner class="spinner-dark" icon="ios"></ion-spinner>',
 					showBackdrop: false
 				});
-				Account.addressAction(params, 'upd').then(function (data) {
+				Account.addressAction(params, 'upd').then(function(data) {
 					$ionicLoading.hide();
 					if (data.state != "ok") {
 						base.prompt("请稍后再试!");
 					}
-				}, function () {
+				}, function() {
 					base.prompt("error");
 				});
 			};
 
 			//编辑
-			$scope.updAddr = function (item) {
+			$scope.updAddr = function(item) {
 				$scope.showBar = false;
 				var _addr = angular.toJson(item);
-				$state.go("tab.setting-addrconfig", {action: 'upd', addr: _addr});
+				$state.go("tab.setting-addrconfig", {
+					action: 'upd',
+					addr: _addr
+				});
 			};
 
 			//删除
-			$scope.delAddr = function (item) {
+			$scope.delAddr = function(item) {
 				$ionicPopup.confirm({
 					title: "确定删除该收货人吗?",
 					cancelText: "取消",
 					cancelType: "button-light",
 					okText: "确定",
 					okType: "button-assertive"
-				}).then(function (res) {
+				}).then(function(res) {
 					if (res) {
 						$ionicLoading.show({
 							template: '<ion-spinner class="spinner-dark" icon="ios"></ion-spinner>',
 							showBackdrop: false
 						});
 						Account.delAddress(item)
-							.then(function (data) {
+							.then(function(data) {
 								if (data.state == "ok") {
 									$scope.loadAddrs();
 								}
 								base.prompt($scope, "删除地址");
-							}, function (resp) {
+							}, function(resp) {
 								base.prompt($scope, "error");
 							});
 					}
@@ -734,29 +767,33 @@ angular.module("account.controller", ["ionic"])
 			};
 
 			//新建地址
-			$scope.goNewAddr = function () {
+			$scope.goNewAddr = function() {
 				$scope.showBar = false;
-				$state.go("tab.setting-addrconfig", {action: 'add'});
+				$state.go("tab.setting-addrconfig", {
+					action: 'add'
+				});
 			};
 
 			//格式化手机
-			$scope.formatPhone = function (phone) {
+			$scope.formatPhone = function(phone) {
 				return base.formatPhone(phone);
 			};
 
-			$scope.$on("$ionicView.enter", function () {
+			$scope.$on("$ionicView.enter", function() {
 				$scope.loadAddrs();
 			});
 		}
 	])
 	//新建收货人
 	.controller('nowAddrCtrl', ["$scope", "$rootScope", "$stateParams", "$ionicHistory", "$ionicLoading", "$ionicPopup", "$ionicTabsDelegate", "$ionicNavBarDelegate", "$ionicSlideBoxDelegate", "$timeout", "Account",
-		function ($scope, $rootScope, $stateParams, $ionicHistory, $ionicLoading, $ionicPopup, $ionicTabsDelegate, $ionicNavBarDelegate, $ionicSlideBoxDelegate, $timeout, Account) {
+		function($scope, $rootScope, $stateParams, $ionicHistory, $ionicLoading, $ionicPopup, $ionicTabsDelegate, $ionicNavBarDelegate, $ionicSlideBoxDelegate, $timeout, Account) {
 
 			$scope.caconfig = {
 				cardinal: 18,
 				increment: 37.5,
-				levelpg: {transform: "translate3d(18px, 0px, 0px) scale(1)"},
+				levelpg: {
+					transform: "translate3d(18px, 0px, 0px) scale(1)"
+				},
 				_prov: null,
 				_city: null,
 				_area: null,
@@ -783,8 +820,8 @@ angular.module("account.controller", ["ionic"])
 			$scope.chooseAddress = "ar-area-animate-leave";
 
 			//打开电话联系人
-			$scope.openContacts = function () {
-				Account.chooseContact().then(function (contcat) {
+			$scope.openContacts = function() {
+				Account.chooseContact().then(function(contcat) {
 					$scope.addr.name = contcat.displayName;
 					if (contcat.phones.length == 0) {
 						base.prompt($scope, "该联系人无手机号码");
@@ -801,13 +838,13 @@ angular.module("account.controller", ["ionic"])
 			 * @param  {Function} next  [是否自动进入下级]
 			 * @return {[type]}         [description]
 			 */
-			$scope.getarea = function (code, level, next) {
+			$scope.getarea = function(code, level, next) {
 				var tl = (level == 0 ? '<ion-spinner class="spinner-dark" icon="ios"></ion-spinner>' : '<ion-spinner class="spinner-light" icon="ios"></ion-spinner>');
 				$ionicLoading.show({
 					template: tl,
 					showBackdrop: false
 				});
-				Account.takeArea(code).then(function (data) {
+				Account.takeArea(code).then(function(data) {
 					if (data) {
 						switch (level) {
 							case 0:
@@ -822,7 +859,7 @@ angular.module("account.controller", ["ionic"])
 						}
 						$ionicSlideBoxDelegate.update();
 						if (next) {
-							$timeout(function () {
+							$timeout(function() {
 								$ionicSlideBoxDelegate.next(300);
 							}, 300);
 						}
@@ -830,15 +867,15 @@ angular.module("account.controller", ["ionic"])
 						$scope.addr.area = "全区";
 						$scope.close();
 					}
-				}, function (resp) {
+				}, function(resp) {
 					base.prompt($scope, "error");
-				}).finally(function () {
+				}).finally(function() {
 					$ionicLoading.hide();
 				});
 			};
 
 
-			$scope.choosedArea = function (item, forLevel) {
+			$scope.choosedArea = function(item, forLevel) {
 				switch (forLevel) {
 					case 1:
 						$scope.caconfig._city = null;
@@ -862,38 +899,38 @@ angular.module("account.controller", ["ionic"])
 				}
 			};
 
-			$scope.areaSlideChange = function (inx) {
+			$scope.areaSlideChange = function(inx) {
 				$scope.switchChoosePanel(inx);
 			};
 
-			$scope.chooseAddr = function () {
+			$scope.chooseAddr = function() {
 				$scope.chooseBack = "ws-choose-back-enter";
 				$scope.chooseAddress = "ar-area-animate-enter";
 				// $ionicNavBarDelegate.showBar(false);
 				$ionicSlideBoxDelegate.update();
 			};
-			$scope.close = function () {
+			$scope.close = function() {
 				$scope.chooseBack = "ws-choose-back-leave";
 				$scope.chooseAddress = "ar-area-animate-leave";
 				// $ionicNavBarDelegate.showBar(true);
 			};
 
-			$scope._provience = function () {
+			$scope._provience = function() {
 				$ionicSlideBoxDelegate.slide(0, 300);
 				$scope.switchChoosePanel(0);
 			};
 
-			$scope._city = function () {
+			$scope._city = function() {
 				$ionicSlideBoxDelegate.slide(1, 300);
 				$scope.switchChoosePanel(1);
 			};
 
-			$scope._area = function () {
+			$scope._area = function() {
 				$ionicSlideBoxDelegate.slide(2, 300);
 				$scope.switchChoosePanel(2);
 			};
 
-			$scope.switchChoosePanel = function (inx) {
+			$scope.switchChoosePanel = function(inx) {
 				var aims = $scope.caconfig.cardinal + $scope.caconfig.increment * inx;
 				$scope.caconfig.levelpg = {
 					transform: "translate3d(" + aims + "px, 0px, 0px) scale(1)",
@@ -902,36 +939,36 @@ angular.module("account.controller", ["ionic"])
 			};
 
 			//保存新地址数据
-			$scope.subaddr = function () {
+			$scope.subaddr = function() {
 				$ionicLoading.show({
 					template: '<ion-spinner icon="ios"></ion-spinner>',
 					showBackdrop: false
 				});
 
 				Account.addressAction($scope.addr, $stateParams.action)
-					.then(function (data) {
+					.then(function(data) {
 						if (data.state == "ok") {
 							$ionicLoading.show({
 								template: '<div style="background: rgba(0,0,0,0.6); width: 88px; border-radius: 6px; height: 40px; line-height: 40px;">' + data.reason + '</div>',
 								showBackdrop: false
 							});
 
-							$timeout(function () {
+							$timeout(function() {
 								$ionicLoading.hide();
 								$ionicHistory.goBack();
 							}, 1500);
 						} else {
 							base.prompt($scope, data.reason);
 						}
-					}, function () {
+					}, function() {
 						base.prompt($scope, "error");
 					});
 			};
 
-			$scope.$on("$ionicView.enter", function () {
+			$scope.$on("$ionicView.enter", function() {
 				$scope.getarea(0, 0, false);
 			});
-			$scope.$on("$ionicView.afterEnter", function () {
+			$scope.$on("$ionicView.afterEnter", function() {
 				if ($stateParams.action == "upd") {
 					$scope.addr = angular.fromJson($stateParams.addr);
 				}
@@ -942,7 +979,7 @@ angular.module("account.controller", ["ionic"])
 	/****************************访美团*****************************/
 	//我的订单
 	.controller('myorderCtrl', ['$scope', '$rootScope', '$state', '$stateParams', '$timeout', '$window', '$ionicTabsDelegate', '$ionicSlideBoxDelegate', '$ionicScrollDelegate', '$ionicLoading', '$ionicPopup', 'Account', 'Cart', 'base',
-		function ($scope, $rootScope, $state, $stateParams, $timeout, $window, $ionicTabsDelegate, $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicLoading, $ionicPopup, Account, Cart, base) {
+		function($scope, $rootScope, $state, $stateParams, $timeout, $window, $ionicTabsDelegate, $ionicSlideBoxDelegate, $ionicScrollDelegate, $ionicLoading, $ionicPopup, Account, Cart, base) {
 			$scope.curActive = undefined;
 			$scope.myOrders = {
 				//全部
@@ -997,7 +1034,7 @@ angular.module("account.controller", ["ionic"])
 			 * @param  {[type]} inx [description]
 			 * @return {[type]}     [description]
 			 */
-			$scope.switchPanel = function (status) {
+			$scope.switchPanel = function(status) {
 				$scope.curStu = status;
 				var inx = undefined;
 				switch (status) {
@@ -1043,7 +1080,7 @@ angular.module("account.controller", ["ionic"])
 
 			};
 
-			$scope.loadMore = function (status, allowLoad) {
+			$scope.loadMore = function(status, allowLoad) {
 				if (!allowLoad) {
 					return false;
 				}
@@ -1052,7 +1089,7 @@ angular.module("account.controller", ["ionic"])
 					status: status,
 					page: $scope.curActive.curInx
 				};
-				base.request("order/mapi/list", 1, params).then(function (result) {
+				base.request("order/mapi/list", 1, params).then(function(result) {
 					switch (status) {
 						case 'all':
 							$scope.handleAll(result.list);
@@ -1074,7 +1111,7 @@ angular.module("account.controller", ["ionic"])
 				});
 			};
 
-			$scope.handleAll = function (data) {
+			$scope.handleAll = function(data) {
 				if (data.length < 20) {
 					$scope.myOrders.all.allowLoadMore = false;
 				} else {
@@ -1088,7 +1125,7 @@ angular.module("account.controller", ["ionic"])
 				console.log(data);
 			};
 
-			$scope.handleWaitPay = function (data) {
+			$scope.handleWaitPay = function(data) {
 				if (data.length < 20) {
 					$scope.myOrders.waitPay.allowLoadMore = false;
 				} else {
@@ -1102,7 +1139,7 @@ angular.module("account.controller", ["ionic"])
 				console.log(data);
 			};
 
-			$scope.handleWaitSent = function (data) {
+			$scope.handleWaitSent = function(data) {
 				if (data.length < 20) {
 					$scope.myOrders.waitConsume.allowLoadMore = false;
 				} else {
@@ -1116,7 +1153,7 @@ angular.module("account.controller", ["ionic"])
 				console.log(data);
 			};
 
-			$scope.handleWaitTake = function (data) {
+			$scope.handleWaitTake = function(data) {
 				if (data.length < 20) {
 					$scope.myOrders.consumed.allowLoadMore = false;
 				} else {
@@ -1130,7 +1167,7 @@ angular.module("account.controller", ["ionic"])
 				console.log(data);
 			};
 
-			$scope.handleRefunded = function (data) {
+			$scope.handleRefunded = function(data) {
 				if (data.length < 20) {
 					$scope.myOrders.refunded.allowLoadMore = false;
 				} else {
@@ -1150,14 +1187,14 @@ angular.module("account.controller", ["ionic"])
 			 * @param  {[type]} on   [description]
 			 * @return {[type]}      [description]
 			 */
-			$scope.gopay = function (data) {
+			$scope.gopay = function(data) {
 				$state.go($stateParams.backWhere + "-shop-pro-pay", {
 					backWhere: $stateParams.backWhere,
 					order: angular.toJson(data)
 				});
 			};
 
-			$scope.reset_all = function () {
+			$scope.reset_all = function() {
 				$scope.myOrders.all = {
 					curInx: 1,
 					allowLoadMore: false,
@@ -1166,7 +1203,7 @@ angular.module("account.controller", ["ionic"])
 					formPageLoad: false,
 				}
 			};
-			$scope.reset_waitPay = function () {
+			$scope.reset_waitPay = function() {
 				$scope.myOrders.waitPay = {
 					curInx: 1,
 					allowLoadMore: false,
@@ -1175,7 +1212,7 @@ angular.module("account.controller", ["ionic"])
 					formPageLoad: false,
 				}
 			};
-			$scope.reset_waitConsume = function () {
+			$scope.reset_waitConsume = function() {
 				$scope.myOrders.waitConsume = {
 					curInx: 1,
 					allowLoadMore: false,
@@ -1184,7 +1221,7 @@ angular.module("account.controller", ["ionic"])
 					formPageLoad: false,
 				}
 			};
-			$scope.reset_consumed = function () {
+			$scope.reset_consumed = function() {
 				$scope.myOrders.consumed = {
 					curInx: 1,
 					allowLoadMore: false,
@@ -1193,7 +1230,7 @@ angular.module("account.controller", ["ionic"])
 					formPageLoad: false,
 				}
 			};
-			$scope.reset_refunded = function () {
+			$scope.reset_refunded = function() {
 				$scope.myOrders.refunded = {
 					curInx: 1,
 					allowLoadMore: false,
@@ -1209,17 +1246,20 @@ angular.module("account.controller", ["ionic"])
 			 * @param  {[type]} inx       [订单索引]
 			 * @return {[type]}           [description]
 			 */
-			$scope.delOrder = function (order, inx) {
+			$scope.delOrder = function(order, inx) {
 				$ionicPopup.confirm({
 					title: '确定删除吗?',
 					cancelText: "取消",
 					cancelType: "button-light",
 					okText: "确定",
 					okType: "button-assertive"
-				}).then(function (res) {
+				}).then(function(res) {
 					if (res) {
-						let params = {"order": order.uuid, "user": Account.getUser().uuid};
-						base.request("order/mapi/del", 1, params).then(function (result) {
+						let params = {
+							"order": order.uuid,
+							"user": Account.getUser().uuid
+						};
+						base.request("order/mapi/del", 1, params).then(function(result) {
 							if (result === "success") {
 								switch ($scope.curStu) {
 									case 'all':
@@ -1253,11 +1293,11 @@ angular.module("account.controller", ["ionic"])
 			 * @param  {[type]} opd_id    [订单商品ID]
 			 * @return {[type]}           [description]
 			 */
-			$scope.takePd = function (order_num, opd_id) {
-				var handleTakePd = function (data) {
-					angular.forEach(data, function (sen, inx) {
+			$scope.takePd = function(order_num, opd_id) {
+				var handleTakePd = function(data) {
+					angular.forEach(data, function(sen, inx) {
 						if (sen.ordernumber == order_num) {
-							angular.forEach(sen.prodecut, function (pdSen, pdInx) {
+							angular.forEach(sen.prodecut, function(pdSen, pdInx) {
 								if (pdSen.productid == opd_id) {
 									sen.prodecut.splice(pdInx, 1);
 									return false;
@@ -1276,13 +1316,13 @@ angular.module("account.controller", ["ionic"])
 					cancelType: "button-light",
 					okText: "确定",
 					okType: "button-assertive"
-				}).then(function (res) {
+				}).then(function(res) {
 					if (res) {
 						$ionicLoading.show({
 							template: '<ion-spinner class="spinner-dark" icon="ios"></ion-spinner>',
 							showBackdrop: false
 						});
-						Cart.takePd(order_num, opd_id).then(function (result) {
+						Cart.takePd(order_num, opd_id).then(function(result) {
 							console.log(result);
 							if (result) {
 								switch ($scope.curLev) {
@@ -1306,7 +1346,7 @@ angular.module("account.controller", ["ionic"])
 			};
 
 			$scope.firstLoad = true;
-			$scope.$on("$ionicView.enter", function () {
+			$scope.$on("$ionicView.enter", function() {
 				if ($scope.firstLoad) {
 					$scope.scroll = {
 						height: $window.innerHeight - (36 + 44) + "px"
@@ -1323,7 +1363,7 @@ angular.module("account.controller", ["ionic"])
 			});
 
 
-			$rootScope.$on("orderReload", function (event, data) {
+			$rootScope.$on("orderReload", function(event, data) {
 				$scope.reset_all();
 				$scope.reset_waitPay();
 				$scope.reset_waitConsume();
@@ -1417,8 +1457,8 @@ angular.module("account.controller", ["ionic"])
 	// 	}
 	// ])
 	// 我的优惠卷
-	.controller('couponsCtrl', ['$scope', "Account", "base", function ($scope, Account, base) {
-		Account.takeCoupons().then(function (data) {
+	.controller('couponsCtrl', ['$scope', "Account", "base", function($scope, Account, base) {
+		Account.takeCoupons().then(function(data) {
 			$scope.items = new Array();
 
 			let params = {
@@ -1428,13 +1468,14 @@ angular.module("account.controller", ["ionic"])
 				good: ''
 			};
 
-			var insert_flg = function (str, flg, sn) {
-				var newstr = "", mark = flg;
-				if(sn == 0) {
+			var insert_flg = function(str, flg, sn) {
+				var newstr = "",
+					mark = flg;
+				if (sn == 0) {
 					sn = 1;
 				}
 				for (var i = 0; i < str.length; i += sn) {
-					if(i == sn) {
+					if (i == sn) {
 						mark = "";
 					}
 					var tmp = str.substring(i, i + sn);
@@ -1443,9 +1484,9 @@ angular.module("account.controller", ["ionic"])
 				return newstr;
 			}
 
-			$scope.loadCoupons = function () {
+			$scope.loadCoupons = function() {
 
-				base.request("usercoupon/mapi/list", 1, params).then(function (result) {
+				base.request("usercoupon/mapi/list", 1, params).then(function(result) {
 					for (var i = 0; i < result.length; i++) {
 						switch (result[i].coupon.rule) {
 							case "recoupon":
@@ -1476,35 +1517,39 @@ angular.module("account.controller", ["ionic"])
 			}
 
 			$scope.loadCoupons();
-			$scope.$on("$ionicView.enter", function () {
+			$scope.$on("$ionicView.enter", function() {
 
 			});
 		});
 	}])
-	.controller('collectCtrl', ['$scope', '$stateParams', '$timeout', "Account", 'base', function ($scope, $stateParams, $timeout, Account, base) {
+	.controller('collectCtrl', ['$scope', '$stateParams', '$timeout', "$state", "Account", "Products", 'base', function($scope, $stateParams, $timeout, $state, Account, Products, base) {
 
 		$scope.moreDataCanBeLoaded = false;
 
-		$scope.getCollects = function (refresh) {
-			Account.takeCollects(refresh, $stateParams.type).then(function (result) {
+		$scope.type = $stateParams.type;
+
+		$scope.getCollects = function(refresh) {
+			Account.takeCollects(refresh, $stateParams.type).then(function(result) {
 				$scope.items = result;
 				$scope.$broadcast('scroll.refreshComplete');
 
-				$timeout(function () {
+				$timeout(function() {
 					$scope.moreDataCanBeLoaded = true;
 				}, 300);
 			});
 		};
 
-		$scope.doRefresh = function () {
+		$scope.doRefresh = function() {
 			$scope.getCollects(true);
 			$scope.refreshData = false;
 		};
 
 		$scope.refreshData = false;
 
-		$scope.del = function (item) {
-			base.request('collect/mapi/del', 1, {"key": item.uuid}).then(function (result) {
+		$scope.del = function(item) {
+			base.request('collect/mapi/del', 1, {
+				"key": item.uuid
+			}).then(function(result) {
 				if (result === "success") {
 					base.prompt($scope, "删除成功");
 					let inx = $scope.items.indexOf(item);
@@ -1516,29 +1561,57 @@ angular.module("account.controller", ["ionic"])
 			});
 		};
 
+		/**
+		 * 进入商家页
+		 */
+		$scope.gotoTar = function(arg) {
+			switch ($scope.type) {
+				case "shop":
+					Products.getShopById(arg.value).then(function(data) {
+						$state.go("tab.account-shop-list", {
+							backWhere: 'tab.account',
+							shop: angular.toJson(data)
+						});
+					});
+					break;
+				default:
+					Products.getGoodById(arg.value).then(function(data) {
+						$state.go("tab.account-shop-pro-details", {
+							backWhere: 'tab.account',
+							good: angular.toJson(data)
+						});
+					});
+					break;
+			}
+
+		};
+
 		$scope.firstLoad = true;
-		$scope.$on("$ionicView.enter", function () {
+		$scope.$on("$ionicView.enter", function() {
 			if ($scope.firstLoad) {
 				$scope.getCollects(false);
 			}
 		});
-		$scope.$on("$ionicView.leave", function () {
+		$scope.$on("$ionicView.leave", function() {
 			if ($scope.refreshData) {
 				Account.takeCollects(true, $stateParams.type);
 			}
 		});
 	}])
 	//我的足迹
-	.controller('footPrintsCtrl', ['$scope', 'Account', 'base', function ($scope, Account, base) {
+	.controller('footPrintsCtrl', ['$scope', '$state', 'Account', 'Products', 'base', function($scope, $state, Account, Products, base) {
 
 		$scope.inx = 1;
 		$scope.moreDataCanBeLoaded = true;
 		$scope.sender = {
 			items: new Array()
 		};
-		$scope.loadMore = function () {
-			let params = {"user": Account.getUser().uuid, "offset": $scope.inx};
-			base.request('userfoot/mapi/list', 1, params).then(function (result) {
+		$scope.loadMore = function() {
+			let params = {
+				"user": Account.getUser().uuid,
+				"offset": $scope.inx
+			};
+			base.request('userfoot/mapi/list', 1, params).then(function(result) {
 				if (result.length < 20) {
 					$scope.moreDataCanBeLoaded = false;
 				}
@@ -1550,8 +1623,19 @@ angular.module("account.controller", ["ionic"])
 
 		$scope.refreshData = false;
 
-		$scope.del = function (item) {
-			base.request('collect/mapi/del', 1, {"key": item.uuid}).then(function (result) {
+		$scope.gotoGood = function(item) {
+			Products.getGoodById(item.goodUuid).then(function(data) {
+				$state.go("tab.account-shop-pro-details", {
+					backWhere: 'tab.account',
+					good: angular.toJson(data)
+				});
+			});
+		}
+
+		$scope.del = function(item) {
+			base.request('collect/mapi/del', 1, {
+				"key": item.uuid
+			}).then(function(result) {
 				if (result === "success") {
 					base.prompt($scope, "删除成功");
 					let inx = $scope.items.indexOf(item);
@@ -1564,17 +1648,19 @@ angular.module("account.controller", ["ionic"])
 		};
 	}])
 	//我的二维码
-	.controller('qrCodeCtrl', ['$scope', 'Account', 'base', function ($scope, Account, base) {
+	.controller('qrCodeCtrl', ['$scope', 'Account', 'base', function($scope, Account, base) {
 
-		$scope.load = function () {
+		$scope.load = function() {
 			base.loading();
 
-			base.request('usmycode', {userid: Account.getUser().usersid}).then(function (data) {
+			base.request('usmycode', {
+				userid: Account.getUser().usersid
+			}).then(function(data) {
 				$scope.qrcode = data.url;
 				base.loaded();
 			})
 		};
-		$scope.$on("$ionicView.enter", function () {
+		$scope.$on("$ionicView.enter", function() {
 			// $scope.shop = Account.getUser().shop;
 			$scope.load();
 		});

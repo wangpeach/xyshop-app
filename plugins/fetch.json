@@ -176,5 +176,13 @@
     "variables": {
       "WECHATAPPID": "wx9b1fa09595b5d87c"
     }
+  },
+  "cordova-plugin-navimap": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-navimap"
+    },
+    "is_top_level": true,
+    "variables": {}
   }
 }

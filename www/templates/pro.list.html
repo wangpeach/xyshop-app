@@ -28,7 +28,7 @@
             </ion-slide>
         </ion-slide-box>
         <div class="content-list">
-            <div class="list">
+            <!-- <div class="list">
                 <a class="item item-thumbnail-left" ng-repeat="item in shops" ng-click="typeProDetails(item)">
                     <img src="{{item.thumbImgShow}}">
                     <p class="weui_media_title product-buttom">
@@ -42,16 +42,32 @@
                             <span class="product-show-scan">{{item.distance}}</span>
                     </p>
                 </a>
-            </div>
+            </div> -->
+            <ion-item ng-repeat="item in goods" ng-click="goodDetails({{item}})" class="item-thumbnail-left">
+                <img ng-src="{{item.thumbImgShow}}">
+                <p class="weui_media_title product-buttom">
+                    <span class="product-show-title">{{item.name}}</span>
+                </p>
+                <p class="product-show-introduce">{{item.description}}</p>
+                <p class="product-buttom">
+                    <span class="product-show-price">￥<font>{{item.price}}</font></span>
+                    <span class="product-show-discount">门市价:￥{{item.orgPrice}}</span>
+                </p>
+                <p>
+                    <span class="product-show-sales">{{item.shopName}}</span>
+                    <span class="product-show-scan">已售{{item.saleNum}}</span>
+                </p>
+            </ion-item>
         </div>
-        <ul ng-if="typePros.length == 0 && !searchParams.moreDataCanBeLoaded" class="ws-pdlist-all-res">
-            <li class="ws-nothing">
+        <ul ng-if="goods.length == 0 && !searchParams.moreDataCanBeLoaded" class="ws-pdlist-all-res">
+            <li class="ws-nothing" style="padding-top: 50px;">
                 <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
+                <!-- <img src="img/shiwang.jpg" alt=""> -->
                 <br />
                 <p>哦~没有找到相关商品</p>
             </li>
         </ul>
-        <fieldset ng-if="!searchParams.moreDataCanBeLoaded" class="line"><legend align="center">&nbsp;&nbsp;我是有底线的&nbsp;&nbsp;</legend></fieldset>
+        <fieldset ng-if="!searchParams.moreDataCanBeLoaded && goods.length> 0" class="line"><legend align="center">&nbsp;&nbsp;我是有底线的&nbsp;&nbsp;</legend></fieldset>
         <ion-infinite-scroll ng-if="searchParams.moreDataCanBeLoaded && searchParams.allowLoad" on-infinite="loadShops(searchParams.allowLoad)" distance="10%"></ion-infinite-scroll>
     </ion-content>
 </ion-view>

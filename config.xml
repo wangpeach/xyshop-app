@@ -110,4 +110,5 @@
     <plugin name="cordova-plugin-wechat" spec="^2.1.0">
         <variable name="WECHATAPPID" value="wx9b1fa09595b5d87c" />
     </plugin>
+    <plugin name="cordova-plugin-navimap" spec="^1.2.3" />
 </widget>

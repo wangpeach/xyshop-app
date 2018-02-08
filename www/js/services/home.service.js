@@ -18,7 +18,7 @@ angular.module('home.service', [])
 			 */
 			hotGoods: function(inx, isload) {
 				var defer = $q.defer();
-				base.request('goods/mapi/list', 1, { shop: null, key: null, offset: inx}, isload)
+				base.request('goods/mapi/hots', 1, { shop: null, key: null, offset: inx}, isload)
 				.then(function(resp) {
 					if(resp) {
 						defer.resolve(resp);

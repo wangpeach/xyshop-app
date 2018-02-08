@@ -52,6 +52,9 @@
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "com.xydc.rtshop"
     },
+    "cordova-plugin-navimap": {
+      "PACKAGE_NAME": "com.xydc.rtshop"
+    },
     "cordova-plugin-networkinterface": {
       "PACKAGE_NAME": "com.xydc.rtshop"
     },

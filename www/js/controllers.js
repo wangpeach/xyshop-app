@@ -13,6 +13,18 @@ angular.module('starter.controllers', ["ionic", "home.controller", "realtime.con
 				$rootScope.$broadcast(data.event, data.arg);
 			});
 
+			$rootScope.$on("convery-singout", function(event) {
+				$rootScope.$broadcast("singout");
+			});
+
+			$rootScope.$on("convery-gc-collect", function(event) {
+				$scope.$broadcast("gc-Change");
+			});		
+
+			$rootScope.$on("convery-sc-collect", function(event) {
+				$scope.$broadcast("sc-Change");
+			});	
+
 			/**
 			 * 处理广告信息
 			 */
@@ -22,7 +34,7 @@ angular.module('starter.controllers', ["ionic", "home.controller", "realtime.con
 				} else if (ad.type === "simpleGoods") {
 					base.loading();
 					base.request("goods/mapi/only", 1, {
-						shop: ad.gotoInfo
+						good: ad.gotoInfo
 					}).then(function(resp) {
 						base.loaded();
 						$state.go("tab.home-shop-pro-details", {

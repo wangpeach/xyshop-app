@@ -1,32 +1,30 @@
 <ion-view view-title="我的收藏" hide-tabs>
-    <ion-content>
-        <ion-refresher pulling-text="松开刷新" on-refresh="doRefresh()" disable-pulling-rotation="true">
-        </ion-refresher>
-        <ion-list   can-swipe="true">
-            <ion-item ng-repeat="item in items"
-                      class="item-thumbnail-left">
-                <img ng-src="{{item.showThumbImg}}">
-                <h2>{{item.name}}</h2>
-                <p>{{item.addTime}}</p>
-                <ion-option-button class="button-assertive"
-                                   ng-click="del(item)">
-                    删除
-                </ion-option-button>
-            </ion-item>
-        </ion-list>
-        <ul>
-            <li class="animate-repeat" ng-if="items.length > 0 && moreDataCanBeLoaded" style="width: 100%; box-shadow: none;">
-                <div class="nothing">
-                    <p>没有更多了</p>
-                </div>
-            </li>
-        </ul>
-        <ul ng-if="items.length == 0 && moreDataCanBeLoaded" class="ws-pdlist-all-res">
-            <li class="ws-nothing">
-                <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
-                <br/>
-                <p>快去收藏一些喜欢的~</p>
-            </li>
-        </ul>
-    </ion-content>
+  <ion-content>
+    <ion-refresher pulling-text="松开刷新" on-refresh="doRefresh()" disable-pulling-rotation="true">
+    </ion-refresher>
+    <ion-list can-swipe="true">
+      <ion-item ng-repeat="item in items" class="item-thumbnail-left" ng-click="gotoTar(item)">
+        <img ng-src="{{item.showThumbImg}}">
+        <h2>{{item.name}}</h2>
+        <p>{{item.addTime}}</p>
+        <ion-option-button class="button-assertive" ng-click="del(item)">
+          删除
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+    <ul>
+      <li class="animate-repeat" ng-if="items.length > 0 && moreDataCanBeLoaded" style="width: 100%; box-shadow: none;">
+        <div class="nothing">
+          <p>没有更多了</p>
+        </div>
+      </li>
+    </ul>
+    <ul ng-if="items.length == 0 && moreDataCanBeLoaded" class="ws-pdlist-all-res">
+      <li class="ws-nothing">
+        <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
+        <br/>
+        <p>快去收藏一些喜欢的~</p>
+      </li>
+    </ul>
+  </ion-content>
 </ion-view>
