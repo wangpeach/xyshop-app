@@ -369,14 +369,14 @@ angular.module("account.controller", ["ionic"])
 			})
 
 			// 商品收藏更新通知
-			$scope.$on("gc-Change", function() {
+			$rootScope.$on("gc-Change", function() {
 				Account.takeCollects(true, "good").then(function(result) {
 					$scope.collectGoods = result.length;
 				});
 
 			});
 			// 商铺收藏更新通知
-			$scope.$on("sc-Change", function() {
+			$rootScope.$on("sc-Change", function() {
 				Account.takeCollects(true, "shop").then(function(result) {
 					$scope.collectShops = result.length;
 				});

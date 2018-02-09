@@ -18,11 +18,11 @@ angular.module('starter.controllers', ["ionic", "home.controller", "realtime.con
 			});
 
 			$rootScope.$on("convery-gc-collect", function(event) {
-				$scope.$broadcast("gc-Change");
+				$rootScope.$broadcast("gc-Change");
 			});		
 
 			$rootScope.$on("convery-sc-collect", function(event) {
-				$scope.$broadcast("sc-Change");
+				$rootScope.$broadcast("sc-Change");
 			});	
 
 			/**
