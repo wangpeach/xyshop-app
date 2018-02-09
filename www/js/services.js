@@ -35,29 +35,29 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 									console.log(result);
 									that.confirm($rootScope, "提示", "发现新版本,是否更新?").then(function(res) {
 										if (res) {
-											$ionicLoading.show({
-												template: "已经下载：0%"
-											});
-											let targetApk = cordova.file.dataDirectory + "xyshop.apk";
-											$cordovaFileTransfer.download(result.url, targetApk, {}, true).then(function() {
-												$ionicLoading.hide();
-												$cordovaFileOpener2.open(targetApk, 'application/vnd.android.package-archive').then(function() {}, function(err) {
-													that.prompt($rootScope, "请手动安装应用程序");
-												});
-											}, function() {
-												that.prompt($rootScope, "下载失败");
-											}, function(progress) {
-												$timeout(function() {
-													var downloadProgress = (progress.loaded / progress.total) * 100;
-													$ionicLoading.show({
-														template: "已下载：" + Math.floor(downloadProgress) + "%"
-													});
-													if (downloadProgress > 99) {
-														$ionicLoading.hide();
-													}
-												})
-											});
-
+											// $ionicLoading.show({
+											// 	template: "已经下载：0%"
+											// });
+											// let targetApk = cordova.file.dataDirectory + "xyshop.apk";
+											// $cordovaFileTransfer.download(result.url, targetApk, {}, true).then(function() {
+											// 	$ionicLoading.hide();
+											// 	$cordovaFileOpener2.open(targetApk, 'application/vnd.android.package-archive').then(function() {}, function(err) {
+											// 		that.prompt($rootScope, "请手动安装应用程序");
+											// 	});
+											// }, function() {
+											// 	that.prompt($rootScope, "下载失败");
+											// }, function(progress) {
+											// 	$timeout(function() {
+											// 		var downloadProgress = (progress.loaded / progress.total) * 100;
+											// 		$ionicLoading.show({
+											// 			template: "已下载：" + Math.floor(downloadProgress) + "%"
+											// 		});
+											// 		if (downloadProgress > 99) {
+											// 			$ionicLoading.hide();
+											// 		}
+											// 	})
+											// });
+											cordova.InAppBrowser.open(result.url, "_system");
 										}
 									});
 								} else {
