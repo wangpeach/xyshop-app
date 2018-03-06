@@ -10,11 +10,11 @@ angular.module('starter.services', ['home.service', 'realtime.service', 'cart.se
 			var _config = JSON.parse(localStorage.getItem("config"));
 			var services = {
 				debug: false,
-				// hostHome: "http://192.168.0.2:8080/xyshop/",
-				// hostShop: "http://192.168.0.2:8080/xyshop-supplier/",
+				hostHome: "http://192.168.0.2:8080/xyshop/",
+				hostShop: "http://192.168.0.2:8080/xyshop-supplier/",
 				// 用生产服务器测试
-				hostHome: "http://219.141.127.213:8087/xyshop/",
-				hostShop: "http://219.141.127.213:8087/xyshop-supplier/",
+				// hostHome: "http://219.141.127.213:8087/xyshop/",
+				// hostShop: "http://219.141.127.213:8087/xyshop-supplier/",
 				ipcurl: "http://219.141.127.213:81/",
 
 				upgrade_url: '',

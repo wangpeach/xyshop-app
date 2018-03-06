@@ -411,7 +411,15 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
 					}
 				}
 			})
-
+			.state('tab.account-myorder-details', {
+				url: '/account/order/details/:backWhere/:info',
+				views: {
+					'tab-account': {
+						templateUrl: 'templates/order-details.html',
+						controller: 'orderDetailsCtrl'
+					}
+				}
+			})
 			//我的收益
 			.state('tab.account-myincome', {
 				url: '/account/myincome',

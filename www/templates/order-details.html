@@ -1,0 +1,51 @@
+<ion-view view-title="订单详情" class="myorder" hide-tabs>
+  <ion-content class="scroll-content-cyan ws-order-content" delegate-handle="contentScroll">
+  	<p class="quarantine"></p>
+    <ion-list class="ws-list">
+      <div class="once-order">
+        <a class="item item-icon-left item-icon-right" style="padding: 10px 46px;" ng-click="goshop()">
+            <i class="icon icon-shop1"></i>
+        	<span>{{sender.shopName}}</span>
+        </a>
+        <ion-item class=" item-remove-animate item-icon-right  item-thumbnail-left ws-order-item " type="item-text-wrap" ng-click="gogoods(item)">
+          <a>
+	            <img class="ws-order-picimg"
+	                 ng-src="{{sender.good.thumbImgShow}}" style="width: 60px; height: 60px;">
+	            <h2 class="ws-order-picname">{{sender.good.name}}</h2>
+	            <p class="ws-order-num">
+	            </p>
+	            <p class="ws-order-picpri" style="top: 50px; width: 60%;">
+	                <span>总价：{{sender.totalPrice}}</span>
+	                <span style="float: right; margin-right: 10px;">×{{sender.goodsNum}}</span>
+	            </p>
+	        </a>
+        </ion-item>
+        <p class="quarantine"></p>
+        <ul class="list">
+          <li class="item">
+          	订单编号：{{sender.orderNo}}
+          </li>
+          <li class="item">
+          	支付方式：{{payWay}}
+          </li>
+          <li class="item">
+          	下单时间：{{sender.payTime}}
+          </li>
+          <li class="item">
+          	订单状态：{{sender.textStatus}}
+          </li>
+        </ul>
+        <p class="quarantine"></p>
+        <ul class="list">
+          <li class="item">
+          	商品总额：￥{{sender.totalPrice}}
+          	<p class="quarantine" style="background: white; height: 10px;"></p>
+          	优惠金额：￥{{sender.preferentialPrice ? sender.preferentialPrice : 0}}
+          </li>
+          <li class="item" style="text-align: right;">
+          	实付款 <b style="font-size: 20px; color: red;">{{sender.payPrice}}</b>
+          </li>
+        </ul>
+    </ion-list>
+  </ion-content>
+</ion-view>

@@ -157,28 +157,12 @@ angular.module('account.service', [])
 				 * @param  {[type]} effect [description]
 				 * @return {[type]}        [description]
 				 */
-				sendCode: function(arg) {
+				sendCode: function(arg, type) {
 					var deferred = $q.defer();
-					base.request("sms/mapi/reg-code", 0, {
-							'phone': arg
+					base.request("sms/mapi/sendcode", 0, {
+							'phone': arg,
+							'type': type
 						})
-						.then(function(resp) {
-							deferred.resolve(resp);
-						}, function(resp) {
-							deferred.reject(resp);
-						});
-					return deferred.promise;
-				},
-
-				/**
-				 * 修改密码
-				 * @param  {[type]} arg [description]
-				 * @return {[type]}     [description]
-				 */
-				modPass: function(arg) {
-					var deferred = $q.defer();
-					//$http.jsonp(s.getUrl("uschangePass"), s.handleParams(arg))
-					base.request("uschangePass", arg)
 						.then(function(resp) {
 							deferred.resolve(resp);
 						}, function(resp) {

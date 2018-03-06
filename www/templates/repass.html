@@ -32,7 +32,7 @@
                             <div class="content">
                                 <div>
                                     <form name="valphone" ng-submit="sendCode_forget(phone)">
-                                        <input type="text" ng-pattern="regexp.phone" required placeholder="请输入手机号码" ng-model="phone.num" style="width: 70%; float: left;">
+                                        <input type="text" ng-pattern="regexp.phone" required placeholder="请输入手机号码" ng-model="phone.phoneNum" style="width: 70%; float: left;">
                                         <button class="button button-small button-green" ng-disabled="againNum > 0 || valphone.$invalid" type="submit" style="float: right; margin-right: 3px; ">
                                             {{againText}}
                                         </button>
@@ -61,9 +61,6 @@
                                     </button>
                                 </div>
                             </form>
-                            <p style="margin-top: 10px;">
-                                <button id="back" class="button button-outline button-block button-assertive" ng-click="_back()">上一步</button>
-                            </p>
                         </ion-slide>
                     </ion-slide-box>
                 </div>

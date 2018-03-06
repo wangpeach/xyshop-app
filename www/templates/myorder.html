@@ -1,33 +1,83 @@
 <ion-view view-title="我的订单" class="myorder" hide-tabs>
-    <ion-content class="scroll-content-cyan ws-order-content" delegate-handle="contentScroll">
-        <div class="ordertype">
+  <ion-content class="scroll-content-cyan ws-order-content" delegate-handle="contentScroll">
+    <div class="ordertype">
+      <ul>
+        <li ng-click="switchPanel('all')"><a ng-class="curStu == 'all' ? 'active' : ''">全部</a></li>
+        <li ng-click="switchPanel('waitPay')"><a ng-class="curStu == 'waitPay' ? 'active' : ''">待支付</a></li>
+        <li ng-click="switchPanel('waitConsume')"><a ng-class="curStu == 'waitConsume' ? 'active' : ''">待使用</a>
+        </li>
+        <li ng-click="switchPanel('consumed')"><a ng-class="curStu == 'consumed' ? 'active' : ''">已完成</a></li>
+        <!-- <li ng-click="switchPanel('refunded')"><a ng-class="curStu == 'refunded' ? 'active' : ''">已退款</a></li> -->
+      </ul>
+      <div class="actived" ng-style="switchWhere"></div>
+    </div>
+    <ion-slide-box auto-play="false" slide-interval="300" show-pager="false">
+      <!-- 全部 -->
+      <ion-slide>
+        <ion-scroll direction="y" style="width: 100%;" ng-style="scroll">
+          <ion-list class="ws-list" ng-if="myOrders.all.os.length > 0">
+            <div class="once-order" ng-repeat="item in myOrders.all.os">
+              <div style="width: 100%; padding: 0px 5px; height: 35px; line-height: 35px; background: white;">
+                <span>订单号：{{item.orderNo}}</span>
+                <span style="position: absolute; right: 10px; color: #FF9F59;">{{item.textStatus}}</span>
+              </div>
+              <!--animated fadeInLeft-->
+              <ion-item class=" item-remove-animate item-icon-right  item-thumbnail-left ws-order-item " ng-class="item.status != '已付款' ? 'ws-order-notake' : 'ws-order-take'" type="item-text-wrap" ng-click="goDetails(item)">
+                <a ng-href="{{getUrl(item.good.uuid)}}">
+                                    <img class="ws-order-picimg"
+                                         ng-src="{{item.good.thumbImgShow}}">
+                                    <h2 class="ws-order-picname">{{item.good.name}}</h2>
+                                    <p class="ws-order-num">
+                                        数量：{{item.goodsNum}}
+                                    </p>
+                                    <p class="ws-order-picpri">
+                                        总价：{{item.totalPrice}}
+                                    </p>
+                                </a>
+              </ion-item>
+              <div class="ws-order-action">
+                <!-- <button class="button button-clear button-small" style="float: left; color: #a09c9c;">
+                  {{item.shopName}}
+                </button> -->
+                <button ng-if="item.status === 'waitConsume'" class="button button-clear  button-small button-positive">
+                  序列码：{{item.cardCode}}
+                </button>
+                <button class="button button-small button-outline button-light" ng-if="item.status == 'waitPay'" ng-click="gopay(item)">&nbsp;&nbsp;&nbsp;&nbsp;付款&nbsp;&nbsp;&nbsp;&nbsp;
+                </button>
+                <button class="button button-small button-outline button-assertive" ng-if="item.status !== 'waitConsume'" ng-click="delOrder(item, $index)">&nbsp;&nbsp;删除订单&nbsp;&nbsp;
+                </button>
+              </div>
+            </div>
             <ul>
-                <li ng-click="switchPanel('all')"><a ng-class="curStu == 'all' ? 'active' : ''">全部</a></li>
-                <li ng-click="switchPanel('waitPay')"><a ng-class="curStu == 'waitPay' ? 'active' : ''">待支付</a></li>
-                <li ng-click="switchPanel('waitConsume')"><a ng-class="curStu == 'waitConsume' ? 'active' : ''">待使用</a>
-                </li>
-                <li ng-click="switchPanel('consumed')"><a ng-class="curStu == 'consumed' ? 'active' : ''">已完成</a></li>
-                <li ng-click="switchPanel('refunded')"><a ng-class="curStu == 'refunded' ? 'active' : ''">已退款</a></li>
+              <li class="animate-repeat" ng-if="!myOrders.all.allowLoadMore" style="width: 100%; box-shadow: none;">
+                <div class="nothing">
+                  <p>已全部加载..</p>
+                </div>
+              </li>
             </ul>
-            <div class="actived" ng-style="switchWhere"></div>
-        </div>
-
-        <ion-slide-box auto-play="false" slide-interval="300" show-pager="false">
-            <!-- 全部 -->
-            <ion-slide>
-                <ion-scroll direction="y" style="width: 100%;" ng-style="scroll">
-                    <ion-list class="ws-list" ng-if="myOrders.all.os.length > 0">
-                        <div class="once-order" ng-repeat="item in myOrders.all.os">
-                            <div style="width: 100%; padding: 0px 5px; height: 35px; line-height: 35px; background: white;">
-                                <span>订单号：{{item.orderNo}}</span>
-                                <span style="position: absolute; right: 10px; color: #FF9F59;">{{item.textStatus}}</span>
-                            </div>
-                            <!--animated fadeInLeft-->
-                            <ion-item
-                                    class=" item-remove-animate item-icon-right  item-thumbnail-left ws-order-item "
-                                    ng-class="item.status != '已付款' ? 'ws-order-notake' : 'ws-order-take'"
-                                    type="item-text-wrap">
-                                <a ng-href="{{getUrl(item.good.uuid)}}">
+            <ion-infinite-scroll ng-if="myOrders.all.allowLoadMore" on-infinite="loadMore(curLev, myOrders.all.formPageLoad)" distance="5%"></ion-infinite-scroll>
+          </ion-list>
+          <ul ng-if="myOrders.all.os == 0 && !myOrders.all.autoLoad" class="ws-pdlist-all-res">
+            <li class="ws-nothing">
+              <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
+              <br/>
+              <p>没有订单哦</p>
+            </li>
+          </ul>
+        </ion-scroll>
+      </ion-slide>
+      <!-- 待付款 -->
+      <ion-slide>
+        <ion-scroll direction="y" style="width: 100%;" ng-style="scroll">
+          <ion-list class="ws-list" ng-if="myOrders.waitPay.os.length > 0">
+            <div class="once-order" ng-repeat="item in myOrders.waitPay.os">
+              <div style="width: 100%; padding: 0px 5px; height: 35px; line-height: 35px; background: white;">
+                <span>订单号：{{item.orderNo}}</span>
+                <span style="position: absolute; right: 10px; color: #FF9F59;">{{item.textStatus}}</span>
+              </div>
+              <!--animated fadeInLeft-->
+              <ion-item class=" item-remove-animate item-icon-right  item-thumbnail-left ws-order-item " ng-class="item.status != '已付款' ? 'ws-order-notake' : 'ws-order-take'" type="item-text-wrap" ng-click="goDetails(item)">
+                <a ng-href="{{getUrl(item.good.uuid)}}">
                                     <img class="ws-order-picimg"
                                          ng-src="{{item.good.thumbImgShow}}">
                                     <h2 class="ws-order-picname">{{item.good.name}}</h2>
@@ -38,59 +88,47 @@
                                         总价：{{item.totalPrice}}
                                     </p>
                                 </a>
-                            </ion-item>
-                            <div class="ws-order-action">
-                                <button class="button button-clear button-small" style="float: left; color: #a09c9c;">
-                                    {{item.shopName}}
-                                </button>
-                                <button ng-if="item.status === 'waitConsume'" class="button button-clear  button-small button-positive">
-                                    序列码：{{item.cardCode}}
-                                </button>
-                                <button class="button button-small button-outline button-light"
-                                        ng-if="item.status == 'waitPay'"
-                                        ng-click="gopay(item)">&nbsp;&nbsp;&nbsp;&nbsp;付款&nbsp;&nbsp;&nbsp;&nbsp;
-                                </button>
-                                <button class="button button-small button-outline button-assertive"
-                                        ng-if="item.status !== 'waitConsume'" ng-click="delOrder(item, $index)">&nbsp;&nbsp;删除订单&nbsp;&nbsp;
-                                </button>
-                            </div>
-                        </div>
-                        <ul>
-                            <li class="animate-repeat" ng-if="!myOrders.all.allowLoadMore"
-                                style="width: 100%; box-shadow: none;">
-                                <div class="nothing">
-                                    <p>已全部加载..</p>
-                                </div>
-                            </li>
-                        </ul>
-                        <ion-infinite-scroll ng-if="myOrders.all.allowLoadMore"
-                                             on-infinite="loadMore(curLev, myOrders.all.formPageLoad)"
-                                             distance="5%"></ion-infinite-scroll>
-                    </ion-list>
-                    <ul ng-if="myOrders.all.os == 0 && !myOrders.all.autoLoad" class="ws-pdlist-all-res">
-                        <li class="ws-nothing">
-                            <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
-                            <br/>
-                            <p>没有订单哦</p>
-                        </li>
-                    </ul>
-                </ion-scroll>
-            </ion-slide>
-            <!-- 待付款 -->
-            <ion-slide>
-                <ion-scroll direction="y" style="width: 100%;" ng-style="scroll">
-                    <ion-list class="ws-list" ng-if="myOrders.waitPay.os.length > 0">
-                        <div class="once-order" ng-repeat="item in myOrders.waitPay.os">
-                            <div style="width: 100%; padding: 0px 5px; height: 35px; line-height: 35px; background: white;">
-                                <span>订单号：{{item.orderNo}}</span>
-                                <span style="position: absolute; right: 10px; color: #FF9F59;">{{item.textStatus}}</span>
-                            </div>
-                            <!--animated fadeInLeft-->
-                            <ion-item
-                                    class=" item-remove-animate item-icon-right  item-thumbnail-left ws-order-item "
-                                    ng-class="item.status != '已付款' ? 'ws-order-notake' : 'ws-order-take'"
-                                    type="item-text-wrap">
-                                <a ng-href="{{getUrl(item.good.uuid)}}">
+              </ion-item>
+              <div class="ws-order-action">
+                <!-- <button class="button button-clear button-small" style="float: left; color: #a09c9c;">
+                  {{item.shopName}}
+                </button> -->
+                <button class="button button-small button-outline button-light" ng-if="item.status == 'waitPay'" ng-click="gopay(item)">&nbsp;&nbsp;&nbsp;&nbsp;付款&nbsp;&nbsp;&nbsp;&nbsp;
+                </button>
+                <button class="button button-small button-outline button-assertive" ng-if="item.status !== 'waitConsume'" ng-click="delOrder(item, $index)">&nbsp;&nbsp;删除订单&nbsp;&nbsp;
+                </button>
+              </div>
+            </div>
+            <ul>
+              <li class="animate-repeat" ng-if="!myOrders.waitPay.allowLoadMore" style="width: 100%; box-shadow: none;">
+                <div class="nothing">
+                  <p>已全部加载..</p>
+                </div>
+              </li>
+            </ul>
+            <ion-infinite-scroll ng-if="myOrders.waitPay.allowLoadMore" on-infinite="loadMore(curLev, myOrders.waitPay.formPageLoad)" distance="5%"></ion-infinite-scroll>
+          </ion-list>
+          <ul ng-if="myOrders.waitPay.os == 0 && !myOrders.waitPay.autoLoad" class="ws-pdlist-all-res">
+            <li class="ws-nothing">
+              <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
+              <br/>
+              <p>没有订单哦</p>
+            </li>
+          </ul>
+        </ion-scroll>
+      </ion-slide>
+      <!-- 待使用-->
+      <ion-slide>
+        <ion-scroll direction="y" style="width: 100%;" ng-style="scroll">
+          <ion-list class="ws-list" ng-if="myOrders.waitConsume.os.length > 0">
+            <div class="once-order" ng-repeat="item in myOrders.waitConsume.os">
+              <div style="width: 100%; padding: 0px 5px; height: 35px; line-height: 35px; background: white;">
+                <span>订单号：{{item.orderNo}}</span>
+                <span style="position: absolute; right: 10px; color: #FF9F59;">{{item.textStatus}}</span>
+              </div>
+              <!--animated fadeInLeft-->
+              <ion-item class=" item-remove-animate item-icon-right  item-thumbnail-left ws-order-item " ng-class="item.status != '已付款' ? 'ws-order-notake' : 'ws-order-take'" type="item-text-wrap" ng-click="goDetails(item)">
+                <a ng-href="{{getUrl(item.good.uuid)}}">
                                     <img class="ws-order-picimg"
                                          ng-src="{{item.good.thumbImgShow}}">
                                     <h2 class="ws-order-picname">{{item.good.name}}</h2>
@@ -101,56 +139,46 @@
                                         总价：{{item.totalPrice}}
                                     </p>
                                 </a>
-                            </ion-item>
-                            <div class="ws-order-action">
-                                <button class="button button-clear button-small" style="float: left; color: #a09c9c;">
-                                    {{item.shopName}}
-                                </button>
-                                <button class="button button-small button-outline button-light"
-                                        ng-if="item.status == 'waitPay'"
-                                        ng-click="gopay(item)">&nbsp;&nbsp;&nbsp;&nbsp;付款&nbsp;&nbsp;&nbsp;&nbsp;
-                                </button>
-                                <button class="button button-small button-outline button-assertive"
-                                        ng-if="item.status !== 'waitConsume'" ng-click="delOrder(item, $index)">&nbsp;&nbsp;删除订单&nbsp;&nbsp;
-                                </button>
-                            </div>
-                        </div>
-                        <ul>
-                            <li class="animate-repeat" ng-if="!myOrders.waitPay.allowLoadMore"
-                                style="width: 100%; box-shadow: none;">
-                                <div class="nothing">
-                                    <p>已全部加载..</p>
-                                </div>
-                            </li>
-                        </ul>
-                        <ion-infinite-scroll ng-if="myOrders.waitPay.allowLoadMore"
-                                             on-infinite="loadMore(curLev, myOrders.waitPay.formPageLoad)"
-                                             distance="5%"></ion-infinite-scroll>
-                    </ion-list>
-                    <ul ng-if="myOrders.waitPay.os == 0 && !myOrders.waitPay.autoLoad" class="ws-pdlist-all-res">
-                        <li class="ws-nothing">
-                            <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
-                            <br/>
-                            <p>没有订单哦</p>
-                        </li>
-                    </ul>
-                </ion-scroll>
-            </ion-slide>
-            <!-- 待使用-->
-            <ion-slide>
-                <ion-scroll direction="y" style="width: 100%;" ng-style="scroll">
-                    <ion-list class="ws-list" ng-if="myOrders.waitConsume.os.length > 0">
-                        <div class="once-order" ng-repeat="item in myOrders.waitConsume.os">
-                            <div style="width: 100%; padding: 0px 5px; height: 35px; line-height: 35px; background: white;">
-                                <span>订单号：{{item.orderNo}}</span>
-                                <span style="position: absolute; right: 10px; color: #FF9F59;">{{item.textStatus}}</span>
-                            </div>
-                            <!--animated fadeInLeft-->
-                            <ion-item
-                                    class=" item-remove-animate item-icon-right  item-thumbnail-left ws-order-item "
-                                    ng-class="item.status != '已付款' ? 'ws-order-notake' : 'ws-order-take'"
-                                    type="item-text-wrap">
-                                <a ng-href="{{getUrl(item.good.uuid)}}">
+              </ion-item>
+              <div class="ws-order-action" ng-if="item.status != '已付款'">
+                <!-- <button class="button button-clear button-small" style="float: left; color: #a09c9c;">
+                  {{item.shopName}}
+                </button> -->
+                <button ng-if="item.status === 'waitConsume'" class="button button-clear  button-small button-positive">
+                  序列码：{{item.cardCode}}
+                </button>
+              </div>
+            </div>
+            <ul>
+              <li class="animate-repeat" ng-if="!myOrders.waitConsume.allowLoadMore" style="width: 100%; box-shadow: none;">
+                <div class="nothing">
+                  <p>已全部加载..</p>
+                </div>
+              </li>
+            </ul>
+            <ion-infinite-scroll ng-if="myOrders.waitConsume.allowLoadMore" on-infinite="loadMore(curLev, myOrders.waitSent.formPageLoad)" distance="5%"></ion-infinite-scroll>
+          </ion-list>
+          <ul ng-if="myOrders.waitConsume.os == 0 && !myOrders.waitConsume.autoLoad" class="ws-pdlist-all-res">
+            <li class="ws-nothing">
+              <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
+              <br/>
+              <p>没有订单哦</p>
+            </li>
+          </ul>
+        </ion-scroll>
+      </ion-slide>
+      <!-- 已完成 -->
+      <ion-slide>
+        <ion-scroll direction="y" style="width: 100%;" ng-style="scroll">
+          <ion-list class="ws-list" ng-if="myOrders.consumed.os.length > 0">
+            <div class="once-order" ng-repeat="item in myOrders.consumed.os">
+              <div style="width: 100%; padding: 0px 5px; height: 35px; line-height: 35px; background: white;">
+                <span>订单号：{{item.orderNo}}</span>
+                <span style="position: absolute; right: 10px; color: #FF9F59;">{{item.textStatus}}</span>
+              </div>
+              <!--animated fadeInLeft-->
+              <ion-item class=" item-remove-animate item-icon-right  item-thumbnail-left ws-order-item " ng-class="item.status != '已付款' ? 'ws-order-notake' : 'ws-order-take'" type="item-text-wrap" ng-click="goDetails(item)">
+                <a ng-href="{{getUrl(item.good.uuid)}}">
                                     <img class="ws-order-picimg"
                                          ng-src="{{item.good.thumbImgShow}}">
                                     <h2 class="ws-order-picname">{{item.good.name}}</h2>
@@ -161,53 +189,45 @@
                                         总价：{{item.totalPrice}}
                                     </p>
                                 </a>
-                            </ion-item>
-                            <div class="ws-order-action" ng-if="item.status != '已付款'">
-                                <button class="button button-clear button-small" style="float: left; color: #a09c9c;">
-                                    {{item.shopName}}
-                                </button>
-                                <button ng-if="item.status === 'waitConsume'" class="button button-clear  button-small button-positive">
-                                    序列码：{{item.cardCode}}
-                                </button>
-                            </div>
-                        </div>
-                        <ul>
-                            <li class="animate-repeat" ng-if="!myOrders.waitConsume.allowLoadMore"
-                                style="width: 100%; box-shadow: none;">
-                                <div class="nothing">
-                                    <p>已全部加载..</p>
-                                </div>
-                            </li>
-                        </ul>
-                        <ion-infinite-scroll ng-if="myOrders.waitConsume.allowLoadMore"
-                                             on-infinite="loadMore(curLev, myOrders.waitSent.formPageLoad)"
-                                             distance="5%"></ion-infinite-scroll>
-                    </ion-list>
-                    <ul ng-if="myOrders.waitConsume.os == 0 && !myOrders.waitConsume.autoLoad"
-                        class="ws-pdlist-all-res">
-                        <li class="ws-nothing">
-                            <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
-                            <br/>
-                            <p>没有订单哦</p>
-                        </li>
-                    </ul>
-                </ion-scroll>
-            </ion-slide>
-            <!-- 已完成 -->
-            <ion-slide>
-                <ion-scroll direction="y" style="width: 100%;" ng-style="scroll">
-                    <ion-list class="ws-list" ng-if="myOrders.consumed.os.length > 0">
-                        <div class="once-order" ng-repeat="item in myOrders.consumed.os">
-                            <div style="width: 100%; padding: 0px 5px; height: 35px; line-height: 35px; background: white;">
-                                <span>订单号：{{item.orderNo}}</span>
-                                <span style="position: absolute; right: 10px; color: #FF9F59;">{{item.textStatus}}</span>
-                            </div>
-                            <!--animated fadeInLeft-->
-                            <ion-item
-                                    class=" item-remove-animate item-icon-right  item-thumbnail-left ws-order-item "
-                                    ng-class="item.status != '已付款' ? 'ws-order-notake' : 'ws-order-take'"
-                                    type="item-text-wrap">
-                                <a ng-href="{{getUrl(item.good.uuid)}}">
+              </ion-item>
+              <div class="ws-order-action">
+                <!-- <button class="button button-clear button-small" style="float: left; color: #a09c9c;">
+                  {{item.shopName}}
+                </button> -->
+                <button class="button button-small button-outline button-light" ng-click="delOrder(item.id, $index)">&nbsp;&nbsp;删除&nbsp;&nbsp;
+                </button>
+              </div>
+            </div>
+            <ul>
+              <li class="animate-repeat" ng-if="!myOrders.consumed.allowLoadMore" style="width: 100%; box-shadow: none;">
+                <div class="nothing">
+                  <p>已全部加载..</p>
+                </div>
+              </li>
+            </ul>
+            <ion-infinite-scroll ng-if="myOrders.consumed.allowLoadMore" on-infinite="loadMore(curLev, myOrders.waitTake.formPageLoad)" distance="5%"></ion-infinite-scroll>
+          </ion-list>
+          <ul ng-if="myOrders.consumed.os == 0 && !myOrders.consumed.autoLoad" class="ws-pdlist-all-res">
+            <li class="ws-nothing">
+              <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
+              <br/>
+              <p>没有订单哦</p>
+            </li>
+          </ul>
+        </ion-scroll>
+      </ion-slide>
+      <!-- 已完成 -->
+      <ion-slide>
+        <ion-scroll direction="y" style="width: 100%;" ng-style="scroll">
+          <ion-list class="ws-list" ng-if="myOrders.refunded.os.length > 0">
+            <div class="once-order" ng-repeat="item in myOrders.refunded.os">
+              <div style="width: 100%; padding: 0px 5px; height: 35px; line-height: 35px; background: white;">
+                <span>订单号：{{item.orderNo}}</span>
+                <span style="position: absolute; right: 10px; color: #FF9F59;">{{item.textStatus}}</span>
+              </div>
+              <!--animated fadeInLeft-->
+              <ion-item class=" item-remove-animate item-icon-right  item-thumbnail-left ws-order-item " ng-class="item.status != '已付款' ? 'ws-order-notake' : 'ws-order-take'" type="item-text-wrap">
+                <a ng-href="{{getUrl(item.good.uuid)}}">
                                     <img class="ws-order-picimg"
                                          ng-src="{{item.good.thumbImgShow}}">
                                     <h2 class="ws-order-picname">{{item.good.name}}</h2>
@@ -218,90 +238,30 @@
                                         总价：{{item.totalPrice}}
                                     </p>
                                 </a>
-                            </ion-item>
-                            <div class="ws-order-action">
-                                <button class="button button-clear button-small" style="float: left; color: #a09c9c;">
-                                    {{item.shopName}}
-                                </button>
-                                <button class="button button-small button-outline button-light"
-                                         ng-click="delOrder(item.id, $index)">&nbsp;&nbsp;评论&nbsp;&nbsp;
-                                </button>
-                            </div>
-                        </div>
-                        <ul>
-                            <li class="animate-repeat" ng-if="!myOrders.consumed.allowLoadMore"
-                                style="width: 100%; box-shadow: none;">
-                                <div class="nothing">
-                                    <p>已全部加载..</p>
-                                </div>
-                            </li>
-                        </ul>
-                        <ion-infinite-scroll ng-if="myOrders.consumed.allowLoadMore"
-                                             on-infinite="loadMore(curLev, myOrders.waitTake.formPageLoad)"
-                                             distance="5%"></ion-infinite-scroll>
-                    </ion-list>
-                    <ul ng-if="myOrders.consumed.os == 0 && !myOrders.consumed.autoLoad" class="ws-pdlist-all-res">
-                        <li class="ws-nothing">
-                            <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
-                            <br/>
-                            <p>没有订单哦</p>
-                        </li>
-                    </ul>
-                </ion-scroll>
-            </ion-slide>
-            <!-- 已完成 -->
-            <ion-slide>
-                <ion-scroll direction="y" style="width: 100%;" ng-style="scroll">
-                    <ion-list class="ws-list" ng-if="myOrders.refunded.os.length > 0">
-                        <div class="once-order" ng-repeat="item in myOrders.refunded.os">
-                            <div style="width: 100%; padding: 0px 5px; height: 35px; line-height: 35px; background: white;">
-                                <span>订单号：{{item.orderNo}}</span>
-                                <span style="position: absolute; right: 10px; color: #FF9F59;">{{item.textStatus}}</span>
-                            </div>
-                            <!--animated fadeInLeft-->
-                            <ion-item
-                                    class=" item-remove-animate item-icon-right  item-thumbnail-left ws-order-item "
-                                    ng-class="item.status != '已付款' ? 'ws-order-notake' : 'ws-order-take'"
-                                    type="item-text-wrap">
-                                <a ng-href="{{getUrl(item.good.uuid)}}">
-                                    <img class="ws-order-picimg"
-                                         ng-src="{{item.good.thumbImgShow}}">
-                                    <h2 class="ws-order-picname">{{item.good.name}}</h2>
-                                    <p class="ws-order-num">
-                                        数量：{{item.goodsNum}}
-                                    </p>
-                                    <p class="ws-order-picpri">
-                                        总价：{{item.totalPrice}}
-                                    </p>
-                                </a>
-                            </ion-item>
-                            <div class="ws-order-action">
-                                <button class="button button-small button-outline button-light"
-                                        ng-click="delOrder(item.id, $index)">&nbsp;&nbsp;删除订单&nbsp;&nbsp;
-                                </button>
-                            </div>
-                        </div>
-                        <ul>
-                            <li class="animate-repeat" ng-if="!myOrders.refunded.allowLoadMore"
-                                style="width: 100%; box-shadow: none;">
-                                <div class="nothing">
-                                    <p>已全部加载..</p>
-                                </div>
-                            </li>
-                        </ul>
-                        <ion-infinite-scroll ng-if="myOrders.refunded.allowLoadMore"
-                                             on-infinite="loadMore(curLev, myOrders.refunded.formPageLoad)"
-                                             distance="5%"></ion-infinite-scroll>
-                    </ion-list>
-                    <ul ng-if="myOrders.refunded.os == 0 && !myOrders.refunded.autoLoad" class="ws-pdlist-all-res">
-                        <li class="ws-nothing">
-                            <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
-                            <br/>
-                            <p>没有订单哦</p>
-                        </li>
-                    </ul>
-                </ion-scroll>
-            </ion-slide>
-        </ion-slide-box>
-    </ion-content>
+              </ion-item>
+              <div class="ws-order-action">
+                <button class="button button-small button-outline button-light" ng-click="delOrder(item.id, $index)">&nbsp;&nbsp;删除订单&nbsp;&nbsp;
+                </button>
+              </div>
+            </div>
+            <ul>
+              <li class="animate-repeat" ng-if="!myOrders.refunded.allowLoadMore" style="width: 100%; box-shadow: none;">
+                <div class="nothing">
+                  <p>已全部加载..</p>
+                </div>
+              </li>
+            </ul>
+            <ion-infinite-scroll ng-if="myOrders.refunded.allowLoadMore" on-infinite="loadMore(curLev, myOrders.refunded.formPageLoad)" distance="5%"></ion-infinite-scroll>
+          </ion-list>
+          <ul ng-if="myOrders.refunded.os == 0 && !myOrders.refunded.autoLoad" class="ws-pdlist-all-res">
+            <li class="ws-nothing">
+              <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
+              <br/>
+              <p>没有订单哦</p>
+            </li>
+          </ul>
+        </ion-scroll>
+      </ion-slide>
+    </ion-slide-box>
+  </ion-content>
 </ion-view>

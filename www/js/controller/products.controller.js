@@ -104,7 +104,7 @@ angular.module('products.controller', ['ionic'])
 				buttons: [{
 					text: '百度地图'
 				}, {
-					text: '高度地图'
+					text: '高德地图'
 				}],
 				titleText: $scope.shop.name,
 				cancelText: '取消',

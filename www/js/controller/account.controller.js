@@ -72,7 +72,6 @@ angular.module("account.controller", ["ionic"])
 
 			//账户登陆注册模块
 			$scope.sinregModal = function() {
-				$scope.shopActionName = "免费开店";
 				$scope._reguser = {};
 
 
@@ -136,55 +135,12 @@ angular.module("account.controller", ["ionic"])
 					}
 				};
 
-				// /*
-				// 扫码
-				//  */
-				// $scope.currentlyScanning = false;
-				// $scope.scanCode = function ($event) {
-				//     $event.stopPropagation();
-				//     if (!$scope.currentlyScanning) {
-				//         $scope.currentlyScanning = true;
-				//         $ionicPlatform.ready(function () {
-				//             var config = {
-				//                 "showFlipCameraButton": true, // iOS and Android
-				//                 "prompt": "请将二维码置于取景框内",
-				//                 "formats": "QR_CODE",
-				//                 "orientation": "portrait"
-				//             };
-				//             $cordovaBarcodeScanner.scan().then(function (result) {
-				//                 if (!result.cancelled) {
-				//                     // $ionicLoading.show({
-				//                     //     template: '<ion-spinner class="spinner-dark" icon="ios"></ion-spinner>',
-				//                     //     showBackdrop: false
-				//                     // });
-				//                     // var userid = base.getUrlParams(result.text, 'registerp');
-				//                     var json = angular.fromJson(result.text);
-				//                     $scope._reguser.temptjrn = json.username;
-				//                     $scope._reguser.usersTuijianren = json.userid;
-				//                     // Account.gainUserById(userid).then(function(data) {
-				//                     //     $scope._reguser.temptjrn = data.username;
-				//                     //     $scope._reguser.usersTuijianren = data.userid;
-				//                     // }).finally(function() {
-				//                     //     $ionicLoading.hide();
-				//                     // });
-				//                 } else {
-				//                     base.prompt($scope, '已取消');
-				//                 }
-				//                 $scope.currentlyScanning = false;
-				//             }, function (error) {
-				//                 base.prompt($scope, '扫描二维码错误');
-				//                 $scope.currentlyScanning = false;
-				//             });
-				//         });
-				//     }
-				// }
-
 				/*
-				获取验证码
+				 * 获取验证码
 				 */
 				$scope.sendCode_Reg = function(arg) {
 					base.loading();
-					Account.sendCode(arg).then(function(data) {
+					Account.sendCode(arg, "register").then(function(data) {
 						if (data.status) {
 							base.loaded();
 							$scope.againNum = 60;
@@ -208,7 +164,7 @@ angular.module("account.controller", ["ionic"])
 				};
 
 				/*
-				注册
+				 * 校检验证码
 				 */
 				$scope.idenSubmit = function(arg) {
 					base.loading();
@@ -238,7 +194,7 @@ angular.module("account.controller", ["ionic"])
 
 
 				$scope.phone = {
-					num: '',
+					phoneNum: '',
 					code: ''
 				};
 
@@ -250,10 +206,10 @@ angular.module("account.controller", ["ionic"])
 						template: '<ion-spinner  class="spinner-dark" icon="ios"></ion-spinner>',
 						showBackdrop: false
 					});
-					Account.sendCode(arg.num, 1).then(function(data) {
-						if (data.state == "ok") {
+					Account.sendCode(arg.phoneNum, "forget").then(function(data) {
+						if (data.status) {
 							$ionicLoading.hide();
-							$scope.code = data.reason;
+							$scope.code = data.msg;
 							base.prompt($scope, "验证码已发送");
 							$scope.againNum = 60;
 							$scope.againText = "请等待(60)";
@@ -267,7 +223,7 @@ angular.module("account.controller", ["ionic"])
 								}
 							}, 1000);
 						} else {
-							base.prompt($scope, data.reason);
+							base.prompt($scope, data.msg);
 						}
 					}, function(resp) {
 						base.prompt($scope, "error");
@@ -283,6 +239,21 @@ angular.module("account.controller", ["ionic"])
 				//         }
 				//     }
 
+				$scope.goforget = function(arg) {
+					base.loading();
+					base.request("sms/mapi/valid-code", 0, {
+						"phone": arg.phoneNum,
+						"code": arg.code
+					}).then(function(resp) {
+						base.loaded();
+						if (resp) {
+							$ionicSlideBoxDelegate.slide($ionicSlideBoxDelegate.currentIndex() + 1, 500);
+						} else {
+							base.prompt($scope, "验证码错误");
+						}
+					});
+				};
+
 
 				/*
 				修改密码
@@ -292,25 +263,22 @@ angular.module("account.controller", ["ionic"])
 						template: '<ion-spinner  class="spinner-dark" icon="ios"></ion-spinner>',
 						showBackdrop: false
 					});
+
 					var params = {
-						phone: $scope.phone.num,
+						phone: $scope.phone.phoneNum,
 						password: arg.pass
 					}
-					Account.modPass(params).then(function(data) {
-						if (data.state == "ok") {
-							$ionicLoading.show({
-								template: '修改成功'
-							});
+					base.request("user/mapi/repass", 1, params).then(function(resp) {
+						if (resp) {
+							base.prompt($scope, "修改成功");
 							$timeout(function() {
-								$ionicLoading.hide();
+								$scope.repassmodal.hide();
 								$scope.why = "Login";
-							}, 1500);
+							}, 2000);
 						} else {
-							base.prompt($scope, data.reason);
+							base.prompt($scope, "修改密码失败");
 						}
-					}, function(resp) {
-
-					})
+					});
 				};
 
 				/*
@@ -1061,7 +1029,7 @@ angular.module("account.controller", ["ionic"])
 				}
 
 				$ionicSlideBoxDelegate.slide(inx, 300);
-				var to = $window.innerWidth * ((20 * inx) / 100);
+				var to = $window.innerWidth * ((25 * inx) / 100);
 				$scope.switchWhere = {
 					transform: "translate3d(" + to + "px, 0px, 0px) scale(1)",
 					"transition-duration": "300ms"
@@ -1110,6 +1078,13 @@ angular.module("account.controller", ["ionic"])
 					$ionicLoading.hide();
 				});
 			};
+
+			$scope.goDetails = function(arg) {
+				$state.go('tab.account-myorder-details', {
+					backWhere: $stateParams.backWhere,
+					info: JSON.stringify(arg)
+				});
+			}
 
 			$scope.handleAll = function(data) {
 				if (data.length < 20) {
@@ -1373,154 +1348,105 @@ angular.module("account.controller", ["ionic"])
 			})
 		}
 	])
-	//我的收益
-	// .controller('myincomeCtrl', ['$scope', '$state', 'Account', 'base',
-	// 	function ($scope, $state, Account, base) {
-	// 		$scope.user = Account.getUser();
-	// 		$scope.user._amount = undefined;
-	// 		console.log(JSON.stringify($scope.user));
-	// 		$scope._wdform = function (userWithdraw) {
-	// 			var sender = {
-	// 				'user.usersZhenshiname': userWithdraw.userszhenshiname,
-	// 				'user.usersBankcard': userWithdraw.default4,
-	// 				'user.usersBankaddress': userWithdraw.usersbankaddress,
-	// 				'fs.amount': userWithdraw._amount,
-	// 				'user.usersId': $scope.user.usersid
-	// 			};
-	// 			base.request("uswithdraw", sender).then(function (data) {
-	// 				console.log(data);
-	// 				if (data.state == "ok") {
-	// 					Account.reload().then(function (reg) {
-	// 						$scope.user = reg;
-	// 						base.prompt($scope, data.reason);
-	// 					});
-	// 				} else {
-	// 					base.prompt($scope, "提现申请失败")
-	// 				}
-	// 			});
-	// 		};
-	// 		//跳转到提现记录页面
-	// 		$scope.getrecord = function () {
-	// 			$state.go('tab.account-myrecord');
-	// 		}
-	// 	}
-	// ])
-	// //提现记录
-	// .controller('myrecordCtrl', ['$scope', 'Account', 'base',
-	// 	function ($scope, Account, base) {
-	// 		$scope.user = Account.getUser();
-	// 		$scope.loadMore = function () {
-	// 			base.request('usgainuserwd', {'userid': $scope.user.usersid}).then(function (data) {
-	// 				$scope.moreDataCanBeLoaded = true;
-	// 				$scope.define = false;
-	// 				$scope.details = [];
-	//
-	// 				if (data && data.state === "ok" && data.data.length > 0) {
-	// 					if (data.data.length < 20) {
-	// 						$scope.moreDataCanBeLoaded = false;
-	// 						$scope.define = "已全部加载";
-	// 					}
-	// 					for (var i = 0; i < data.data.length; i++) {
-	// 						$scope.details.push(data.data[i]);
-	// 					}
-	// 				} else {
-	// 					$scope.define = data.reason;
-	// 					$scope.moreDataCanBeLoaded = false;
-	// 				}
-	// 				$scope.$broadcast('scroll.infiniteScrollComplete');
-	// 			});
-	// 		};
-	// 		$scope.loadMore();
-	//
-	// 		$scope.splitDate = function (arg) {
-	// 			return arg.split(" ");
-	// 		};
-	//
-	// 		$scope.failStyle = function (status) {
-	// 			if (status == "已拒绝") {
-	// 				return {color: '#FC5757', 'text-decoration': 'underline'};
-	// 			} else if (status == "已审核") {
-	// 				return {color: '#08AE23'};
-	// 			} else {
-	// 				return {color: '#4C4C4C'};
-	// 			}
-	// 		};
-	//
-	// 		$scope.failReason = function (status, reason) {
-	// 			if (status == "已拒绝") {
-	// 				if (!reason) {
-	// 					reason = "无反馈信息";
-	// 				}
-	// 				base.alert($scope, "提示", reason);
-	// 			}
-	// 		}
-	// 	}
-	// ])
+	.controller('orderDetailsCtrl', ['$scope', "$stateParams", "$state", "Products", "Account", "base", function($scope, $stateParams, $state, Products, Account, base) {
+		$scope.sender = JSON.parse($stateParams.info);
+		console.log($scope.sender);
+
+		switch ($scope.sender.payWay) {
+			case 'wxpay':
+				$scope.payWay = "微信支付";
+				break;
+			case 'coin':
+				$scope.payWay = "金币支付";
+				break;
+			case 'alipay':
+				$scope.payWay = "支付宝支付";
+				break;
+			default:
+				break;
+		}
+
+		$scope.goshop = function() {
+			Products.getShopById($scope.sender.shopUuid).then(function(data) {
+				$state.go("tab.account-shop-list", {
+					backWhere: 'tab.account',
+					shop: angular.toJson(data)
+				});
+			});
+		}
+
+		$scope.gogoods = function() {
+			// Products.getGoodById(arg.value).then(function(data) {
+				$state.go("tab.account-shop-pro-details", {
+					backWhere: 'tab.account',
+					good: angular.toJson($scope.sender.good)
+				});
+			// });
+		}
+
+	}])
 	// 我的优惠卷
 	.controller('couponsCtrl', ['$scope', "Account", "base", function($scope, Account, base) {
-		Account.takeCoupons().then(function(data) {
-			$scope.items = new Array();
 
-			let params = {
-				user: Account.getUser().uuid,
-				shopId: '',
-				cate: '',
-				good: ''
-			};
+		$scope.items = new Array();
+		$scope.loaded = false;
 
-			var insert_flg = function(str, flg, sn) {
-				var newstr = "",
-					mark = flg;
-				if (sn == 0) {
-					sn = 1;
-				}
-				for (var i = 0; i < str.length; i += sn) {
-					if (i == sn) {
-						mark = "";
-					}
-					var tmp = str.substring(i, i + sn);
-					newstr += tmp + mark;
-				}
-				return newstr;
+		let params = {
+			user: Account.getUser().uuid,
+			shopId: '',
+			cate: '',
+			good: ''
+		};
+
+		var insert_flg = function(str, flg, sn) {
+			var newstr = "",
+				mark = flg;
+			if (sn == 0) {
+				sn = 1;
 			}
-
-			$scope.loadCoupons = function() {
-
-				base.request("usercoupon/mapi/list", 1, params).then(function(result) {
-					for (var i = 0; i < result.length; i++) {
-						switch (result[i].coupon.rule) {
-							case "recoupon":
-								result[i].coupon.ruleValue = "劵";
-								result[i].coupon.ruleText = "返 券";
-								break;
-							case "discount":
-								result[i].coupon.ruleValue = insert_flg(result[i].coupon.ruleValue, ".", 1);
-								result[i].coupon.ruleText = "折 扣";
-								break;
-							case "fulldown":
-								result[i].coupon.ruleMark = "¥";
-								result[i].coupon.ruleText = "满 减";
-								break;
-						}
-						if (result[i].coupon.endTime == "forever") {
-							result[i].coupon.timeLine = "永久有效";
-						} else {
-							let start = result[i].coupon.startTime.replace("-", ".");
-							let end = result[i].coupon.endTime.replace("-", ".");
-							result[i].coupon.timeLine = start + "-" + end;
-						}
-
-						$scope.items.push(result[i]);
-					}
-					console.log(angular.toJson($scope.items));
-				});
+			for (var i = 0; i < str.length; i += sn) {
+				if (i == sn) {
+					mark = "";
+				}
+				var tmp = str.substring(i, i + sn);
+				newstr += tmp + mark;
 			}
+			return newstr;
+		}
 
-			$scope.loadCoupons();
-			$scope.$on("$ionicView.enter", function() {
+		$scope.loadCoupons = function() {
 
+			Account.takeCoupons().then(function(result) {
+				for (var i = 0; i < result.length; i++) {
+					switch (result[i].coupon.rule) {
+						case "recoupon":
+							result[i].coupon.ruleValue = "劵";
+							result[i].coupon.ruleText = "返 券";
+							break;
+						case "discount":
+							result[i].coupon.ruleValue = insert_flg(result[i].coupon.ruleValue, ".", 1);
+							result[i].coupon.ruleText = "折 扣";
+							break;
+						case "fulldown":
+							result[i].coupon.ruleMark = "¥";
+							result[i].coupon.ruleText = "满 减";
+							break;
+					}
+					if (result[i].coupon.endTime == "forever") {
+						result[i].coupon.timeLine = "永久有效";
+					} else {
+						let start = result[i].coupon.startTime.replace("-", ".");
+						let end = result[i].coupon.endTime.replace("-", ".");
+						result[i].coupon.timeLine = start + "-" + end;
+					}
+					$scope.items.push(result[i]);
+				}
+				$scope.loaded = true;
+				console.log(angular.toJson($scope.items));
 			});
-		});
+		}
+		$scope.loadCoupons();
+		$scope.$on("$ionicView.enter", function() {});
 	}])
 	.controller('collectCtrl', ['$scope', '$stateParams', '$timeout', "$state", "Account", "Products", 'base', function($scope, $stateParams, $timeout, $state, Account, Products, base) {
 

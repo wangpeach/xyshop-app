@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.xydc.rtshop" version="1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.xydc.rtshop" version="1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>畅行金州</name>
     <description>畅行金州是一个本地综合性商城，消费模式为线上购买线下消费</description>
     <author email="" href="">贵州兴义多彩文化传媒</author>

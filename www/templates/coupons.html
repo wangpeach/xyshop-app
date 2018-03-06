@@ -1,7 +1,7 @@
 <ion-view view-title="我的优惠卷">
     <ion-content class="scroll-content-gray">
-        <ion-refresher pulling-text="松开刷新" on-refresh="doRefresh()" disable-pulling-rotation="true">
-        </ion-refresher>
+        <!-- <ion-refresher pulling-text="松开刷新" on-refresh="loadCoupons()" disable-pulling-rotation="true">
+        </ion-refresher> -->
         <div class="coupon" ng-repeat="item in items">
             <div class="content">
                 <div class="head">
@@ -35,14 +35,21 @@
             </div>
             <div class="wave"></div>
         </div>-->
-
-       <!-- <ul>
-            <li class="animate-repeat" ng-if="!moreDataCanBeLoaded" style="width: 100%; box-shadow: none;">
+        <ul ng-if="items.length == 0 && loaded" class="ws-pdlist-all-res">
+            <li class="ws-nothing" style="padding-top: 50px;">
+                <i class="icon-ws-NGBQ" style="font-size: 30px;"></i>
+                <!-- <img src="img/shiwang.jpg" alt=""> -->
+                <br />
+                <p>哦~没有找到优惠卷</p>
+            </li>
+        </ul>
+        <ul>
+            <li class="animate-repeat" ng-if="items.length> 0 && loaded" style="width: 100%; box-shadow: none;">
                 <div class="nothing">
                     <p>没有更多了</p>
                 </div>
             </li>
-        </ul>-->
+        </ul>
         <!--<ion-infinite-scroll ng-if="moreDataCanBeLoaded" on-infinite="loadMore()" distance="1%"></ion-infinite-scroll>-->
     </ion-content>
 </ion-view>
